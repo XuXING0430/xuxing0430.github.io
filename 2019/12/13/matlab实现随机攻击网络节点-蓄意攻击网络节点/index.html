@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="utf-8">
 
   <!-- PACE Progress Bar START -->
   
-    <script src="https://raw.githubusercontent.com/HubSpot/pace/v1.0.2/pace.min.js"></script>
-    <link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+    
+<script src="https://raw.githubusercontent.com/HubSpot/pace/v1.0.2/pace.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+
   
   
 
@@ -16,24 +20,26 @@
   <title>matlab实现随机攻击网络节点+蓄意攻击网络节点(1)附github完整工程地址 | XuXing&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="matlab网络节点随机攻击">
+  <meta name="keywords" content="matlab网络节点随机攻击" />
   
   
   
   
   <meta name="description" content="更新：  有同学反馈说：网络效率的函数可能有点问题。可以试试这个网络效率函数，对应的部分改一下就可以了。  还有最大连通子图比例函数：最大连通子图比例函数   在研究网络的鲁棒性的时候，我们往往会通过随机与蓄意攻击网络节点，观察网络效率的下降比例来进行网络特性的研究。 常见的指标有：最大连通子图比例、网络效率、平均距离等等。这三个指标是不同的，但是实现随机攻击与蓄意攻击的原理是相同的，这里以按照节">
-<meta name="keywords" content="matlab,网络节点,随机攻击">
 <meta property="og:type" content="article">
 <meta property="og:title" content="matlab实现随机攻击网络节点+蓄意攻击网络节点(1)附github完整工程地址">
-<meta property="og:url" content="http://yoursite.com/2019/12/13/matlab实现随机攻击网络节点-蓄意攻击网络节点/index.html">
+<meta property="og:url" content="http://yoursite.com/2019/12/13/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/index.html">
 <meta property="og:site_name" content="XuXing&#39;s blog">
 <meta property="og:description" content="更新：  有同学反馈说：网络效率的函数可能有点问题。可以试试这个网络效率函数，对应的部分改一下就可以了。  还有最大连通子图比例函数：最大连通子图比例函数   在研究网络的鲁棒性的时候，我们往往会通过随机与蓄意攻击网络节点，观察网络效率的下降比例来进行网络特性的研究。 常见的指标有：最大连通子图比例、网络效率、平均距离等等。这三个指标是不同的，但是实现随机攻击与蓄意攻击的原理是相同的，这里以按照节">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2019_12/1.png?raw=true">
-<meta property="og:updated_time" content="2021-03-24T11:17:24.182Z">
+<meta property="article:published_time" content="2019-12-13T09:20:22.000Z">
+<meta property="article:modified_time" content="2021-03-24T11:17:26.000Z">
+<meta property="article:author" content="xsk">
+<meta property="article:tag" content="matlab">
+<meta property="article:tag" content="网络节点">
+<meta property="article:tag" content="随机攻击">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="matlab实现随机攻击网络节点+蓄意攻击网络节点(1)附github完整工程地址">
-<meta name="twitter:description" content="更新：  有同学反馈说：网络效率的函数可能有点问题。可以试试这个网络效率函数，对应的部分改一下就可以了。  还有最大连通子图比例函数：最大连通子图比例函数   在研究网络的鲁棒性的时候，我们往往会通过随机与蓄意攻击网络节点，观察网络效率的下降比例来进行网络特性的研究。 常见的指标有：最大连通子图比例、网络效率、平均距离等等。这三个指标是不同的，但是实现随机攻击与蓄意攻击的原理是相同的，这里以按照节">
 <meta name="twitter:image" content="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2019_12/1.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="XuXing&#39;s blog" type="application/atom+xml">
@@ -52,24 +58,30 @@
     @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
     
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+  
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/hiero.css">
-  <link rel="stylesheet" href="/css/glyphs.css">
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="/css/hiero.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
   
-    <link rel="stylesheet" href="/css/vdonate.css">
+    <link rel="stylesheet" href="/css/vdonate.css" >
   
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="/css/my.css">
+  
+<link rel="stylesheet" href="/css/my.css">
+
   <!-- Google Adsense -->
   
-</head>
-</html>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
 <script>
 var themeMenus = {};
 
@@ -176,7 +188,7 @@ var themeMenus = {};
     
     <div class="article-meta">
       
-	Posted on <a href="/2019/12/13/matlab实现随机攻击网络节点-蓄意攻击网络节点/" class="article-date">
+	Posted on <a href="/2019/12/13/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" class="article-date">
 	  <time datetime="2019-12-13T09:20:22.000Z" itemprop="datePublished">December 13, 2019</time>
 	</a>
 
@@ -189,8 +201,8 @@ var themeMenus = {};
     <div class="article-entry" itemprop="articleBody">
       
         <p><strong>更新：</strong> </p>
-<p>有同学反馈说：网络效率的函数可能有点问题。可以试试这个<a href="https://pan.baidu.com/s/1PWMNafuW8pZq5c-q2nz8Og" target="_blank" rel="noopener">网络效率函数</a>，对应的部分改一下就可以了。 </p>
-<p>还有最大连通子图比例函数：<a href="https://pan.baidu.com/s/1lgXTb1OG0-vRNXHa9mJ7Sw" target="_blank" rel="noopener">最大连通子图比例函数</a> </p>
+<p>有同学反馈说：网络效率的函数可能有点问题。可以试试这个<a href="https://pan.baidu.com/s/1PWMNafuW8pZq5c-q2nz8Og">网络效率函数</a>，对应的部分改一下就可以了。 </p>
+<p>还有最大连通子图比例函数：<a href="https://pan.baidu.com/s/1lgXTb1OG0-vRNXHa9mJ7Sw">最大连通子图比例函数</a> </p>
 <hr>
 <p><strong>在研究网络的鲁棒性的时候，我们往往会通过随机与蓄意攻击网络节点，观察网络效率的下降比例来进行网络特性的研究。</strong></p>
 <p>常见的指标有：<strong>最大连通子图比例、网络效率、平均距离</strong>等等。<br>这三个指标是不同的，但是实现随机攻击与蓄意攻击的<strong>原理是相同的</strong>，这里以按照<strong>节点度</strong>攻击的<strong>网络效率</strong>变化为例（其他两个指标就是函数不同，想按照其他节点重要度排序指标，也是类似的，只需要按照想要的排序方法得出节点的排序即可）。</p>
@@ -200,16 +212,16 @@ var themeMenus = {};
 <p>节点度的排名要按照节点的编号排序，下图是一个简单的例子，建议先在Excel中排列好了，然后再复制到Matlab中转置一下保存为mat文件就可以了。</p>
 <p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2019_12/1.png?raw=true" alt="度排序示例"></p>
 <p>明白了蓄意攻击的原理，那么随机攻击的原理也比较好理解了，蓄意攻击是按照节点重要度排序进行的攻击，那么随机攻击可以理解为给所有节点随机赋排名，所以攻击的时候就等效于随机攻击了。也就是说，在随机攻击时，你只需要在蓄意攻击的基础上添加一行代码，把度排序的数组赋值上长度相同的一个随机数组，即：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Name_Struct.Node_Key_Degree = randperm(440);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Name_Struct.Node_Key_Degree = randperm(440);</span><br></pre></td></tr></table></figure>
 
 <p><strong>具体代码如下：</strong></p>
 <p><strong>主函数：</strong> testRandom（命名随意。。。）<br><strong>作用：原理挺简单的，就是通过循环来删除节点。把临界矩阵中节点对应的行和列先置0，然后再删除。每删除一次节点，就生成了一个新的邻接矩阵，然后每一次都通过testEglob函数计算出当前的网络效率值。</strong></p>
 <p>部分代码如下：</p>
 <figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 蓄意攻击：按照节点重要性顺序，一次攻击一个节点</span></span><br><span class="line"></span><br><span class="line">clc;</span><br><span class="line">clear; </span><br><span class="line"></span><br><span class="line">         </span><br><span class="line"><span class="comment">% 初始网络性能</span></span><br><span class="line"><span class="comment">%生成随机数，以此进行随机攻击（注释掉即为蓄意攻击），随机数值改为你自己网络的节点数</span></span><br><span class="line">Name_Struct.Node_Key_Degree = randperm(<span class="number">440</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">%%</span></span><br><span class="line"><span class="comment">%  按照 Degree 算法排序，删除节点</span></span><br><span class="line">A = A_Init;          <span class="comment">%% 网络邻接矩阵 A</span></span><br><span class="line">B=[];                <span class="comment">%%定义空数组，接收被删除的节点序号</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:NumDelete</span><br><span class="line">     <span class="comment">%% 删除节点 Node_Key_Degree(i),用 0 占位，不能置空</span></span><br><span class="line">    B(<span class="built_in">i</span>) = Name_Struct.Node_Key_Degree(<span class="built_in">i</span>);</span><br><span class="line">    Con_Index_NetEff = testEglob( AA );</span><br><span class="line">    Eglob(<span class="built_in">i</span>) = Con_Index_NetEff.Net_Eff_Mymod;</span><br><span class="line"><span class="keyword">end</span>          </span><br><span class="line"></span><br><span class="line"><span class="comment">%接下来就是生成网络连通效率图</span></span><br><span class="line"><span class="comment">%Eglob存储了相应的网络效率的数值</span></span><br></pre></td></tr></table></figure>
 
-<p>正常情况下，<strong>一次随机攻击</strong>并不能说明什么，一次随机攻击的数据也并不可靠，所以<strong>需要多次随机攻击之后取平均值</strong>，这样得出的数据才更具有说服力，下一篇将介绍如何实现，<a href="https://xuxing0430.github.io/2019/12/20/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-2/" target="_blank" rel="noopener">matlab实现随机攻击网络节点+蓄意攻击网络节点（2）</a></p>
+<p>正常情况下，<strong>一次随机攻击</strong>并不能说明什么，一次随机攻击的数据也并不可靠，所以<strong>需要多次随机攻击之后取平均值</strong>，这样得出的数据才更具有说服力，下一篇将介绍如何实现，<a href="https://xuxing0430.github.io/2019/12/20/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-2/">matlab实现随机攻击网络节点+蓄意攻击网络节点（2）</a></p>
 <p>本篇文章对应的GitHub工程地址如下：内含函数文件+测试文件，下载即可直接运行。 </p>
-<p><a href="https://github.com/XuXING0430/complexNetwork/tree/master1/keyNodeMethod1" target="_blank" rel="noopener">工程地址</a></p>
+<p><a href="https://github.com/XuXING0430/complexNetwork/tree/master1/keyNodeMethod1">工程地址</a></p>
 <p>希望对大家有所帮助，有任何疑问欢迎与我交流，谢谢你的时间。</p>
 
       
@@ -217,16 +229,18 @@ var themeMenus = {};
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/复杂网络/">复杂网络</a>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matlab/">matlab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/网络节点/">网络节点</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/随机攻击/">随机攻击</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matlab/" rel="tag">matlab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" rel="tag">网络节点</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" rel="tag">随机攻击</a></li></ul>
 
       
         <div id="donation_div"></div>
 
+
 <script src="/js/vdonate.js"></script>
+
 <script>
 var a = new Donate({
   title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
@@ -269,7 +283,7 @@ var a = new Donate({
     
 <nav id="article-nav">
   
-    <a href="/2019/12/20/matlab实现随机攻击网络节点-蓄意攻击网络节点-2/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/12/20/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-2/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
@@ -279,7 +293,7 @@ var a = new Donate({
     </a>
   
   
-    <a href="/2019/10/06/Veirlog学习记录-4-分频模块-层次化的模块设计/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2019/10/06/Veirlog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95-4-%E5%88%86%E9%A2%91%E6%A8%A1%E5%9D%97-%E5%B1%82%E6%AC%A1%E5%8C%96%E7%9A%84%E6%A8%A1%E5%9D%97%E8%AE%BE%E8%AE%A1/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">Veirlog学习记录(4)分频模块+层次化的模块设计</div>
     </a>
@@ -307,7 +321,7 @@ var a = new Donate({
 
   <div class="clearfix container">
       <div class="site-info">
-	      &copy; 2021 XuXing&#39;s blog All Rights Reserved.
+	      &copy; 2025 XuXing&#39;s blog All Rights Reserved.
           
             <span id="busuanzi_container_site_uv">
               本站访客数<span id="busuanzi_value_site_uv"></span>人次  
@@ -331,7 +345,9 @@ var a = new Donate({
 </script>
 
 <!-- Custome JS -->
+
 <script src="/js/my.js"></script>
+
     </div>
     <!-- <nav id="mobile-nav">
   
@@ -379,13 +395,23 @@ var a = new Donate({
 
 
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
 
 
 <script src="/js/scripts.js"></script>
+
+
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 <!-- Google Analytics -->

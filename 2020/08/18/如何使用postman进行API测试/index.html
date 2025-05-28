@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 <html>
-<head><meta name="generator" content="Hexo 3.9.0">
+<head>
   <meta charset="utf-8">
 
   <!-- PACE Progress Bar START -->
   
-    <script src="https://raw.githubusercontent.com/HubSpot/pace/v1.0.2/pace.min.js"></script>
-    <link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+    
+<script src="https://raw.githubusercontent.com/HubSpot/pace/v1.0.2/pace.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+
   
   
 
@@ -16,26 +20,27 @@
   <title>如何使用postman进行api测试 | XuXing&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
-  <meta name="keywords" content="postman测试">
+  <meta name="keywords" content="postman测试" />
   
   
   
   
   <meta name="description" content="最近接触了Postman API测试，业务上是需要写出来Postman脚本。以前可以说是从来都没有听说过脚本的事情，虽说也其实这个工具有一点了解，但是在这回实践之后才有了更多的理解。首先推荐大家学习一个Pluralsight的视频Postman Fundamentals，我只是有针对性的看了前一部分，就感觉收获良多。一个好的入门课程其实也是很重要的。 这里我就举例说一个spring securit">
-<meta name="keywords" content="postman,测试">
 <meta property="og:type" content="article">
 <meta property="og:title" content="如何使用postman进行API测试">
-<meta property="og:url" content="http://yoursite.com/2020/08/18/如何使用postman进行API测试/index.html">
+<meta property="og:url" content="http://yoursite.com/2020/08/18/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8postman%E8%BF%9B%E8%A1%8CAPI%E6%B5%8B%E8%AF%95/index.html">
 <meta property="og:site_name" content="XuXing&#39;s blog">
 <meta property="og:description" content="最近接触了Postman API测试，业务上是需要写出来Postman脚本。以前可以说是从来都没有听说过脚本的事情，虽说也其实这个工具有一点了解，但是在这回实践之后才有了更多的理解。首先推荐大家学习一个Pluralsight的视频Postman Fundamentals，我只是有针对性的看了前一部分，就感觉收获良多。一个好的入门课程其实也是很重要的。 这里我就举例说一个spring securit">
-<meta property="og:locale" content="default">
+<meta property="og:locale">
 <meta property="og:image" content="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/1.png?raw=true">
 <meta property="og:image" content="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/2.png?raw=true">
 <meta property="og:image" content="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/3.png?raw=true">
-<meta property="og:updated_time" content="2020-08-18T13:10:00.792Z">
+<meta property="article:published_time" content="2020-08-18T12:54:07.000Z">
+<meta property="article:modified_time" content="2020-08-18T13:10:02.000Z">
+<meta property="article:author" content="xsk">
+<meta property="article:tag" content="postman">
+<meta property="article:tag" content="测试">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何使用postman进行API测试">
-<meta name="twitter:description" content="最近接触了Postman API测试，业务上是需要写出来Postman脚本。以前可以说是从来都没有听说过脚本的事情，虽说也其实这个工具有一点了解，但是在这回实践之后才有了更多的理解。首先推荐大家学习一个Pluralsight的视频Postman Fundamentals，我只是有针对性的看了前一部分，就感觉收获良多。一个好的入门课程其实也是很重要的。 这里我就举例说一个spring securit">
 <meta name="twitter:image" content="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/1.png?raw=true">
   
     <link rel="alternate" href="/atom.xml" title="XuXing&#39;s blog" type="application/atom+xml">
@@ -54,24 +59,30 @@
     @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
     
   <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
-  <link rel="stylesheet" href="/css/style.css">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+  
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
 
   <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/hiero.css">
-  <link rel="stylesheet" href="/css/glyphs.css">
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="/css/hiero.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
   
-    <link rel="stylesheet" href="/css/vdonate.css">
+    <link rel="stylesheet" href="/css/vdonate.css" >
   
 
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="/css/my.css">
+  
+<link rel="stylesheet" href="/css/my.css">
+
   <!-- Google Adsense -->
   
-</head>
-</html>
+<meta name="generator" content="Hexo 7.3.0"></head>
+
 <script>
 var themeMenus = {};
 
@@ -178,7 +189,7 @@ var themeMenus = {};
     
     <div class="article-meta">
       
-	Posted on <a href="/2020/08/18/如何使用postman进行API测试/" class="article-date">
+	Posted on <a href="/2020/08/18/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8postman%E8%BF%9B%E8%A1%8CAPI%E6%B5%8B%E8%AF%95/" class="article-date">
 	  <time datetime="2020-08-18T12:54:07.000Z" itemprop="datePublished">August 18, 2020</time>
 	</a>
 
@@ -190,10 +201,10 @@ var themeMenus = {};
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <p>最近接触了Postman API测试，业务上是需要写出来Postman脚本。以前可以说是从来都没有听说过脚本的事情，虽说也其实这个工具有一点了解，但是在这回实践之后才有了更多的理解。首先推荐大家学习一个Pluralsight的视频<a href="https://app.pluralsight.com/library/courses/postman-fundamentals/table-of-contents" target="_blank" rel="noopener">Postman Fundamentals</a>，我只是有针对性的看了前一部分，就感觉收获良多。一个好的入门课程其实也是很重要的。</p>
+        <p>最近接触了Postman API测试，业务上是需要写出来Postman脚本。以前可以说是从来都没有听说过脚本的事情，虽说也其实这个工具有一点了解，但是在这回实践之后才有了更多的理解。首先推荐大家学习一个Pluralsight的视频<a href="https://app.pluralsight.com/library/courses/postman-fundamentals/table-of-contents">Postman Fundamentals</a>，我只是有针对性的看了前一部分，就感觉收获良多。一个好的入门课程其实也是很重要的。</p>
 <p>这里我就举例说一个spring security的用户验证的测试，其他的测试过程也是很相似的。</p>
 <p>认证测试：</p>
-<p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/1.png?raw=true" alt></p>
+<p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/1.png?raw=true" alt=""></p>
 <ul>
 <li>step1 在地址栏中输入自己API的地址（例子中是用户登陆认证的一个form）</li>
 <li>step2 选择请求的方式，这个postman里面有很多，我这里选择的是POST</li>
@@ -202,22 +213,22 @@ var themeMenus = {};
 <li>step5 在Tests中可以编写一些测试语句，以检查得到的Response body是否是你需要的</li>
 </ul>
 <p>这个例子的Tests如下：</p>
-<p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/2.png?raw=true" alt></p>
+<p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/2.png?raw=true" alt=""></p>
 <p>编写好测试界面中的测试语句，然后点击send，可以在下面的Tests Results中查看测试是否通过，例子中的就是测试全部通过了，如果有错误，下面的提示中会告知你哪个测试出错，以及为什么出错。</p>
 <p>下面说一下这几个简单测试语句：</p>
 <p>我想在开始之前提醒大家一件事，postman测试语句是需要很精准的，也就是说你写的测试语句需要可以精准的、直观的测试出返回的response是否符合预期，你的测试需要着眼于关键点。</p>
 <p><strong>状态码测试：</strong></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pm.test(&quot;Status code is 200&quot;, function () &#123;</span><br><span class="line">    pm.response.to.have.status(200);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pm.test(&quot;Status code is 200&quot;, function () &#123;</span><br><span class="line">    pm.response.to.have.status(200);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
 <p>第一行中的”Status code is 200”是可以自己修改的，这一行字符串会在下面的控制台输出（可参照上图），这里建议要取一些有意义的字符串，可以见名知义那种。</p>
 <p>第二行中的 200，就是你期望得到的状态码。</p>
 <p><strong>是否得到认证的测试：</strong></p>
 <p>第二行就是定义jsonData接受response中json数据，然后就是进行判断返回的字段是否是预期的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pm.test(&quot;Your test user is authenticated&quot;, function () &#123;</span><br><span class="line">    var jsonData = pm.response.json();</span><br><span class="line">    pm.expect(jsonData.authenticated).to.eql(true);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pm.test(&quot;Your test user is authenticated&quot;, function () &#123;</span><br><span class="line">    var jsonData = pm.response.json();</span><br><span class="line">    pm.expect(jsonData.authenticated).to.eql(true);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
 
 <p>那么对比验证一下认证失败的情况：</p>
 <p>我随便的设置了登录的用户名和密码，可以看到下方的Test results中3条都fail了，并且还有返回值的对比说明。</p>
-<p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/3.png?raw=true" alt></p>
+<p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/3.png?raw=true" alt=""></p>
 <p>希望以上能对大家有所帮助。</p>
 
       
@@ -225,16 +236,18 @@ var themeMenus = {};
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/postman/">postman</a>, <a class="article-category-link" href="/categories/postman/测试/">测试</a>
+    <a class="article-category-link" href="/categories/postman/">postman</a>, <a class="article-category-link" href="/categories/postman/%E6%B5%8B%E8%AF%95/">测试</a>
 
       
   <span class="ico-tags"></span>
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/postman/">postman</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/测试/">测试</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/postman/" rel="tag">postman</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li></ul>
 
       
         <div id="donation_div"></div>
 
+
 <script src="/js/vdonate.js"></script>
+
 <script>
 var a = new Donate({
   title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
@@ -277,8 +290,17 @@ var a = new Donate({
     
 <nav id="article-nav">
   
+    <a href="/2025/05/28/JavaSocket%E5%AE%9E%E7%8E%B0%E5%90%91%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
   
-    <a href="/2020/08/12/如何在spring-security中对用户密码进行加密/" id="article-nav-older" class="article-nav-link-wrap">
+  
+    <a href="/2020/08/12/%E5%A6%82%E4%BD%95%E5%9C%A8spring-security%E4%B8%AD%E5%AF%B9%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">如何在spring security中对用户密码进行加密</div>
     </a>
@@ -306,7 +328,7 @@ var a = new Donate({
 
   <div class="clearfix container">
       <div class="site-info">
-	      &copy; 2021 XuXing&#39;s blog All Rights Reserved.
+	      &copy; 2025 XuXing&#39;s blog All Rights Reserved.
           
             <span id="busuanzi_container_site_uv">
               本站访客数<span id="busuanzi_value_site_uv"></span>人次  
@@ -330,7 +352,9 @@ var a = new Donate({
 </script>
 
 <!-- Custome JS -->
+
 <script src="/js/my.js"></script>
+
     </div>
     <!-- <nav id="mobile-nav">
   
@@ -378,13 +402,23 @@ var a = new Donate({
 
 
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
 
 
 <script src="/js/scripts.js"></script>
+
+
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
 <script src="/js/main.js"></script>
+
 
 
 <!-- Google Analytics -->
