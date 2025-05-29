@@ -163,66 +163,6 @@ var themeMenus = {};
         
           <section id="main">
   
-    <article id="post-matlab实现随机攻击网络边-蓄意攻击网络连边-3-“"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2020/05/04/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%BE%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9-3-%E2%80%9C/">matlab实现随机攻击网络边+蓄意攻击网络连边(3)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	Posted on <a href="/2020/05/04/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%BE%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9-3-%E2%80%9C/" class="article-date">
-	  <time datetime="2020-05-04T02:14:47.000Z" itemprop="datePublished">May 4, 2020</time>
-	</a>
-
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>其实在前面已经介绍过随机进攻节点和蓄意进攻节点的原理，今天和大家说一下边攻击。其实原理都是类似的，只要改动之前的一些代码就可以完成这个操作的。如果没有看过前两篇文章，那么建议你先看一下，有助于理解原理。</p>
-<h4 id="前两篇地址："><a href="#前两篇地址：" class="headerlink" title="前两篇地址："></a>前两篇地址：</h4><h4 id="matlab实现随机攻击网络节点-蓄意攻击网络节点-1-附github完整工程地址"><a href="#matlab实现随机攻击网络节点-蓄意攻击网络节点-1-附github完整工程地址" class="headerlink" title="matlab实现随机攻击网络节点+蓄意攻击网络节点(1)附github完整工程地址"></a><a href="[https://xuxing0430.github.io/2019/12/13/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/](https://xuxing0430.github.io/2019/12/13/matlab实现随机攻击网络节点-蓄意攻击网络节点/)">matlab实现随机攻击网络节点+蓄意攻击网络节点(1)附github完整工程地址</a></h4><h4 id="matlab实现随机攻击网络节点-蓄意攻击网络节点-2"><a href="#matlab实现随机攻击网络节点-蓄意攻击网络节点-2" class="headerlink" title="matlab实现随机攻击网络节点+蓄意攻击网络节点(2)"></a><a href="[https://xuxing0430.github.io/2019/12/20/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-2/](https://xuxing0430.github.io/2019/12/20/matlab实现随机攻击网络节点-蓄意攻击网络节点-2/)">matlab实现随机攻击网络节点+蓄意攻击网络节点(2)</a></h4><h3 id="我们首先应该了解删除连边和删除的节点的区别："><a href="#我们首先应该了解删除连边和删除的节点的区别：" class="headerlink" title="我们首先应该了解删除连边和删除的节点的区别："></a>我们首先应该了解删除连边和删除的节点的区别：</h3><p>删除节点：删除该节点及与该节点所有相连的边。</p>
-<p>删除连边：只删除该连边，而不改变节点的状态。</p>
-<h4 id="如果结合维度为N-N邻接矩阵A来说："><a href="#如果结合维度为N-N邻接矩阵A来说：" class="headerlink" title="如果结合维度为N*N邻接矩阵A来说："></a>如果结合维度为N*N邻接矩阵A来说：</h4><p>删除节点a：要删除A(a，:)和A(:，a)这一列一行，矩阵A变为（N-1）*（N-1）维度</p>
-<p>删除节点a和节点b的连边：A(a,b) = 0;A(b,a) = 0;(邻接矩阵的对称性)，矩阵A还是N*N维度。</p>
-<h3 id="知道了具体逻辑，那么下面就是代码实现了："><a href="#知道了具体逻辑，那么下面就是代码实现了：" class="headerlink" title="知道了具体逻辑，那么下面就是代码实现了："></a>知道了具体逻辑，那么下面就是代码实现了：</h3><h4 id="之前我们删除节点的代码片段为："><a href="#之前我们删除节点的代码片段为：" class="headerlink" title="之前我们删除节点的代码片段为："></a>之前我们删除节点的代码片段为：</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:numDelete</span><br><span class="line">    A( Name_Struct.Node_Key_Degree(<span class="built_in">i</span>),: ) = <span class="number">0</span>;     <span class="comment">%% 删除节点 Node_Key_Degree(i),用 0 占位，不能置空</span></span><br><span class="line">    A( :,Name_Struct.Node_Key_Degree(<span class="built_in">i</span>) ) = <span class="number">0</span>;</span><br><span class="line">    AA = A;</span><br><span class="line">    AA( sum(A)==<span class="number">0</span>,: ) = [];</span><br><span class="line">    AA( :,sum(A)==<span class="number">0</span> ) = [];</span><br><span class="line">    Con_Index_NetEff = testEglob( AA );</span><br><span class="line"></span><br><span class="line">    Eglob(<span class="built_in">i</span>) = Con_Index_NetEff.Net_Eff_Mymod;          </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="边攻击需要的数据准备："><a href="#边攻击需要的数据准备：" class="headerlink" title="边攻击需要的数据准备："></a>边攻击需要的数据准备：</h4><h5 id="邻接表：也就是网络中的所有连边关系-也就是下面的代码片段中的-biao（2-edge-number的矩阵）"><a href="#邻接表：也就是网络中的所有连边关系-也就是下面的代码片段中的-biao（2-edge-number的矩阵）" class="headerlink" title="邻接表：也就是网络中的所有连边关系 也就是下面的代码片段中的 biao（2*edge_number的矩阵）"></a>邻接表：也就是网络中的所有连边关系 也就是下面的代码片段中的 biao（2*edge_number的矩阵）</h5><h5 id="边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node-edge-bet（1-edge-number的矩阵），就是根据边介数参数得到的边的排序"><a href="#边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node-edge-bet（1-edge-number的矩阵），就是根据边介数参数得到的边的排序" class="headerlink" title="边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node_edge_bet（1*edge_number的矩阵），就是根据边介数参数得到的边的排序"></a>边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node_edge_bet（1*edge_number的矩阵），就是根据边介数参数得到的边的排序</h5><h4 id="那么改动后的边攻击代码片段为："><a href="#那么改动后的边攻击代码片段为：" class="headerlink" title="那么改动后的边攻击代码片段为："></a>那么改动后的边攻击代码片段为：</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">A = A_Init;          <span class="comment">%% 网络邻接矩阵 A</span></span><br><span class="line"><span class="comment">% numDelete：删除连边的数量</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:numDelete</span><br><span class="line">	<span class="comment">%把要删除的边置为0</span></span><br><span class="line">    A( biao(<span class="number">1</span>,Node_edge_bet(<span class="built_in">i</span>)),biao(<span class="number">2</span>,Node_edge_bet(<span class="built_in">i</span>)) ) = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">%把对称位置的边也置为0</span></span><br><span class="line">    A( biao(<span class="number">2</span>,Node_edge_bet(<span class="built_in">i</span>)),biao(<span class="number">1</span>,Node_edge_bet(<span class="built_in">i</span>)) ) = <span class="number">0</span>;</span><br><span class="line">    AA = A;</span><br><span class="line">    Con_Index_NetEff = testEglob( AA );</span><br><span class="line">    Eglob_edge_bet(<span class="built_in">i</span>) = Con_Index_NetEff.Net_Eff;           </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-<p>经过分析之后，我们可以得到一个推测或者说是结论：那就是边攻击每次只攻击一个边，对网络的影响较小（相对于节点攻击来说）。</p>
-<p>感谢大家的时间，并希望以上的内容会对大家有所帮助。</p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matlab/" rel="tag">matlab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" rel="tag">网络连边</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" rel="tag">蓄意攻击</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" rel="tag">随机攻击</a></li></ul>
-
-      
-            
-      
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-    
-
-  
     <article id="post-算法学习笔记1-面向对象的数组"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -852,6 +792,83 @@ var themeMenus = {};
     
 
   
+    <article id="post-算法图解第二章笔记：快速排序1（java版）"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2019/09/10/%E7%AE%97%E6%B3%95%E5%9B%BE%E8%A7%A3%E7%AC%AC%E4%BA%8C%E7%AB%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F1%EF%BC%88java%E7%89%88%EF%BC%89/">算法图解第四章笔记：快速排序1（java版）</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2019/09/10/%E7%AE%97%E6%B3%95%E5%9B%BE%E8%A7%A3%E7%AC%AC%E4%BA%8C%E7%AB%A0%E7%AC%94%E8%AE%B0%EF%BC%9A%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F1%EF%BC%88java%E7%89%88%EF%BC%89/" class="article-date">
+	  <time datetime="2019-09-10T00:54:19.000Z" itemprop="datePublished">September 10, 2019</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="分而治之（D-amp-C）一种著名的递归式问题的解决方法。"><a href="#分而治之（D-amp-C）一种著名的递归式问题的解决方法。" class="headerlink" title="分而治之（D&amp;C）一种著名的递归式问题的解决方法。"></a>分而治之（D&amp;C）一种著名的递归式问题的解决方法。</h3><h4 id="案例：农场主分地问题："><a href="#案例：农场主分地问题：" class="headerlink" title="案例：农场主分地问题："></a>案例：农场主分地问题：</h4><h4 id="要求：要将这块地均匀分成方块，且分出的方块尽可能大。"><a href="#要求：要将这块地均匀分成方块，且分出的方块尽可能大。" class="headerlink" title="要求：要将这块地均匀分成方块，且分出的方块尽可能大。"></a>要求：要将这块地均匀分成方块，且分出的方块尽可能大。</h4><p>步骤：（1）找出基线条件，这种条件必须尽可能的简单</p>
+<p>​    （2）不断将问题分解（或者说是缩小规模），直到符合基线条件</p>
+<h4 id="这个案例很有意思，而且后面的顿悟时刻：为何不对余下的那一块小块地使用相同的算法呢？这正是递归的核心思想啊。"><a href="#这个案例很有意思，而且后面的顿悟时刻：为何不对余下的那一块小块地使用相同的算法呢？这正是递归的核心思想啊。" class="headerlink" title="这个案例很有意思，而且后面的顿悟时刻：为何不对余下的那一块小块地使用相同的算法呢？这正是递归的核心思想啊。"></a>这个案例很有意思，而且后面的顿悟时刻：为何不对余下的那一块小块地使用相同的算法呢？这正是递归的核心思想啊。</h4><h4 id="另一个小例子："><a href="#另一个小例子：" class="headerlink" title="另一个小例子："></a>另一个小例子：</h4><p>​    给定一个数组：2，4，6</p>
+<p>​    需要将这些数字相加，并返回结果。使用循环很容易。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public static int sum(int[] arr)&#123;</span><br><span class="line">		int total = 0;</span><br><span class="line">		for(int i = 0;i &lt; arr.length ; i++)&#123;</span><br><span class="line">			total += arr[i];</span><br><span class="line">		&#125;</span><br><span class="line">		return total;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="如何用递归完成这种任务呢？"><a href="#如何用递归完成这种任务呢？" class="headerlink" title="如何用递归完成这种任务呢？"></a>如何用递归完成这种任务呢？</h4><p>第一步：找出基线条件。最简单的数组：不包含任何元素或只包含元素，这样计算总和非常容易。</p>
+<p>第二步：每次递归调用都必须离空数组更进一步。</p>
+<p>那么如何缩小问题的规模呢？给sum传递的数组更短。</p>
+<p>练习：</p>
+<h3 id="4-1-实现前述sum函数"><a href="#4-1-实现前述sum函数" class="headerlink" title="4.1:实现前述sum函数"></a>4.1:实现前述sum函数</h3><p>分析：这个问题基线条件比较清晰，不太清晰的点其实是递归条件，如何让数组离空数组更近一步呢？一开始我想的是，把数组截取，让数组长度每次调用都减一。其实这样想就有点偏差了，因为让数组变成空数组，其实并不是真的让数组逐渐的变为空数组，其实一直都是原来的数组，只不过每次调用的元素都是数组中的不同元素。下面的代码可能会更加帮助理解递归条件：</p>
+<p>代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">	 * 练习4.1：利用递归求和：</span><br><span class="line">	 * 		基线条件： 最简单的数组：不包含任何元素或者只包含一个元素</span><br><span class="line">	 * 		递归条件： 给函数传递的数组越来越短</span><br><span class="line">	 * </span><br><span class="line">	 */</span><br><span class="line">	public static int sum_1(int[] arr,int n)&#123;</span><br><span class="line">            //基线条件</span><br><span class="line">            if( n == 0 )&#123;</span><br><span class="line">                return arr[n];</span><br><span class="line">           &#125;else&#123;</span><br><span class="line">               return arr[n] + sum_1(arr,n-1);</span><br><span class="line">		&#125;</span><br><span class="line">	</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="4-2：编写一个递归函数来计算列表包含的元素数"><a href="#4-2：编写一个递归函数来计算列表包含的元素数" class="headerlink" title="4.2：编写一个递归函数来计算列表包含的元素数"></a>4.2：编写一个递归函数来计算列表包含的元素数</h3><p>分析：乍一看这个问题和4.1不太一样，但是如果数组中每个元素的值都是1的话，是不是这时候求数组的和，得到的就是列表中所包含的元素数。所以只需要把上述的代码稍做修改即可。</p>
+<p>代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">/*</span><br><span class="line">	 * 练习4.2：编写函数来计算列表所包含的元素数</span><br><span class="line">	 * </span><br><span class="line">	 */</span><br><span class="line">	public static int countNumbers(int[] arr,int n)&#123;</span><br><span class="line">            //判断数组是否为空</span><br><span class="line">            if(arr.length == 0)&#123;</span><br><span class="line">			return 0;</span><br><span class="line">		&#125;</span><br><span class="line">              //基线条件</span><br><span class="line">		else if(n == 0)&#123;</span><br><span class="line">			return 1;</span><br><span class="line">		&#125;else&#123;</span><br><span class="line">			return 1 + countNumbers(arr, n-1);</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3：找出列表中最大的数字"><a href="#4-3：找出列表中最大的数字" class="headerlink" title="4.3：找出列表中最大的数字"></a>4.3：找出列表中最大的数字</h3><p>分析：这个问题就比前两个深化一些了，要找出列表中的最大值，其实有很多方法。如果用递归去做，其实还是要考虑基线条件和递归条件。和前两个问题类似，递归条件还是想让传入的数组的长度原来越短，换句话说就是，想要比较的元素数越来越少。这里可以把一个数组分割成为两个，通过数组的下标做判断。左数组找出一个最大值，右数组找一个最大值，再进行比较，返回大的那个。</p>
+<p>代码如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public static int findMax(int[] arr,int leftIndex,int rightIndex)&#123;</span><br><span class="line">            //基线条件</span><br><span class="line">		if(leftIndex == rightIndex)&#123;</span><br><span class="line">			return arr[leftIndex];</span><br><span class="line">		&#125;</span><br><span class="line">             //这种方式求得mid不会溢出</span><br><span class="line">		int mid = leftIndex + (rightIndex -leftIndex)/2;</span><br><span class="line">		int maxLeft = findMax(arr,leftIndex,mid);</span><br><span class="line">		int maxRight = findMax(arr,mid+1,rightIndex);</span><br><span class="line">		</span><br><span class="line">		return Math.max(maxLeft, maxRight); </span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<p>我的测试数组为2，4，6，8</p>
+<h4 id="所得到的输出为："><a href="#所得到的输出为：" class="headerlink" title="所得到的输出为："></a>所得到的输出为：</h4><p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2019_9/13.png?raw=true" alt=""></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>, <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/java/">java</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F/" rel="tag">快速排序</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%AE%97%E6%B3%95/" rel="tag">算法</a></li></ul>
+
+      
+            
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+    
+
+  
 
 
   <nav id="page-nav">
@@ -958,18 +975,6 @@ var themeMenus = {};
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/2025/05/28/test/">page</a></h6>
-              <span>May 28, 2025</span>
-            </div>
-
-          </li>
-        
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
               <h6 style="margin: 0;"><a href="/2025/05/28/JavaSocket%E5%AE%9E%E7%8E%B0%E5%90%91%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BC%A0%E8%BE%93%E6%96%87%E4%BB%B6/">(no title)</a></h6>
               <span>May 28, 2025</span>
             </div>
@@ -1024,6 +1029,18 @@ var themeMenus = {};
 
           </li>
         
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/2020/07/23/%E8%A7%A3%E5%86%B3centos7%E4%B8%8B%E6%8A%A5%E9%94%99%EF%BC%9Anet-http-TLS-handshake-timeout/">解决centos7下报错：net/http: TLS handshake timeout</a></h6>
+              <span>July 23, 2020</span>
+            </div>
+
+          </li>
+        
       </ul>
     </div>
   </div>
@@ -1063,7 +1080,7 @@ var themeMenus = {};
     <h3 class="widget-title">Archives</h3>
 
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/05/">May 2025</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">5</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/05/">May 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">5</span></li></ul>
     </div>
   </div>
 
