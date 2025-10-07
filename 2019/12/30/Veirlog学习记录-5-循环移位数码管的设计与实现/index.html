@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <!-- PACE Progress Bar START -->
+  
+    
+<script src="https://raw.githubusercontent.com/HubSpot/pace/v1.0.2/pace.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+
+  
+  
+
+  <!-- PACE Progress Bar START -->
+
+  
+  <title>veirlog学习记录-5-循环移位数码管的设计与实现 | XuXing&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="VeirlogFPGA数码管" />
+  
+  
+  
+  
+  <meta name="description" content="实现功能：在开发板的数码管上显示特定数字，并且让这些数字循环移位。 总体框图如下： 代码如下： 分频模块： 1234567891011121314module div(    input clk, &#x2F;&#x2F;输入自带的系统时钟(100Mhz)    input rst, &#x2F;&#x2F;复位    output scan_clk &#x2F;&#x2F;输出时钟，用于驱动数码管，让其动态扫描用    );    reg [19:0]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Veirlog学习记录-5-循环移位数码管的设计与实现">
+<meta property="og:url" content="http://yoursite.com/2019/12/30/Veirlog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95-5-%E5%BE%AA%E7%8E%AF%E7%A7%BB%E4%BD%8D%E6%95%B0%E7%A0%81%E7%AE%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/index.html">
+<meta property="og:site_name" content="XuXing&#39;s blog">
+<meta property="og:description" content="实现功能：在开发板的数码管上显示特定数字，并且让这些数字循环移位。 总体框图如下： 代码如下： 分频模块： 1234567891011121314module div(    input clk, &#x2F;&#x2F;输入自带的系统时钟(100Mhz)    input rst, &#x2F;&#x2F;复位    output scan_clk &#x2F;&#x2F;输出时钟，用于驱动数码管，让其动态扫描用    );    reg [19:0]">
+<meta property="og:locale">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/2019050910072775.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3NzEzOQ==,size_16,color_FFFFFF,t_70">
+<meta property="og:image" content="https://img-blog.csdnimg.cn/20190509101008687.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3NzEzOQ==,size_16,color_FFFFFF,t_70">
+<meta property="article:published_time" content="2019-12-30T02:25:18.000Z">
+<meta property="article:modified_time" content="2025-10-02T11:35:30.644Z">
+<meta property="article:author" content="xsk">
+<meta property="article:tag" content="Veirlog">
+<meta property="article:tag" content="FPGA">
+<meta property="article:tag" content="数码管">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://img-blog.csdnimg.cn/2019050910072775.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3NzEzOQ==,size_16,color_FFFFFF,t_70">
+  
+    <link rel="alternate" href="/atom.xml" title="XuXing&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="/css/hiero.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+  <!-- Custom CSS -->
+  
+<link rel="stylesheet" href="/css/my.css">
+
+  <!-- Google Adsense -->
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<script>
+var themeMenus = {};
+
+  themeMenus["/"] = "Home"; 
+
+  themeMenus["/archives"] = "Archives"; 
+
+  themeMenus["/categories"] = "Categories"; 
+
+  themeMenus["/tags"] = "Tags"; 
+
+</script>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  <header id="allheader" class="site-header" role="banner">
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="124px" height="124px" alt="Hike News" src=" /css/images/bDuck.png">
+              </a>
+            
+          </h1>
+
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+            <div class="clearfix sf-menu">
+
+              <ul id="main-nav" class="nmenu sf-js-enabled">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="originBgDiv" style="background: #fff; width: 100%;">
+
+      <div style="max-height:600px; overflow: hidden;  display: flex; display: -webkit-flex; align-items: center;">
+        <img id="originBg" width="100%" alt="" src="">
+      </div>
+
+  </div>
+
+  <script>
+  function setAboutIMG(){
+      var imgUrls = "css/images/pose.jpg,https://source.unsplash.com/collection/954550/1920x1080".split(",");
+      var random = Math.floor((Math.random() * imgUrls.length ));
+      if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+        document.getElementById("originBg").src=imgUrls[random];
+      } else {
+        document.getElementById("originBg").src='/' + imgUrls[random];
+      }
+  }
+  bgDiv=document.getElementById("originBgDiv");
+  if(location.pathname.match('about')){
+    setAboutIMG();
+    bgDiv.style.display='block';
+  }else{
+    bgDiv.style.display='none';
+  }
+  </script>
+
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-Veirlog学习记录-5-循环移位数码管的设计与实现" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      Veirlog学习记录-5-循环移位数码管的设计与实现
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2019/12/30/Veirlog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95-5-%E5%BE%AA%E7%8E%AF%E7%A7%BB%E4%BD%8D%E6%95%B0%E7%A0%81%E7%AE%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" class="article-date">
+	  <time datetime="2019-12-30T02:25:18.000Z" itemprop="datePublished">December 30, 2019</time>
+	</a>
+
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>﻿<strong>实现功能：在开发板的数码管上显示特定数字，并且让这些数字循环移位。</strong></p>
+<p>总体框图如下：<br><img src="https://img-blog.csdnimg.cn/2019050910072775.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3NzEzOQ==,size_16,color_FFFFFF,t_70" alt="总体框图"></p>
+<p>代码如下：</p>
+<p>分频模块：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">module div(</span><br><span class="line">    input clk, //输入自带的系统时钟(100Mhz)</span><br><span class="line">    input rst, //复位</span><br><span class="line">    output scan_clk //输出时钟，用于驱动数码管，让其动态扫描用</span><br><span class="line">    );</span><br><span class="line">    reg [19:0] clkdiv;</span><br><span class="line">    </span><br><span class="line">    always @(posedge clk or posedge rst)</span><br><span class="line">    begin</span><br><span class="line">        if( rst == 1)  clkdiv &lt;=0;</span><br><span class="line">        else  clkdiv &lt;= clkdiv + 1;</span><br><span class="line">    end</span><br><span class="line">    assign scan_clk = clkdiv[15]; //使得san_clk = 190Hz</span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
+<p>其他模块（显示模块）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">module otherModel(</span><br><span class="line">    input rst,</span><br><span class="line">    input scan_clk,</span><br><span class="line">    </span><br><span class="line">    output reg [7:0] an,</span><br><span class="line">    output reg [6:0] seg</span><br><span class="line">    );</span><br><span class="line">    reg [3:0] digit;  //选择位上显示的数字</span><br><span class="line">    reg [2:0] cnt;  //选择哪一位显示</span><br><span class="line">    </span><br><span class="line">    always @(posedge scan_clk or posedge rst)</span><br><span class="line">        begin</span><br><span class="line">        if ( rst == 1) cnt &lt;=0;</span><br><span class="line">        else cnt &lt;=cnt + 1;</span><br><span class="line">        end</span><br><span class="line">    </span><br><span class="line">    always @ (*)</span><br><span class="line">    begin</span><br><span class="line">        case ( cnt )</span><br><span class="line">        3&#x27;b000:begin digit = 4&#x27;b0000; an = 8&#x27;b01111111; end</span><br><span class="line">        3&#x27;b001:begin digit = 4&#x27;b0001; an = 8&#x27;b10111111; end</span><br><span class="line">        3&#x27;b010:begin digit = 4&#x27;b0010; an = 8&#x27;b11011111; end</span><br><span class="line">        3&#x27;b011:begin digit = 4&#x27;b0011; an = 8&#x27;b11101111; end</span><br><span class="line">        3&#x27;b100:begin digit = 4&#x27;b0100; an = 8&#x27;b11110111; end</span><br><span class="line">        3&#x27;b101:begin digit = 4&#x27;b0101; an = 8&#x27;b11111011; end</span><br><span class="line">        3&#x27;b110:begin digit = 4&#x27;b0110; an = 8&#x27;b11111101; end</span><br><span class="line">        3&#x27;b111:begin digit = 4&#x27;b0111; an = 8&#x27;b11111110; end</span><br><span class="line">         default:begin digit= 4&#x27;b0000; an = 8&#x27;b01111111; end</span><br><span class="line">        endcase</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    always @ (*)</span><br><span class="line">      begin</span><br><span class="line">         case ( digit )</span><br><span class="line">         4&#x27;b0000:seg = 7&#x27;b0100100;</span><br><span class="line">         4&#x27;b0001:seg = 7&#x27;b1000000;</span><br><span class="line">         4&#x27;b0010:seg = 7&#x27;b1111001;</span><br><span class="line">         4&#x27;b0011:seg= 7&#x27;b0000000;</span><br><span class="line">         4&#x27;b0100:seg =7&#x27;b0100100;</span><br><span class="line">         4&#x27;b0101:seg =7&#x27;b1000000;</span><br><span class="line">         4&#x27;b0110:seg =7&#x27;b1111000;</span><br><span class="line">         4&#x27;b0111:seg =7&#x27;b0000000;</span><br><span class="line">         default: seg = 7&#x27;b0000001;</span><br><span class="line">         endcase</span><br><span class="line">     end</span><br><span class="line">         </span><br><span class="line">         </span><br><span class="line">         </span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
+<p>顶层模块：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">module top(</span><br><span class="line">    input clk,</span><br><span class="line">    input rst,</span><br><span class="line">    output [7:0] an,</span><br><span class="line">    output [6:0] seg</span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line">    div u1(clk,rst,scan_clk); //例化模块</span><br><span class="line">    otherModel u2(rst,scan_clk,an,seg);</span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
+<p>测试文件：<br><strong>注意：测试文件是针对otherModel文件的。在写测试文件之前，最好不要添加顶层模块，否则测试时会找不到想要测试的那个文件。如果，已经编写完了顶层模块，可以在design列表中，右键要测试的文件，然后点击 设置为顶层文件，这样就会测试到指定的文件了。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">module otherModel_tb();</span><br><span class="line">    reg rst,scan_clk; //输入信号要用 reg型</span><br><span class="line">    wire [7:0] an; //输出信号要用 wire型</span><br><span class="line">    wire [6:0] seg; //输出信号</span><br><span class="line">    </span><br><span class="line">    otherModel test(</span><br><span class="line">                     .rst(rst),</span><br><span class="line">                     .scan_clk(scan_clk),</span><br><span class="line">                     .an(an),</span><br><span class="line">                     .seg(seg)</span><br><span class="line">                     </span><br><span class="line">                        );</span><br><span class="line">     initial fork</span><br><span class="line">           scan_clk = 0;</span><br><span class="line">           rst = 1; #50 rst = 0;</span><br><span class="line">     join</span><br><span class="line">                              </span><br><span class="line">     always #10 scan_clk = ~scan_clk; //定义没过10毫秒，信号就会进行翻转</span><br><span class="line">     </span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
+<p>仿真波形如下：<br><img src="https://img-blog.csdnimg.cn/20190509101008687.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3NzEzOQ==,size_16,color_FFFFFF,t_70" alt="仿真结果"><br><strong>我也写了几篇关于Veirlog的文章，感兴趣的同学可以去看看。该模块链接如下：</strong><br><a href="https://xuxing0430.github.io/categories/Veirlog/">Verilog学习</a></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Veirlog/">Veirlog</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FPGA/" rel="tag">FPGA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Veirlog/" rel="tag">Veirlog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" rel="tag">数码管</a></li></ul>
+
+      
+        <div id="donation_div"></div>
+
+
+<script src="/js/vdonate.js"></script>
+
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/weChat.jpg?raw=true',
+  alipayImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/aliPay.jpg?raw=true'
+});
+</script>
+      
+            
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/12/30/Veirlog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95-6-%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%84%E5%AE%8C%E6%95%B4%E5%B7%A5%E7%A8%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Veirlog学习记录-6-数字频率计的设计与实现(附完整工程)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/20/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">matlab实现随机攻击网络节点+蓄意攻击网络节点(2)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article" style="overflow-y: scroll; max-width: 28%;">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav">None</ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2025 XuXing&#39;s blog All Rights Reserved.
+          
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hiero" target="_blank">hiero</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var contentdiv = document.getElementById("content");
+
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+</script>
+
+<!-- Custome JS -->
+
+<script src="/js/my.js"></script>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/scripts.js"></script>
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-145170584-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+
+
+
+	<script async src="https://dnqof95d40fo6.cloudfront.net/atw7f8.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>

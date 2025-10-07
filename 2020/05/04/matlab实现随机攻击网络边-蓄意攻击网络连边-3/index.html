@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <!-- PACE Progress Bar START -->
+  
+    
+<script src="https://raw.githubusercontent.com/HubSpot/pace/v1.0.2/pace.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+
+  
+  
+
+  <!-- PACE Progress Bar START -->
+
+  
+  <title>matlab实现随机攻击网络边+蓄意攻击网络连边(3) | XuXing&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="matlab随机攻击网络连边蓄意攻击" />
+  
+  
+  
+  
+  <meta name="description" content="其实在前面已经介绍过随机进攻节点和蓄意进攻节点的原理，今天和大家说一下边攻击。其实原理都是类似的，只要改动之前的一些代码就可以完成这个操作的。如果没有看过前两篇文章，那么建议你先看一下，有助于理解原理。 前两篇地址：matlab实现随机攻击网络节点+蓄意攻击网络节点(1)附github完整工程地址matlab实现随机攻击网络节点+蓄意攻击网络节点(2)我们首先应该了解删除连边和删除的节点的区别：删">
+<meta property="og:type" content="article">
+<meta property="og:title" content="matlab实现随机攻击网络边+蓄意攻击网络连边(3)">
+<meta property="og:url" content="http://yoursite.com/2020/05/04/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%BE%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9-3/index.html">
+<meta property="og:site_name" content="XuXing&#39;s blog">
+<meta property="og:description" content="其实在前面已经介绍过随机进攻节点和蓄意进攻节点的原理，今天和大家说一下边攻击。其实原理都是类似的，只要改动之前的一些代码就可以完成这个操作的。如果没有看过前两篇文章，那么建议你先看一下，有助于理解原理。 前两篇地址：matlab实现随机攻击网络节点+蓄意攻击网络节点(1)附github完整工程地址matlab实现随机攻击网络节点+蓄意攻击网络节点(2)我们首先应该了解删除连边和删除的节点的区别：删">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-05-04T02:14:47.000Z">
+<meta property="article:modified_time" content="2025-10-02T11:35:30.645Z">
+<meta property="article:author" content="xsk">
+<meta property="article:tag" content="matlab">
+<meta property="article:tag" content="随机攻击">
+<meta property="article:tag" content="网络连边">
+<meta property="article:tag" content="蓄意攻击">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="XuXing&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="/css/hiero.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+  <!-- Custom CSS -->
+  
+<link rel="stylesheet" href="/css/my.css">
+
+  <!-- Google Adsense -->
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<script>
+var themeMenus = {};
+
+  themeMenus["/"] = "Home"; 
+
+  themeMenus["/archives"] = "Archives"; 
+
+  themeMenus["/categories"] = "Categories"; 
+
+  themeMenus["/tags"] = "Tags"; 
+
+</script>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  <header id="allheader" class="site-header" role="banner">
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="124px" height="124px" alt="Hike News" src=" /css/images/bDuck.png">
+              </a>
+            
+          </h1>
+
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+            <div class="clearfix sf-menu">
+
+              <ul id="main-nav" class="nmenu sf-js-enabled">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="originBgDiv" style="background: #fff; width: 100%;">
+
+      <div style="max-height:600px; overflow: hidden;  display: flex; display: -webkit-flex; align-items: center;">
+        <img id="originBg" width="100%" alt="" src="">
+      </div>
+
+  </div>
+
+  <script>
+  function setAboutIMG(){
+      var imgUrls = "css/images/pose.jpg,https://source.unsplash.com/collection/954550/1920x1080".split(",");
+      var random = Math.floor((Math.random() * imgUrls.length ));
+      if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+        document.getElementById("originBg").src=imgUrls[random];
+      } else {
+        document.getElementById("originBg").src='/' + imgUrls[random];
+      }
+  }
+  bgDiv=document.getElementById("originBgDiv");
+  if(location.pathname.match('about')){
+    setAboutIMG();
+    bgDiv.style.display='block';
+  }else{
+    bgDiv.style.display='none';
+  }
+  </script>
+
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-matlab实现随机攻击网络边-蓄意攻击网络连边-3" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      matlab实现随机攻击网络边+蓄意攻击网络连边(3)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2020/05/04/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%BE%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9-3/" class="article-date">
+	  <time datetime="2020-05-04T02:14:47.000Z" itemprop="datePublished">May 4, 2020</time>
+	</a>
+
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>其实在前面已经介绍过随机进攻节点和蓄意进攻节点的原理，今天和大家说一下边攻击。其实原理都是类似的，只要改动之前的一些代码就可以完成这个操作的。如果没有看过前两篇文章，那么建议你先看一下，有助于理解原理。</p>
+<h4 id="前两篇地址："><a href="#前两篇地址：" class="headerlink" title="前两篇地址："></a>前两篇地址：</h4><h4 id="matlab实现随机攻击网络节点-蓄意攻击网络节点-1-附github完整工程地址"><a href="#matlab实现随机攻击网络节点-蓄意攻击网络节点-1-附github完整工程地址" class="headerlink" title="matlab实现随机攻击网络节点+蓄意攻击网络节点(1)附github完整工程地址"></a><a href="[https://xuxing0430.github.io/2019/12/13/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/](https://xuxing0430.github.io/2019/12/13/matlab实现随机攻击网络节点-蓄意攻击网络节点/)">matlab实现随机攻击网络节点+蓄意攻击网络节点(1)附github完整工程地址</a></h4><h4 id="matlab实现随机攻击网络节点-蓄意攻击网络节点-2"><a href="#matlab实现随机攻击网络节点-蓄意攻击网络节点-2" class="headerlink" title="matlab实现随机攻击网络节点+蓄意攻击网络节点(2)"></a><a href="[https://xuxing0430.github.io/2019/12/20/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-2/](https://xuxing0430.github.io/2019/12/20/matlab实现随机攻击网络节点-蓄意攻击网络节点-2/)">matlab实现随机攻击网络节点+蓄意攻击网络节点(2)</a></h4><h3 id="我们首先应该了解删除连边和删除的节点的区别："><a href="#我们首先应该了解删除连边和删除的节点的区别：" class="headerlink" title="我们首先应该了解删除连边和删除的节点的区别："></a>我们首先应该了解删除连边和删除的节点的区别：</h3><p>删除节点：删除该节点及与该节点所有相连的边。</p>
+<p>删除连边：只删除该连边，而不改变节点的状态。</p>
+<h4 id="如果结合维度为N-N邻接矩阵A来说："><a href="#如果结合维度为N-N邻接矩阵A来说：" class="headerlink" title="如果结合维度为N*N邻接矩阵A来说："></a>如果结合维度为N*N邻接矩阵A来说：</h4><p>删除节点a：要删除A(a，:)和A(:，a)这一列一行，矩阵A变为（N-1）*（N-1）维度</p>
+<p>删除节点a和节点b的连边：A(a,b) = 0;A(b,a) = 0;(邻接矩阵的对称性)，矩阵A还是N*N维度。</p>
+<h3 id="知道了具体逻辑，那么下面就是代码实现了："><a href="#知道了具体逻辑，那么下面就是代码实现了：" class="headerlink" title="知道了具体逻辑，那么下面就是代码实现了："></a>知道了具体逻辑，那么下面就是代码实现了：</h3><h4 id="之前我们删除节点的代码片段为："><a href="#之前我们删除节点的代码片段为：" class="headerlink" title="之前我们删除节点的代码片段为："></a>之前我们删除节点的代码片段为：</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:numDelete</span><br><span class="line">    A( Name_Struct.Node_Key_Degree(<span class="built_in">i</span>),: ) = <span class="number">0</span>;     <span class="comment">%% 删除节点 Node_Key_Degree(i),用 0 占位，不能置空</span></span><br><span class="line">    A( :,Name_Struct.Node_Key_Degree(<span class="built_in">i</span>) ) = <span class="number">0</span>;</span><br><span class="line">    AA = A;</span><br><span class="line">    AA( sum(A)==<span class="number">0</span>,: ) = [];</span><br><span class="line">    AA( :,sum(A)==<span class="number">0</span> ) = [];</span><br><span class="line">    Con_Index_NetEff = testEglob( AA );</span><br><span class="line"></span><br><span class="line">    Eglob(<span class="built_in">i</span>) = Con_Index_NetEff.Net_Eff_Mymod;          </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="边攻击需要的数据准备："><a href="#边攻击需要的数据准备：" class="headerlink" title="边攻击需要的数据准备："></a>边攻击需要的数据准备：</h4><h5 id="邻接表：也就是网络中的所有连边关系-也就是下面的代码片段中的-biao（2-edge-number的矩阵）"><a href="#邻接表：也就是网络中的所有连边关系-也就是下面的代码片段中的-biao（2-edge-number的矩阵）" class="headerlink" title="邻接表：也就是网络中的所有连边关系 也就是下面的代码片段中的 biao（2*edge_number的矩阵）"></a>邻接表：也就是网络中的所有连边关系 也就是下面的代码片段中的 biao（2*edge_number的矩阵）</h5><h5 id="边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node-edge-bet（1-edge-number的矩阵），就是根据边介数参数得到的边的排序"><a href="#边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node-edge-bet（1-edge-number的矩阵），就是根据边介数参数得到的边的排序" class="headerlink" title="边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node_edge_bet（1*edge_number的矩阵），就是根据边介数参数得到的边的排序"></a>边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node_edge_bet（1*edge_number的矩阵），就是根据边介数参数得到的边的排序</h5><h4 id="那么改动后的边攻击代码片段为："><a href="#那么改动后的边攻击代码片段为：" class="headerlink" title="那么改动后的边攻击代码片段为："></a>那么改动后的边攻击代码片段为：</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">A = A_Init;          <span class="comment">%% 网络邻接矩阵 A</span></span><br><span class="line"><span class="comment">% numDelete：删除连边的数量</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:numDelete</span><br><span class="line">	<span class="comment">%把要删除的边置为0</span></span><br><span class="line">    A( biao(<span class="number">1</span>,Node_edge_bet(<span class="built_in">i</span>)),biao(<span class="number">2</span>,Node_edge_bet(<span class="built_in">i</span>)) ) = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">%把对称位置的边也置为0</span></span><br><span class="line">    A( biao(<span class="number">2</span>,Node_edge_bet(<span class="built_in">i</span>)),biao(<span class="number">1</span>,Node_edge_bet(<span class="built_in">i</span>)) ) = <span class="number">0</span>;</span><br><span class="line">    AA = A;</span><br><span class="line">    Con_Index_NetEff = testEglob( AA );</span><br><span class="line">    Eglob_edge_bet(<span class="built_in">i</span>) = Con_Index_NetEff.Net_Eff;           </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>经过分析之后，我们可以得到一个推测或者说是结论：那就是边攻击每次只攻击一个边，对网络的影响较小（相对于节点攻击来说）。</p>
+<p>感谢大家的时间，并希望以上的内容会对大家有所帮助。</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matlab/" rel="tag">matlab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" rel="tag">网络连边</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" rel="tag">蓄意攻击</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" rel="tag">随机攻击</a></li></ul>
+
+      
+        <div id="donation_div"></div>
+
+
+<script src="/js/vdonate.js"></script>
+
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/weChat.jpg?raw=true',
+  alipayImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/aliPay.jpg?raw=true'
+});
+</script>
+      
+            
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/05/19/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E5%AE%9E%E4%BD%93%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E7%9A%84Space-L%E6%A8%A1%E5%9E%8B/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          如何建立复杂网络实体网络的Space L模型
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/12/30/Veirlog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95-6-%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E9%99%84%E5%AE%8C%E6%95%B4%E5%B7%A5%E7%A8%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Veirlog学习记录-6-数字频率计的设计与实现(附完整工程)</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article" style="overflow-y: scroll; max-width: 28%;">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%89%8D%E4%B8%A4%E7%AF%87%E5%9C%B0%E5%9D%80%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">前两篇地址：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-1-%E9%99%84github%E5%AE%8C%E6%95%B4%E5%B7%A5%E7%A8%8B%E5%9C%B0%E5%9D%80"><span class="nav-number">2.</span> <span class="nav-text">matlab实现随机攻击网络节点+蓄意攻击网络节点(1)附github完整工程地址</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-2"><span class="nav-number">3.</span> <span class="nav-text">matlab实现随机攻击网络节点+蓄意攻击网络节点(2)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%88%91%E4%BB%AC%E9%A6%96%E5%85%88%E5%BA%94%E8%AF%A5%E4%BA%86%E8%A7%A3%E5%88%A0%E9%99%A4%E8%BF%9E%E8%BE%B9%E5%92%8C%E5%88%A0%E9%99%A4%E7%9A%84%E8%8A%82%E7%82%B9%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9A"><span class="nav-number"></span> <span class="nav-text">我们首先应该了解删除连边和删除的节点的区别：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A6%82%E6%9E%9C%E7%BB%93%E5%90%88%E7%BB%B4%E5%BA%A6%E4%B8%BAN-N%E9%82%BB%E6%8E%A5%E7%9F%A9%E9%98%B5A%E6%9D%A5%E8%AF%B4%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">如果结合维度为N*N邻接矩阵A来说：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9F%A5%E9%81%93%E4%BA%86%E5%85%B7%E4%BD%93%E9%80%BB%E8%BE%91%EF%BC%8C%E9%82%A3%E4%B9%88%E4%B8%8B%E9%9D%A2%E5%B0%B1%E6%98%AF%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0%E4%BA%86%EF%BC%9A"><span class="nav-number"></span> <span class="nav-text">知道了具体逻辑，那么下面就是代码实现了：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B9%8B%E5%89%8D%E6%88%91%E4%BB%AC%E5%88%A0%E9%99%A4%E8%8A%82%E7%82%B9%E7%9A%84%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5%E4%B8%BA%EF%BC%9A"><span class="nav-number">1.</span> <span class="nav-text">之前我们删除节点的代码片段为：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BE%B9%E6%94%BB%E5%87%BB%E9%9C%80%E8%A6%81%E7%9A%84%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87%EF%BC%9A"><span class="nav-number">2.</span> <span class="nav-text">边攻击需要的数据准备：</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%82%BB%E6%8E%A5%E8%A1%A8%EF%BC%9A%E4%B9%9F%E5%B0%B1%E6%98%AF%E7%BD%91%E7%BB%9C%E4%B8%AD%E7%9A%84%E6%89%80%E6%9C%89%E8%BF%9E%E8%BE%B9%E5%85%B3%E7%B3%BB-%E4%B9%9F%E5%B0%B1%E6%98%AF%E4%B8%8B%E9%9D%A2%E7%9A%84%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5%E4%B8%AD%E7%9A%84-biao%EF%BC%882-edge-number%E7%9A%84%E7%9F%A9%E9%98%B5%EF%BC%89"><span class="nav-number">2.1.</span> <span class="nav-text">邻接表：也就是网络中的所有连边关系 也就是下面的代码片段中的 biao（2*edge_number的矩阵）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E8%BE%B9%E7%9A%84%E6%8E%92%E5%BA%8F%E5%85%B3%E7%B3%BB%EF%BC%9A%EF%BC%88%E5%8F%AF%E4%BB%A5%E6%98%AF%E9%9A%8F%E6%9C%BA%E6%8E%92%E5%BA%8F%EF%BC%8C%E5%8F%AF%E4%BB%A5%E6%98%AF%E6%8C%89%E6%9F%90%E7%A7%8D%E5%8F%82%E6%95%B0%E8%BF%9B%E8%A1%8C%E7%9A%84%E6%8E%92%E5%BA%8F%EF%BC%89%E4%B8%8B%E9%9D%A2%E7%9A%84%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5%E4%B8%AD%E7%9A%84Node-edge-bet%EF%BC%881-edge-number%E7%9A%84%E7%9F%A9%E9%98%B5%EF%BC%89%EF%BC%8C%E5%B0%B1%E6%98%AF%E6%A0%B9%E6%8D%AE%E8%BE%B9%E4%BB%8B%E6%95%B0%E5%8F%82%E6%95%B0%E5%BE%97%E5%88%B0%E7%9A%84%E8%BE%B9%E7%9A%84%E6%8E%92%E5%BA%8F"><span class="nav-number">2.2.</span> <span class="nav-text">边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node_edge_bet（1*edge_number的矩阵），就是根据边介数参数得到的边的排序</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%82%A3%E4%B9%88%E6%94%B9%E5%8A%A8%E5%90%8E%E7%9A%84%E8%BE%B9%E6%94%BB%E5%87%BB%E4%BB%A3%E7%A0%81%E7%89%87%E6%AE%B5%E4%B8%BA%EF%BC%9A"><span class="nav-number">3.</span> <span class="nav-text">那么改动后的边攻击代码片段为：</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2025 XuXing&#39;s blog All Rights Reserved.
+          
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hiero" target="_blank">hiero</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var contentdiv = document.getElementById("content");
+
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+</script>
+
+<!-- Custome JS -->
+
+<script src="/js/my.js"></script>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/scripts.js"></script>
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-145170584-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+
+
+
+	<script async src="https://dnqof95d40fo6.cloudfront.net/atw7f8.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>

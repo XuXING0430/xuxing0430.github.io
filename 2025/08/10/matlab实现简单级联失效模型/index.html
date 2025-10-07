@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <!-- PACE Progress Bar START -->
+  
+    
+<script src="https://raw.githubusercontent.com/HubSpot/pace/v1.0.2/pace.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+
+  
+  
+
+  <!-- PACE Progress Bar START -->
+
+  
+  <title>matlab实现简单级联失效模型 | XuXing&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="复杂网络级联失效" />
+  
+  
+  
+  
+  <meta name="description" content="级联失效的定义如下：网络中，一个或少数几个节点或连线的失效会通过节点之间的耦合关系引发其他节点也发生失效，进而产生级联效应，最终导致相当一部分节点甚至整个网络的崩溃，这种现象就称为级联失效，有时也形象称之为“ 雪崩”。 级联失效的原理并不难懂，但是实现起来并不简单，也曾在网上寻找过代码，可以几无所得。有的实现代码确实有点复杂，但我觉得从逻辑上来讲，应该是不难的。 负载-容量模型是应用最为广泛的级联">
+<meta property="og:type" content="article">
+<meta property="og:title" content="matlab实现简单级联失效模型">
+<meta property="og:url" content="http://yoursite.com/2025/08/10/matlab%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="XuXing&#39;s blog">
+<meta property="og:description" content="级联失效的定义如下：网络中，一个或少数几个节点或连线的失效会通过节点之间的耦合关系引发其他节点也发生失效，进而产生级联效应，最终导致相当一部分节点甚至整个网络的崩溃，这种现象就称为级联失效，有时也形象称之为“ 雪崩”。 级联失效的原理并不难懂，但是实现起来并不简单，也曾在网上寻找过代码，可以几无所得。有的实现代码确实有点复杂，但我觉得从逻辑上来讲，应该是不难的。 负载-容量模型是应用最为广泛的级联">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-08-10T08:11:28.000Z">
+<meta property="article:modified_time" content="2025-10-07T07:50:58.890Z">
+<meta property="article:author" content="xsk">
+<meta property="article:tag" content="复杂网络">
+<meta property="article:tag" content="级联失效">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="XuXing&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="/css/hiero.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+  <!-- Custom CSS -->
+  
+<link rel="stylesheet" href="/css/my.css">
+
+  <!-- Google Adsense -->
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<script>
+var themeMenus = {};
+
+  themeMenus["/"] = "Home"; 
+
+  themeMenus["/archives"] = "Archives"; 
+
+  themeMenus["/categories"] = "Categories"; 
+
+  themeMenus["/tags"] = "Tags"; 
+
+</script>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  <header id="allheader" class="site-header" role="banner">
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="124px" height="124px" alt="Hike News" src=" /css/images/bDuck.png">
+              </a>
+            
+          </h1>
+
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+            <div class="clearfix sf-menu">
+
+              <ul id="main-nav" class="nmenu sf-js-enabled">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags">Tags</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="originBgDiv" style="background: #fff; width: 100%;">
+
+      <div style="max-height:600px; overflow: hidden;  display: flex; display: -webkit-flex; align-items: center;">
+        <img id="originBg" width="100%" alt="" src="">
+      </div>
+
+  </div>
+
+  <script>
+  function setAboutIMG(){
+      var imgUrls = "css/images/pose.jpg,https://source.unsplash.com/collection/954550/1920x1080".split(",");
+      var random = Math.floor((Math.random() * imgUrls.length ));
+      if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+        document.getElementById("originBg").src=imgUrls[random];
+      } else {
+        document.getElementById("originBg").src='/' + imgUrls[random];
+      }
+  }
+  bgDiv=document.getElementById("originBgDiv");
+  if(location.pathname.match('about')){
+    setAboutIMG();
+    bgDiv.style.display='block';
+  }else{
+    bgDiv.style.display='none';
+  }
+  </script>
+
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-matlab实现简单级联失效模型" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      matlab实现简单级联失效模型
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2025/08/10/matlab%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88%E6%A8%A1%E5%9E%8B/" class="article-date">
+	  <time datetime="2025-08-10T08:11:28.000Z" itemprop="datePublished">August 10, 2025</time>
+	</a>
+
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>级联失效的定义如下：网络中，一个或少数几个节点或连线的失效会通过节点之间的耦合关系引发其他节点也发生失效，进而产生级联效应，最终导致相当一部分节点甚至整个网络的崩溃，这种现象就称为级联失效，有时也形象称之为“ 雪崩”。</p>
+<p>级联失效的原理并不难懂，但是实现起来并不简单，也曾在网上寻找过代码，可以几无所得。有的实现代码确实有点复杂，但我觉得从逻辑上来讲，应该是不难的。</p>
+<p>负载-容量模型是应用最为广泛的级联失效模型。该模型主要有三个部分组成，初始负载定义、节点容量设置、负载重分配策略。<br>一个简单的负荷容量模型流程图可如下图所示：</p>
+<p>流程图<br>重分配策略一般是创新点集中存在的地方，因为这块可以做文章的地方比较多，我理解重这部分可以分三块：策略，节点状态和分配负载的比例。<br>策略：常见的负载重分配策略有随机分配，按某指标进行分配，剩余负载重分配等等。<br>节点状态：最简单的就是两种：正常和失效。所以有研究者又设置了一种叫做 过载 的状态，顾名思义就是介于正常和失效的中间状态。<br>分配负载的比例：最简单的就是当节点失效的时候，失效节点上的所有负载都参与重分配。那么如果有过载这个节点状态呢？那么此时就不是所有的负载都会被分配。<br>💥 级联失效动态演示<br>下图是失效过程的动态模拟，红色节点表示在各阶段中失效的节点，示例网络是100节点的侧视图。</p>
+<p>根据实际攻击结果的动态图<br>🎯 模拟前后网络对比</p>
+<p>对比图</p>
+<p>上面的理论说的差不多，具体从哪里开始创新还是要靠个人自己的研究，本文从代码层面帮助大家实现一个最基础的级联失效模型，希望可以帮助到大家。<br>下面的示例代码：初始负载为度，节点容量设置为线性模型设置，负载重分配策略为按照度分配。</p>
+<p>其中初始负载L0 定义和节点容量C 设置，这两部分相对比较简单:</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">L0 = sum(A);</span><br><span class="line">C = (<span class="number">1</span> + a)*L0</span><br><span class="line">重分配部分：</span><br></pre></td></tr></table></figure>
+<p>%% 重分配<br>pre_attack_list = [1];<br>% 初始节点状态 一开始都是正常所以都是0, 失效为1<br>status_list = zeros([1 node_num]);<br>% 失效节点列表<br>node_index_list{1,1} = pre_attack_list;<br>% 当前失效的列表<br>failure_list = node_index_list{1,1};</p>
+<p>status_list(node_index_list{1,1}) = 1;<br>% 存储每个阶段的失效列表<br>failure_cell{1,1} = node_index_list{1,1};</p>
+<p>% 1.从node_index_list拿出此次失效的节点<br>% 2.计算出相邻节点开始分配<br>for i = 1:length(indexs)<br>    % 开始分配<br>    f1(i) = Load_redistribution(indexs(i),indexs, L0, status_list(node_index(j)))；<br>    L( indexs(i) ) = L0( indexs(i) ) +  f1(i)* L0( node_index(j));</p>
+<pre><code>% 3. 更新节点状态
+% 4. 更新失效列表
+
+if status_list(indexs(i)) == 1
+    failure_list = [failure_list indexs(i)];
+end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>A(failure_list,:) = 0;<br>A(:,failure_list) = 0;<br>AA = A;</p>
+<p>% 记载失效集合<br>failure_cell{1,k+1} = failure_list;<br>node_index_list{1,k+1} = setdiff(failure_cell{1,k+1}, failure_cell{1,k});</p>
+<p>% 判断级联失效是否停止<br>all_the_indexs = figure_NetEff( AA ,node_num);<br>NetEff = all_the_indexs.Eglob;<br>Max_sub_num = all_the_indexs.Max_sub_num;<br>实现算法不易，本文仅放置了部分代码，若想获取完整代码或者与我交流，可关注：公众号【三紫智造局】，或直接访问下方内测入口也可以。后续会一直更新相关复杂网络算法和内容，欢迎关注。</p>
+<p>放在最后：<br>我们最近正在开发一个复杂网络平台，参与内测后续上线会赠送免费计算次数<br>平台入口（内测中）<br>​<a href="http://www.threepurple.cn/">www.threepurple.cn/</a></p>
+<p>并且我准备建立一个复杂网络交流群，想进群可以联系我。</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" rel="tag">复杂网络</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" rel="tag">级联失效</a></li></ul>
+
+      
+        <div id="donation_div"></div>
+
+
+<script src="/js/vdonate.js"></script>
+
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/weChat.jpg?raw=true',
+  alipayImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/aliPay.jpg?raw=true'
+});
+</script>
+      
+            
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/08/18/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8postman%E8%BF%9B%E8%A1%8CAPI%E6%B5%8B%E8%AF%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">如何使用postman进行API测试</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article" style="overflow-y: scroll; max-width: 28%;">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav">None</ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2025 XuXing&#39;s blog All Rights Reserved.
+          
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hiero" target="_blank">hiero</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var contentdiv = document.getElementById("content");
+
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+</script>
+
+<!-- Custome JS -->
+
+<script src="/js/my.js"></script>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags" class="mobile-nav-link">Tags</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/scripts.js"></script>
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-145170584-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+
+
+
+	<script async src="https://dnqof95d40fo6.cloudfront.net/atw7f8.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
