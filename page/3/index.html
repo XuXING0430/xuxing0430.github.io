@@ -163,6 +163,85 @@ var themeMenus = {};
         
           <section id="main">
   
+    <article id="post-tensorflow在AMD上用ROCm框架实现GPU训练"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2019/08/17/tensorflow%E5%9C%A8AMD%E4%B8%8A%E7%94%A8ROCm%E6%A1%86%E6%9E%B6%E5%AE%9E%E7%8E%B0GPU%E8%AE%AD%E7%BB%83/">tensorflow在AMD上用ROCm框架实现GPU训练</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2019/08/17/tensorflow%E5%9C%A8AMD%E4%B8%8A%E7%94%A8ROCm%E6%A1%86%E6%9E%B6%E5%AE%9E%E7%8E%B0GPU%E8%AE%AD%E7%BB%83/" class="article-date">
+	  <time datetime="2019-08-17T05:28:06.000Z" itemprop="datePublished">August 17, 2019</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="众所周知，a卡对于tensorflow-gpu的支持很小，要想使用的话一般都得配n卡的电脑。而我只是感兴趣一个项目，想要跑出来一个模型，如果不用gpu加速，可能得跑一个月，所以不得不寻找在a卡上的解决方案。好在，终于找到了一个解决方案，虽然只是取巧，速度也不如正常n卡跑的快，但已经很不错了。"><a href="#众所周知，a卡对于tensorflow-gpu的支持很小，要想使用的话一般都得配n卡的电脑。而我只是感兴趣一个项目，想要跑出来一个模型，如果不用gpu加速，可能得跑一个月，所以不得不寻找在a卡上的解决方案。好在，终于找到了一个解决方案，虽然只是取巧，速度也不如正常n卡跑的快，但已经很不错了。" class="headerlink" title="众所周知，a卡对于tensorflow gpu的支持很小，要想使用的话一般都得配n卡的电脑。而我只是感兴趣一个项目，想要跑出来一个模型，如果不用gpu加速，可能得跑一个月，所以不得不寻找在a卡上的解决方案。好在，终于找到了一个解决方案，虽然只是取巧，速度也不如正常n卡跑的快，但已经很不错了。"></a>众所周知，a卡对于tensorflow gpu的支持很小，要想使用的话一般都得配n卡的电脑。而我只是感兴趣一个项目，想要跑出来一个模型，如果不用gpu加速，可能得跑一个月，所以不得不寻找在a卡上的解决方案。好在，终于找到了一个解决方案，虽然只是取巧，速度也不如正常n卡跑的快，但已经很不错了。</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">我的配置：</span><br><span class="line">显卡：RX 550</span><br><span class="line">所用系统：虚拟机ubuntu 18</span><br><span class="line">注：如果是虚拟机的话，最好分配3GB内存或以上，否则可能无法import tensorflow</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="a卡上支持的ROCm框架，暂时只支持ubuntu系统。如果你是windows系统，可以安一个虚拟机，道理是一样的，我也是在虚拟机上跑的。要注意，你的AMD显卡是否支持ROCm框架，请参考以下链接确定你的显卡是否支持。https-rocm-github-io-hardware-html-。还有你的工程如果不是python3-5-3-6-你也用不了。"><a href="#a卡上支持的ROCm框架，暂时只支持ubuntu系统。如果你是windows系统，可以安一个虚拟机，道理是一样的，我也是在虚拟机上跑的。要注意，你的AMD显卡是否支持ROCm框架，请参考以下链接确定你的显卡是否支持。https-rocm-github-io-hardware-html-。还有你的工程如果不是python3-5-3-6-你也用不了。" class="headerlink" title="a卡上支持的ROCm框架，暂时只支持ubuntu系统。如果你是windows系统，可以安一个虚拟机，道理是一样的，我也是在虚拟机上跑的。要注意，你的AMD显卡是否支持ROCm框架，请参考以下链接确定你的显卡是否支持。https://rocm.github.io/hardware.html 。还有你的工程如果不是python3.5\3.6,你也用不了。"></a>a卡上支持的ROCm框架，暂时只支持ubuntu系统。如果你是windows系统，可以安一个虚拟机，道理是一样的，我也是在虚拟机上跑的。要注意，你的AMD显卡是否支持ROCm框架，请参考以下链接确定你的显卡是否支持。<a href="https://rocm.github.io/hardware.html">https://rocm.github.io/hardware.html</a> 。还有你的工程如果不是python3.5\3.6,你也用不了。</h3><h3 id="如果条件都符合，就可以开始愉快的安装了。（变通的法子就是费劲儿。。。）"><a href="#如果条件都符合，就可以开始愉快的安装了。（变通的法子就是费劲儿。。。）" class="headerlink" title="如果条件都符合，就可以开始愉快的安装了。（变通的法子就是费劲儿。。。）"></a>如果条件都符合，就可以开始愉快的安装了。（变通的法子就是费劲儿。。。）</h3><h3 id="更新系统"><a href="#更新系统" class="headerlink" title="更新系统"></a>更新系统</h3><h4 id="建议：把源换为国内的，比如阿里的，会快很多的。"><a href="#建议：把源换为国内的，比如阿里的，会快很多的。" class="headerlink" title="建议：把源换为国内的，比如阿里的，会快很多的。"></a>建议：把源换为国内的，比如阿里的，会快很多的。</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt upgrade</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装ROCm"><a href="#安装ROCm" class="headerlink" title="安装ROCm"></a>安装ROCm</h2><h3 id="添加ROCm库（没有这一步，会提示找不到-软件包）"><a href="#添加ROCm库（没有这一步，会提示找不到-软件包）" class="headerlink" title="添加ROCm库（没有这一步，会提示找不到 软件包）"></a>添加ROCm库（没有这一步，会提示找不到 软件包）</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget -qO - http://repo.radeon.com/rocm/apt/debian/rocm.gpg.key | sudo apt-key add -</span><br><span class="line">sudo sh -c &#x27;echo deb [arch=amd64] http://repo.radeon.com/rocm/apt/debian/ xenial main &gt; /etc/apt/sources.list.d/rocm.list&#x27;</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装必要的软件包"><a href="#安装必要的软件包" class="headerlink" title="安装必要的软件包"></a>安装必要的软件包</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update &amp;&amp; sudo apt install -y \</span><br><span class="line">  build-essential \</span><br><span class="line">  clang \</span><br><span class="line">  clang-format \</span><br><span class="line">  clang-tidy \</span><br><span class="line">  cmake \</span><br><span class="line">  cmake-qt-gui \</span><br><span class="line">  ssh \</span><br><span class="line">  curl \</span><br><span class="line">  apt-utils \</span><br><span class="line">  pkg-config \</span><br><span class="line">  g++-multilib \</span><br><span class="line">  git \</span><br><span class="line">  libunwind-dev \</span><br><span class="line">  libfftw3-dev \</span><br><span class="line">  libelf-dev \</span><br><span class="line">  libncurses5-dev \</span><br><span class="line">  libpthread-stubs0-dev \</span><br><span class="line">  vim \</span><br><span class="line">  gfortran \</span><br><span class="line">  libboost-program-options-dev \</span><br><span class="line">  libssl-dev \</span><br><span class="line">  libboost-dev \</span><br><span class="line">  libboost-system-dev \</span><br><span class="line">  libboost-filesystem-dev \</span><br><span class="line">  rpm \</span><br><span class="line">  wget </span><br></pre></td></tr></table></figure>
+
+<h3 id="安装ROCm驱动"><a href="#安装ROCm驱动" class="headerlink" title="安装ROCm驱动"></a>安装ROCm驱动</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update &amp;&amp; \</span><br><span class="line">    sudo apt install -y --allow-unauthenticated \</span><br><span class="line">    rocm-dkms rocm-dev rocm-libs \</span><br><span class="line">    rocm-device-libs \</span><br><span class="line">    hsa-ext-rocr-dev hsakmt-roct-dev hsa-rocr-dev \</span><br><span class="line">    rocm-opencl rocm-opencl-dev \</span><br><span class="line">    rocm-utils \</span><br><span class="line">    rocm-profiler cxlactivitylogger \</span><br><span class="line">    miopen-hip miopengemm</span><br></pre></td></tr></table></figure>
+
+<h4 id="提示：rocm-dkms这一步下载的非常的慢，也和你的网络状况相关，我下的时候慢的时候10几k，快的时候有200。一共大概要下载500m-耐心等待一下吧。"><a href="#提示：rocm-dkms这一步下载的非常的慢，也和你的网络状况相关，我下的时候慢的时候10几k，快的时候有200。一共大概要下载500m-耐心等待一下吧。" class="headerlink" title="提示：rocm-dkms这一步下载的非常的慢，也和你的网络状况相关，我下的时候慢的时候10几k，快的时候有200。一共大概要下载500m,耐心等待一下吧。"></a>提示：rocm-dkms这一步下载的非常的慢，也和你的网络状况相关，我下的时候慢的时候10几k，快的时候有200。一共大概要下载500m,耐心等待一下吧。</h4><h3 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo adduser $LOGNAME video</span><br><span class="line">sudo reboot</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装miniconda（体积小、方便）"><a href="#安装miniconda（体积小、方便）" class="headerlink" title="安装miniconda（体积小、方便）"></a>安装miniconda（体积小、方便）</h3><h3 id="在使用python时我们很多时候会用到conda，但是conda会改变python的一些配置。所以我们先安装conda，这样就不会出现在使用tensorflow时需要使用-usr-bin-python3这样的命令。"><a href="#在使用python时我们很多时候会用到conda，但是conda会改变python的一些配置。所以我们先安装conda，这样就不会出现在使用tensorflow时需要使用-usr-bin-python3这样的命令。" class="headerlink" title="在使用python时我们很多时候会用到conda，但是conda会改变python的一些配置。所以我们先安装conda，这样就不会出现在使用tensorflow时需要使用/usr/bin/python3这样的命令。"></a>在使用python时我们很多时候会用到conda，但是conda会改变python的一些配置。所以我们先安装conda，这样就不会出现在使用tensorflow时需要使用<code>/usr/bin/python3</code>这样的命令。</h3><h3 id="下载地址（64位）：https-mirrors-tuna-tsinghua-edu-cn-anaconda-miniconda-Miniconda3-latest-Linux-x86-64-sh"><a href="#下载地址（64位）：https-mirrors-tuna-tsinghua-edu-cn-anaconda-miniconda-Miniconda3-latest-Linux-x86-64-sh" class="headerlink" title="下载地址（64位）：https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh"></a>下载地址（64位）：<a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh">https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Linux-x86_64.sh</a></h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd 下载目录</span><br><span class="line">chmod +x ./Miniconda3-latest-Linux-x86_64.sh</span><br><span class="line">bash Miniconda3-latest-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
+
+<h4 id="这一步安装的时候，会让你先阅读一个license，按enter到一个栏让你选择输入yes-no，当然选yes，然后进入下一步是选择安装路径，如果选择默认路径，就按enter，然后就会出现安装的信息，安装好之后会退出来。可以新建一个终端，验证一下是否安装成功："><a href="#这一步安装的时候，会让你先阅读一个license，按enter到一个栏让你选择输入yes-no，当然选yes，然后进入下一步是选择安装路径，如果选择默认路径，就按enter，然后就会出现安装的信息，安装好之后会退出来。可以新建一个终端，验证一下是否安装成功：" class="headerlink" title="这一步安装的时候，会让你先阅读一个license，按enter到一个栏让你选择输入yes/no，当然选yes，然后进入下一步是选择安装路径，如果选择默认路径，就按enter，然后就会出现安装的信息，安装好之后会退出来。可以新建一个终端，验证一下是否安装成功："></a>这一步安装的时候，会让你先阅读一个license，按enter到一个栏让你选择输入yes/no，当然选yes，然后进入下一步是选择安装路径，如果选择默认路径，就按enter，然后就会出现安装的信息，安装好之后会退出来。可以新建一个终端，验证一下是否安装成功：</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">conda -h</span><br><span class="line"></span><br><span class="line">#输出以下信息就是成功了</span><br><span class="line"></span><br><span class="line">usage: conda [-h] [-V] command ...</span><br><span class="line"></span><br><span class="line">conda is a tool for managing and deploying applications, environments and packages.</span><br><span class="line"></span><br><span class="line">Options:</span><br><span class="line"></span><br><span class="line">.....</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="ROCm版的tensorflow仅支持3-5和3-6，我的项目也是3-6的，所以需要新建一个环境。"><a href="#ROCm版的tensorflow仅支持3-5和3-6，我的项目也是3-6的，所以需要新建一个环境。" class="headerlink" title="ROCm版的tensorflow仅支持3.5和3.6，我的项目也是3.6的，所以需要新建一个环境。"></a>ROCm版的tensorflow仅支持3.5和3.6，我的项目也是3.6的，所以需要新建一个环境。</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">conda install python=3.6</span><br></pre></td></tr></table></figure>
+
+<h3 id="安装python相关的软件包"><a href="#安装python相关的软件包" class="headerlink" title="安装python相关的软件包"></a>安装python相关的软件包</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update &amp;&amp; sudo apt install -y \</span><br><span class="line">    python3-numpy \</span><br><span class="line">    python3-dev \</span><br><span class="line">    python3-wheel \</span><br><span class="line">    python3-mock \</span><br><span class="line">    python3-future \</span><br><span class="line">    python3-pip \</span><br><span class="line">    python3-yaml \</span><br><span class="line">    python3-setuptools</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装TensorFlow"><a href="#安装TensorFlow" class="headerlink" title="安装TensorFlow"></a>安装TensorFlow</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install --user tensorflow-rocm -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+
+<h3 id="下载的速度很快。之后就可以验证是否成功了。"><a href="#下载的速度很快。之后就可以验证是否成功了。" class="headerlink" title="下载的速度很快。之后就可以验证是否成功了。"></a>下载的速度很快。之后就可以验证是否成功了。</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line">import tensorflow as tf</span><br><span class="line"></span><br><span class="line">tf.__version__</span><br></pre></td></tr></table></figure>
+
+<h4 id="如果import没报错，然后最后输出了tensorflow的版本，我的是1-14-1。说明一切顺利，可以愉快的开始玩耍了。"><a href="#如果import没报错，然后最后输出了tensorflow的版本，我的是1-14-1。说明一切顺利，可以愉快的开始玩耍了。" class="headerlink" title="如果import没报错，然后最后输出了tensorflow的版本，我的是1.14.1。说明一切顺利，可以愉快的开始玩耍了。"></a>如果import没报错，然后最后输出了tensorflow的版本，我的是1.14.1。说明一切顺利，可以愉快的开始玩耍了。</h4><h3 id="import-tensorflow这一句我碰到了两个bug，给大家贴出来，避一避。"><a href="#import-tensorflow这一句我碰到了两个bug，给大家贴出来，避一避。" class="headerlink" title="import tensorflow这一句我碰到了两个bug，给大家贴出来，避一避。"></a>import tensorflow这一句我碰到了两个bug，给大家贴出来，避一避。</h3><h4 id="1-ImportError-librccl-so-cannot-open-shared-object-file-No-such-file-or-directory-During-handling-of-the-above-exception-another-exception-occurred"><a href="#1-ImportError-librccl-so-cannot-open-shared-object-file-No-such-file-or-directory-During-handling-of-the-above-exception-another-exception-occurred" class="headerlink" title="1.ImportError: librccl.so: cannot open shared object file: No such file or directory During handling of the above exception, another exception occurred:"></a>1.ImportError: librccl.so: cannot open shared object file: No such file or directory During handling of the above exception, another exception occurred:</h4><h3 id="解决：Google到的。输入以下命令，安装这些包。"><a href="#解决：Google到的。输入以下命令，安装这些包。" class="headerlink" title="解决：Google到的。输入以下命令，安装这些包。"></a>解决：Google到的。输入以下命令，安装这些包。</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update &amp;&amp;  sudo apt-get install -y --allow-unauthenticated  rocm-dkms rocm-dev rocm-libs rccl  rocm-device-libs  hsa-ext-rocr-dev hsakmt-roct-dev hsa-rocr-dev  rocm-opencl rocm-opencl-dev  rocm-utils  rocm-profiler cxlactivitylogger  miopen-hip miopengemm </span><br></pre></td></tr></table></figure>
+
+<h3 id="2-terminate-called-after-throwing-an-instance-of-‘std-bad-alloc’-what-std-bad-alloc-已放弃-核心已转储"><a href="#2-terminate-called-after-throwing-an-instance-of-‘std-bad-alloc’-what-std-bad-alloc-已放弃-核心已转储" class="headerlink" title="2.terminate called after throwing an instance of ‘std::bad_alloc’ what(): std::bad_alloc 已放弃 (核心已转储)"></a>2.terminate called after throwing an instance of ‘std::bad_alloc’ what(): std::bad_alloc 已放弃 (核心已转储)</h3><h3 id="解决：Google一下，你就知道。这句话的意思是虚拟机内存分配的不够，我原来只分配了2G的内存，加到3G以后，再import-tensorflow就好用啦。"><a href="#解决：Google一下，你就知道。这句话的意思是虚拟机内存分配的不够，我原来只分配了2G的内存，加到3G以后，再import-tensorflow就好用啦。" class="headerlink" title="解决：Google一下，你就知道。这句话的意思是虚拟机内存分配的不够，我原来只分配了2G的内存，加到3G以后，再import tensorflow就好用啦。"></a>解决：Google一下，你就知道。这句话的意思是虚拟机内存分配的不够，我原来只分配了2G的内存，加到3G以后，再import tensorflow就好用啦。</h3><h3 id="希望这个教程能帮助到大家，也希望大家都可以用a卡跑gpu。更简单的方法还是换电脑啊。。。。"><a href="#希望这个教程能帮助到大家，也希望大家都可以用a卡跑gpu。更简单的方法还是换电脑啊。。。。" class="headerlink" title="希望这个教程能帮助到大家，也希望大家都可以用a卡跑gpu。更简单的方法还是换电脑啊。。。。"></a>希望这个教程能帮助到大家，也希望大家都可以用a卡跑gpu。更简单的方法还是换电脑啊。。。。</h3>
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/tensorlfow/">tensorlfow</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/AMD/" rel="tag">AMD</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ROCm/" rel="tag">ROCm</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/gpu/" rel="tag">gpu</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorlfow/" rel="tag">tensorlfow</a></li></ul>
+
+      
+            
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+    
+
+  
     <article id="post-Veirlog学习记录-1-十进制计数器"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -498,6 +577,18 @@ var themeMenus = {};
               <div class="widget-entry-summary" style="margin: 0;">
             
 
+              <h6 style="margin: 0;"><a href="/2025/10/08/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%881%EF%BC%89%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90-1/">复杂网络仿真从入门到精通（1）关键网络指标解析</a></h6>
+              <span>October 8, 2025</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
               <h6 style="margin: 0;"><a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%881%EF%BC%89%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90/">复杂网络仿真从入门到精通（1）关键网络指标解析</a></h6>
               <span>October 7, 2025</span>
             </div>
@@ -552,18 +643,6 @@ var themeMenus = {};
 
           </li>
         
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/2020/08/01/matlab%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/">matlab运行速度优化</a></h6>
-              <span>August 1, 2020</span>
-            </div>
-
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -603,7 +682,7 @@ var themeMenus = {};
     <h3 class="widget-title">Archives</h3>
 
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/10/">October 2025</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">August 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">5</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/10/">October 2025</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">August 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">5</span></li></ul>
     </div>
   </div>
 
