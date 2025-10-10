@@ -17,7 +17,7 @@
   <!-- PACE Progress Bar START -->
 
   
-  <title>复杂网络仿真从入门到精通（1）关键网络指标解析 | Three purple&#39;s blog</title>
+  <title>复杂网络仿真从入门到精通1：关键网络指标解析 | Three purple&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   
   <meta name="keywords" content="复杂网络" />
@@ -27,53 +27,16 @@
   
   <meta name="description" content="引言复杂网络作为描绘与分析现实世界复杂系统的有力工具，已渗透到自然科学与社会科学的众多领域。从生物网络、技术网络到社会网络，其普适性源于将系统实体抽象为“节点”（Nodes）、将实体间关系抽象为“边”（Edges）的强大能力。对网络拓扑结构的量化分析是理解系统行为、功能与演化规律的基础。 本文旨在系统性介绍复杂网络分析中的核心度量指标，并辅以相应的数学定义，为复杂网络研究扫清障碍。  1. 网络的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="复杂网络仿真从入门到精通（1）关键网络指标解析">
-<meta property="og:url" content="https://doc.threepurple.cn/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%881%EF%BC%89%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:title" content="复杂网络仿真从入门到精通1：关键网络指标解析">
+<meta property="og:url" content="https://doc.threepurple.cn/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A1%EF%BC%9A%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90/index.html">
 <meta property="og:site_name" content="Three purple&#39;s blog">
 <meta property="og:description" content="引言复杂网络作为描绘与分析现实世界复杂系统的有力工具，已渗透到自然科学与社会科学的众多领域。从生物网络、技术网络到社会网络，其普适性源于将系统实体抽象为“节点”（Nodes）、将实体间关系抽象为“边”（Edges）的强大能力。对网络拓扑结构的量化分析是理解系统行为、功能与演化规律的基础。 本文旨在系统性介绍复杂网络分析中的核心度量指标，并辅以相应的数学定义，为复杂网络研究扫清障碍。  1. 网络的">
 <meta property="og:locale">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=+++++D+%3D+%5Cfrac%7B2M%7D%7BN%28N-1%29%7D+++++">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=D+%5Cto+1">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=D+%5Cto+0">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=+++++L+%3D+%5Cfrac%7B1%7D%7BN%28N-1%29%7D+%5Csum_%7Bi+%5Cneq+j%7D+d%28i%2C+j%29+++++">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=d%28i%2C+j%29">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=i">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=j">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=L">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=i">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=C_i">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=+++++C_i+%3D+%5Cfrac%7B2E_i%7D%7Bk_i%28k_i-1%29%7D+++++">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=k_i">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=i">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=E_i">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=k_i">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=C_i">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=+++++C+%3D+%5Cfrac%7B1%7D%7BN%7D+%5Csum_%7Bi%3D1%7D%5E%7BN%7D+C_i+++++">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=+++++Q+%3D+%5Cfrac%7B1%7D%7B2M%7D+%5Csum_%7Bi%2Cj%7D+%5Cleft%5B+A_%7Bij%7D+-+%5Cfrac%7Bk_i+k_j%7D%7B2M%7D+%5Cright%5D+%5Cdelta%28c_i%2C+c_j%29+++++">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=A_%7Bij%7D">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=k_i">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=i">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Cdelta%28c_i%2C+c_j%29">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=i%2C+j">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=Q">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=+++++C_D%28i%29+%3D+%5Cfrac%7Bk_i%7D%7BN-1%7D+++++">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=+++++C_B%28v%29+%3D+%5Csum_%7Bs+%5Cneq+v+%5Cneq+t%7D+%5Cfrac%7B%5Csigma_%7Bst%7D%28v%29%7D%7B%5Csigma_%7Bst%7D%7D+++++">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Csigma_%7Bst%7D">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=s">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=t">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Csigma_%7Bst%7D%28v%29">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=v">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=+++++C_C%28v%29+%3D+%5Cfrac%7BN-1%7D%7B%5Csum_%7Bt+%5Cneq+v%7D+d%28v%2C+t%29%7D+++++">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=P%28k%29+%5Csim+k%5E%7B-%5Cgamma%7D">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=P%28k%29">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=k">
-<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5Cgamma">
 <meta property="article:published_time" content="2025-10-07T07:42:54.000Z">
-<meta property="article:modified_time" content="2025-10-08T08:42:57.259Z">
+<meta property="article:modified_time" content="2025-10-10T02:27:39.687Z">
 <meta property="article:author" content="Three purple">
 <meta property="article:tag" content="复杂网络">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://www.zhihu.com/equation?tex=+++++D+%3D+%5Cfrac%7B2M%7D%7BN%28N-1%29%7D+++++">
   
     <link rel="alternate" href="/atom.xml" title="Three purple&#39;s blog" type="application/atom+xml">
   
@@ -205,7 +168,7 @@ var themeMenus = {};
             
       <div id="content" class="outer">
         
-          <section id="main" style="float:none;"><article id="post-复杂网络仿真从入门到精通（1）关键网络指标解析" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+          <section id="main" style="float:none;"><article id="post-复杂网络仿真从入门到精通1：关键网络指标解析" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
     
@@ -213,7 +176,7 @@ var themeMenus = {};
         
   
     <h1 class="thumb" class="article-title" itemprop="name">
-      复杂网络仿真从入门到精通（1）关键网络指标解析
+      复杂网络仿真从入门到精通1：关键网络指标解析
     </h1>
   
 
@@ -221,7 +184,7 @@ var themeMenus = {};
     
     <div class="article-meta">
       
-	Posted on <a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%881%EF%BC%89%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90/" class="article-date">
+	Posted on <a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A1%EF%BC%9A%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90/" class="article-date">
 	  <time datetime="2025-10-07T07:42:54.000Z" itemprop="datePublished">October 7, 2025</time>
 	</a>
 
@@ -240,15 +203,12 @@ var themeMenus = {};
 <ul>
 <li><strong>节点数 (Node Count, N)</strong> ：网络中节点的总数。</li>
 <li><strong>边数 (Edge Count, M)</strong> ：网络中边的总数。</li>
-<li><strong>网络密度 (Density, D)</strong> ：衡量网络中节点间连接的完备程度。对于一个无向无权网络，其定义为实际存在的边数与可能的最大边数之比。<br><img src="https://www.zhihu.com/equation?tex=+++++D+%3D+%5Cfrac%7B2M%7D%7BN%28N-1%29%7D+++++" alt="     D = \\frac{2M}{N\(N-1\)}
-"><br>密度值介于 0 和 1 之间。<img src="https://www.zhihu.com/equation?tex=D+%5Cto+1" alt="D \\to 1"><br>表示网络趋近于一个完全图（Clique），节点间连接非常紧密；而 <img src="https://www.zhihu.com/equation?tex=D+%5Cto+0" alt="D \\to
-0"> 则表示网络是一个稀疏网络。</li>
+<li><strong>网络密度 (Density, D)</strong> ：衡量网络中节点间连接的完备程度。对于一个无向无权网络，其定义为实际存在的边数与可能的最大边数之比。<br>$$D = \frac{2M}{N(N-1)}$$<br>密度值介于 0 和 1 之间。$D \to 1$ 表示网络趋近于一个完全图（Clique），节点间连接非常紧密；而 $D \to 0$ 则表示网络是一个稀疏网络。</li>
 </ul>
 <hr>
 <h2 id="2-路径、距离与网络效率"><a href="#2-路径、距离与网络效率" class="headerlink" title="2. 路径、距离与网络效率"></a>2. 路径、距离与网络效率</h2><p>路径相关指标主要用于衡量网络中信息或物质的传输效率与可达性。</p>
 <ul>
-<li><p><strong>平均路径长度 (Average Path Length, L)</strong> ：网络中所有节点对之间最短路径长度的算术平均值。它反映了网络的全局传输效率。<br><img src="https://www.zhihu.com/equation?tex=+++++L+%3D+%5Cfrac%7B1%7D%7BN%28N-1%29%7D+%5Csum_%7Bi+%5Cneq+j%7D+d%28i%2C+j%29+++++" alt="     L = \\frac{1}{N\(N-1\)} \\sum_{i \\neq j} d\(i, j\)
-"><br>其中，<img src="https://www.zhihu.com/equation?tex=d%28i%2C+j%29" alt="d\(i, j\)"> 是节点<br><img src="https://www.zhihu.com/equation?tex=i" alt="i"> 和<br><img src="https://www.zhihu.com/equation?tex=j" alt="j"> 之间的最短路径距离。较小的<br><img src="https://www.zhihu.com/equation?tex=L" alt="L"> 值通常意味着更高的网络通信效率。</p>
+<li><p><strong>平均路径长度 (Average Path Length, L)</strong> ：网络中所有节点对之间最短路径长度的算术平均值。它反映了网络的全局传输效率。<br>$$L = \frac{1}{N(N-1)} \sum_{i \neq j} d(i, j)$$<br>其中，$d(i, j)$ 是节点 $i$ 和 $j$ 之间的最短路径距离。较小的 $L$ 值通常意味着更高的网络通信效率。</p>
 </li>
 <li><p><strong>网络直径 (Diameter, D_max)</strong> ：网络中所有节点对之间最短路径长度的最大值。它定义了网络中信息传输所需的最长时延。</p>
 </li>
@@ -256,42 +216,32 @@ var themeMenus = {};
 <hr>
 <h2 id="3-聚类效应与社区结构"><a href="#3-聚类效应与社区结构" class="headerlink" title="3. 聚类效应与社区结构"></a>3. 聚类效应与社区结构</h2><p>这些指标用于量化网络中的局部聚集程度和中尺度结构。</p>
 <ul>
-<li><p><strong>平均聚类系数 (Average Clustering Coefficient, C)</strong> ：衡量网络中节点“抱团”或形成紧密邻域的平均趋势。一个节点 <img src="https://www.zhihu.com/equation?tex=i" alt="i"> 的局部聚类系数 <img src="https://www.zhihu.com/equation?tex=C_i" alt="C_i"> 定义为其邻居节点之间实际存在的边数与可能的最大边数之比。<br><img src="https://www.zhihu.com/equation?tex=+++++C_i+%3D+%5Cfrac%7B2E_i%7D%7Bk_i%28k_i-1%29%7D+++++" alt="     C_i = \\frac{2E_i}{k_i\(k_i-1\)}
-"><br>其中，<img src="https://www.zhihu.com/equation?tex=k_i" alt="k_i"> 是节点<br><img src="https://www.zhihu.com/equation?tex=i" alt="i"><br>的度（邻居数），<img src="https://www.zhihu.com/equation?tex=E_i" alt="E_i"> 是其<br><img src="https://www.zhihu.com/equation?tex=k_i" alt="k_i"> 个邻居之间实际存在的边数。网络的平均聚类系数即为所有节点<br><img src="https://www.zhihu.com/equation?tex=C_i" alt="C_i"> 的平均值：<br><img src="https://www.zhihu.com/equation?tex=+++++C+%3D+%5Cfrac%7B1%7D%7BN%7D+%5Csum_%7Bi%3D1%7D%5E%7BN%7D+C_i+++++" alt="     C = \\frac{1}{N} \\sum_{i=1}^{N} C_i
-">  </p>
+<li><p><strong>平均聚类系数 (Average Clustering Coefficient, C)</strong> ：衡量网络中节点“抱团”或形成紧密邻域的平均趋势。一个节点 $i$ 的局部聚类系数  $C_i$ 定义为其邻居节点之间实际存在的边数与可能的最大边数之比。<br>$$C_i = \frac{2E_i}{k_i(k_i-1)} $$<br>其中，$k_i$是节点$i$的度（邻居数），$E_i$是其<br>$k_i$个邻居之间实际存在的边数。网络的平均聚类系数即为所有节点$C_i$的平均值：<br>$$C = \frac{1}{N} \sum_{i=1}^{N} C_i$$</p>
 </li>
 <li><p><strong>社区 (Community)</strong> ：指网络中由一些连接紧密的节点组成的子图，这些子图内部的连接密度远高于其与网络其余部分的连接密度。</p>
 </li>
-<li><p><strong>模块度 (Modularity, Q)</strong> ：衡量网络社区结构划分质量的常用指标。其核心思想是比较社区内部实际存在的边数与在相同节点度和社区划分下的随机期望边数。<br><img src="https://www.zhihu.com/equation?tex=+++++Q+%3D+%5Cfrac%7B1%7D%7B2M%7D+%5Csum_%7Bi%2Cj%7D+%5Cleft%5B+A_%7Bij%7D+-+%5Cfrac%7Bk_i+k_j%7D%7B2M%7D+%5Cright%5D+%5Cdelta%28c_i%2C+c_j%29+++++" alt="     Q = \\frac{1}{2M} \\sum_{i,j} \\left\[ A_{ij} - \\frac{k_i k_j}{2M}
-\\right\] \\delta\(c_i, c_j\)
-"><br>其中，<img src="https://www.zhihu.com/equation?tex=A_%7Bij%7D" alt="A_{ij}"><br>是邻接矩阵元素，<img src="https://www.zhihu.com/equation?tex=k_i" alt="k_i"> 是节点<br><img src="https://www.zhihu.com/equation?tex=i" alt="i"> 的度，<img src="https://www.zhihu.com/equation?tex=%5Cdelta%28c_i%2C+c_j%29" alt="\\delta\(c_i,
-c_j\)"> 函数当节点 <img src="https://www.zhihu.com/equation?tex=i%2C+j" alt="i,
-j"> 属于同一社区时为 1，否则为<br>0。<img src="https://www.zhihu.com/equation?tex=Q" alt="Q"> 值越高（通常认为大于 0.3），表明社区划分越显著。</p>
+<li><p><strong>模块度 (Modularity, Q)</strong> ：衡量网络社区结构划分质量的常用指标。其核心思想是比较社区内部实际存在的边数与在相同节点度和社区划分下的随机期望边数。<br>$$Q = \frac{1}{2M} \sum_{i,j} \left[ A_{ij} - \frac{k_i k_j}{2M} \right] \delta(c_i, c_j)$$<br>其中，$A_{ij}$ 是邻接矩阵元素，$k_i$ 是节点 $i$ 的度，$\delta(c_i, c_j)$ 函数当节点 $i, j$ 属于同一社区时为 1，否则为 0。$Q$ 值越高（通常认为大于 0.3），表明社区划分越显著。</p>
 </li>
 </ul>
 <hr>
 <h2 id="4-节点中心性度量"><a href="#4-节点中心性度量" class="headerlink" title="4. 节点中心性度量"></a>4. 节点中心性度量</h2><p>中心性指标用于识别网络中最重要的节点，但“重要性”的定义因场景而异。</p>
 <ul>
-<li><p><strong>度中心性 (Degree Centrality)</strong> ：最直接的中心性度量，定义为节点的连接数（度）。对于有向图，分为入度和出度。标准化的度中心性为：<br><img src="https://www.zhihu.com/equation?tex=+++++C_D%28i%29+%3D+%5Cfrac%7Bk_i%7D%7BN-1%7D+++++" alt="     C_D\(i\) = \\frac{k_i}{N-1}
-">  </p>
+<li><p><strong>度中心性 (Degree Centrality)</strong> ：最直接的中心性度量，定义为节点的连接数（度）。对于有向图，分为入度和出度。标准化的度中心性为：<br>$$C_D(i) = \frac{k_i}{N-1}$$  </p>
 </li>
-<li><p><strong>介数中心性 (Betweenness Centrality)</strong> ：衡量一个节点作为网络中其他节点对之间最短路径“桥梁”的程度。<br><img src="https://www.zhihu.com/equation?tex=+++++C_B%28v%29+%3D+%5Csum_%7Bs+%5Cneq+v+%5Cneq+t%7D+%5Cfrac%7B%5Csigma_%7Bst%7D%28v%29%7D%7B%5Csigma_%7Bst%7D%7D+++++" alt="     C_B\(v\) = \\sum_{s \\neq v \\neq t}
-\\frac{\\sigma_{st}\(v\)}{\\sigma_{st}}
-"><br>其中，<img src="https://www.zhihu.com/equation?tex=%5Csigma_%7Bst%7D" alt="\\sigma_{st}"> 是从节点<br><img src="https://www.zhihu.com/equation?tex=s" alt="s"> 到<br><img src="https://www.zhihu.com/equation?tex=t" alt="t"><br>的最短路径总数，<img src="https://www.zhihu.com/equation?tex=%5Csigma_%7Bst%7D%28v%29" alt="\\sigma_{st}\(v\)"><br>是这些路径中经过节点 <img src="https://www.zhihu.com/equation?tex=v" alt="v"> 的数量。高介数的节点是网络信息流的关键瓶颈。</p>
+<li><p><strong>介数中心性 (Betweenness Centrality)</strong> ：衡量一个节点作为网络中其他节点对之间最短路径“桥梁”的程度。<br>$$C_B(v) = \sum_{s \neq v \neq t}<br>\frac{\sigma_{st}(v)}{\sigma_{st}}$$其中，$\sigma_{st}$ 是从节点$s$到$t$<br>的最短路径总数，$$\sigma_{st}(v)$$<br>是这些路径中经过节点 $v$的数量。高介数的节点是网络信息流的关键瓶颈。</p>
 </li>
-<li><p><strong>接近度中心性 (Closeness Centrality)</strong> ：衡量一个节点到网络中所有其他节点的平均距离的倒数。它反映了节点作为信息传播中心的能力。<br><img src="https://www.zhihu.com/equation?tex=+++++C_C%28v%29+%3D+%5Cfrac%7BN-1%7D%7B%5Csum_%7Bt+%5Cneq+v%7D+d%28v%2C+t%29%7D+++++" alt="     C_C\(v\) = \\frac{N-1}{\\sum_{t \\neq v} d\(v, t\)}
-">  </p>
+<li><p><strong>接近度中心性 (Closeness Centrality)</strong> ：衡量一个节点到网络中所有其他节点的平均距离的倒数。它反映了节点作为信息传播中心的能力。<br>$$C_C(v) = \frac{N-1}{\sum_{t \neq v} d(v, t)}$$  </p>
 </li>
 <li><p><strong>PageRank</strong> ：一种衡量节点递归重要性的算法。一个节点的 PageRank 值不仅取决于指向它的链接数量，还取决于这些链接来源节点的重要性。</p>
 </li>
 </ul>
 <hr>
 <h2 id="5-常见网络拓扑模型"><a href="#5-常见网络拓扑模型" class="headerlink" title="5. 常见网络拓扑模型"></a>5. 常见网络拓扑模型</h2><ul>
-<li><strong>无标度网络 (Scale-Free Network)</strong> ：许多真实网络的度分布服从幂律分布（Power-law distribution），即 <img src="https://www.zhihu.com/equation?tex=P%28k%29+%5Csim+k%5E%7B-%5Cgamma%7D" alt="P\(k\) \\sim k^{-\\gamma}">，其中 <img src="https://www.zhihu.com/equation?tex=P%28k%29" alt="P\(k\)"> 是度为 <img src="https://www.zhihu.com/equation?tex=k" alt="k"> 的节点比例，<img src="https://www.zhihu.com/equation?tex=%5Cgamma" alt="\\gamma"> 是幂律指数。这类网络具有少量度极高的“中心节点”（Hubs）和大量度很低的“末梢节点”，呈现“贫富分化”现象。无标度网络对随机故障具有鲁棒性，但对针对中心节点的蓄意攻击则表现出脆弱性。</li>
+<li><strong>无标度网络 (Scale-Free Network)</strong> ：许多真实网络的度分布服从幂律分布（Power-law distribution），即 $$P(k) \sim k^{-\gamma}$$，其中 $P(k)$是度为 $k$ 的节点比例，$gamma$ 是幂律指数。这类网络具有少量度极高的“中心节点”（Hubs）和大量度很低的“末梢节点”，呈现“贫富分化”现象。无标度网络对随机故障具有鲁棒性，但对针对中心节点的蓄意攻击则表现出脆弱性。</li>
 <li><strong>小世界网络 (Small-World Network)</strong> ：这类网络同时具有高聚类系数（类似规则网络）和短平均路径长度（类似随机网络）的特征。该特性由 Watts 和 Strogatz 于 1998 年提出，广泛存在于社会、生物和技术网络中。</li>
 </ul>
 <hr>
-<h3 id="实践（Matlab代码版）"><a href="#实践（Matlab代码版）" class="headerlink" title="实践（Matlab代码版）"></a>实践（Matlab代码版）</h3><p>对上述指标的精确计算与综合分析，是揭示任何复杂系统内在机制的关键。然而，手动计算和分析过程繁琐且易错。</p>
+<h3 id="实践（Matlab代码版）"><a href="#实践（Matlab代码版）" class="headerlink" title="实践（Matlab代码版）"></a>实践（Matlab代码版）</h3><p>对上述指标的精确计算与综合分析，是揭示任何复杂系统内在机制的关键。然而，手动计算和分析过程繁琐且易错。<br>matlab 实现代码请访问：<br><a href="https://github.com/XuXING0430/complex-network-study">https://github.com/XuXING0430/complex-network-study</a></p>
 <p>为了促进学术研究与应用探索，我们开发了一个计算平台，该平台旨在提供一个高效、精准且用户友好的网络分析解决方案。可以直接进行体验：</p>
 <p><a href="https://complex.threepurple.cn/demo/basic-info">复杂网络分析平台 -<br>体验地址</a></p>
 <p>还包括以下的功能：</p>
@@ -301,14 +251,13 @@ j"> 属于同一社区时为 1，否则为<br>0。<img src="https://www.zhihu.co
 <li><strong>深度 AI 分析报告</strong> ：结合计算结果，提供对网络结构与特性的智能化解读。</li>
 <li><strong>图表可视化</strong> ：相关指标出图表</li>
 </ul>
-<p>复杂网络 matlab 实现代码请访问：<br><a href="https://github.com/XuXING0430/complex-network-study">https://github.com/XuXING0430/complex-network-study</a></p>
 
       
     </div>
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>, <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络入门到精通</a>
 
       
   <span class="ico-tags"></span>
@@ -362,10 +311,19 @@ var a = new Donate({
     
 <nav id="article-nav">
   
+    <a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A0%EF%BC%9A%20%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          复杂网络仿真从入门到精通0：学习路线
+        
+      </div>
+    </a>
   
-    <a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%9A0%20%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/" id="article-nav-older" class="article-nav-link-wrap">
+  
+    <a href="/2025/08/10/matlab%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88%E6%A8%A1%E5%9E%8B/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">复杂网络仿真从入门到精通：(0) 学习路线</div>
+      <div class="article-nav-title">matlab实现简单级联失效模型</div>
     </a>
   
 </nav>

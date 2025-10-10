@@ -163,7 +163,7 @@ var themeMenus = {};
         
           <section id="main">
   
-    <article id="post-复杂网络仿真从入门到精通（1）关键网络指标解析"  class="article article-type-post" itemscope itemprop="blogPost" >
+    <article id="post-复杂网络入门到精通系列2：网络构建"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
     
@@ -171,7 +171,7 @@ var themeMenus = {};
         
   
     <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%881%EF%BC%89%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90/">复杂网络仿真从入门到精通（1）关键网络指标解析</a>
+      <a class="article-title" href="/2025/10/10/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%B3%BB%E5%88%972%EF%BC%9A%E7%BD%91%E7%BB%9C%E6%9E%84%E5%BB%BA/">复杂网络入门到精通系列2: 构建网络（邻接矩阵）</a>
     </h1>
   
 
@@ -179,90 +179,198 @@ var themeMenus = {};
     
     <div class="article-meta">
       
-	Posted on <a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%881%EF%BC%89%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90/" class="article-date">
-	  <time datetime="2025-10-07T07:42:54.000Z" itemprop="datePublished">October 7, 2025</time>
+	Posted on <a href="/2025/10/10/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%B3%BB%E5%88%972%EF%BC%9A%E7%BD%91%E7%BB%9C%E6%9E%84%E5%BB%BA/" class="article-date">
+	  <time datetime="2025-10-10T00:55:20.000Z" itemprop="datePublished">October 10, 2025</time>
 	</a>
 
       
     </div>
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>复杂网络作为描绘与分析现实世界复杂系统的有力工具，已渗透到自然科学与社会科学的众多领域。从生物网络、技术网络到社会网络，其普适性源于将系统实体抽象为“节点”（Nodes）、将实体间关系抽象为“边”（Edges）的强大能力。对网络拓扑结构的量化分析是理解系统行为、功能与演化规律的基础。</p>
-<p>本文旨在系统性介绍复杂网络分析中的核心度量指标，并辅以相应的数学定义，为复杂网络研究扫清障碍。</p>
-<hr>
-<h2 id="1-网络的基本拓扑属性"><a href="#1-网络的基本拓扑属性" class="headerlink" title="1. 网络的基本拓扑属性"></a>1. 网络的基本拓扑属性</h2><p>网络的基本属性是宏观上刻画其规模与连接紧密度的基础。</p>
+        <blockquote>
+<p>系列文章：</p>
 <ul>
-<li><strong>节点数 (Node Count, N)</strong> ：网络中节点的总数。</li>
-<li><strong>边数 (Edge Count, M)</strong> ：网络中边的总数。</li>
-<li><strong>网络密度 (Density, D)</strong> ：衡量网络中节点间连接的完备程度。对于一个无向无权网络，其定义为实际存在的边数与可能的最大边数之比。<br><img src="https://www.zhihu.com/equation?tex=+++++D+%3D+%5Cfrac%7B2M%7D%7BN%28N-1%29%7D+++++" alt="     D = \\frac{2M}{N\(N-1\)}
-"><br>密度值介于 0 和 1 之间。<img src="https://www.zhihu.com/equation?tex=D+%5Cto+1" alt="D \\to 1"><br>表示网络趋近于一个完全图（Clique），节点间连接非常紧密；而 <img src="https://www.zhihu.com/equation?tex=D+%5Cto+0" alt="D \\to
-0"> 则表示网络是一个稀疏网络。</li>
+<li><a href="https://doc.threepurple.cn/categories/复杂网络/复杂网络入门到精通/">系列合集</a></li>
+<li>下一篇预告：网络可视化与基础统计分析</li>
 </ul>
+</blockquote>
 <hr>
-<h2 id="2-路径、距离与网络效率"><a href="#2-路径、距离与网络效率" class="headerlink" title="2. 路径、距离与网络效率"></a>2. 路径、距离与网络效率</h2><p>路径相关指标主要用于衡量网络中信息或物质的传输效率与可达性。</p>
+<h2 id="💡-引言"><a href="#💡-引言" class="headerlink" title="💡 引言"></a>💡 引言</h2><p>在复杂网络研究中，<strong>“网络构建”</strong> 是一切分析与建模的起点。<br>无论你要研究传播、鲁棒性还是社团结构，第一步都必须拥有一个可计算、可分析的网络结构。而且后续我们的研究，也是研究这个目标网络的特性。<br>本文以Matlab代码为实例，进行代码说明。</p>
 <ul>
-<li><p><strong>平均路径长度 (Average Path Length, L)</strong> ：网络中所有节点对之间最短路径长度的算术平均值。它反映了网络的全局传输效率。<br><img src="https://www.zhihu.com/equation?tex=+++++L+%3D+%5Cfrac%7B1%7D%7BN%28N-1%29%7D+%5Csum_%7Bi+%5Cneq+j%7D+d%28i%2C+j%29+++++" alt="     L = \\frac{1}{N\(N-1\)} \\sum_{i \\neq j} d\(i, j\)
-"><br>其中，<img src="https://www.zhihu.com/equation?tex=d%28i%2C+j%29" alt="d\(i, j\)"> 是节点<br><img src="https://www.zhihu.com/equation?tex=i" alt="i"> 和<br><img src="https://www.zhihu.com/equation?tex=j" alt="j"> 之间的最短路径距离。较小的<br><img src="https://www.zhihu.com/equation?tex=L" alt="L"> 值通常意味着更高的网络通信效率。</p>
-</li>
-<li><p><strong>网络直径 (Diameter, D_max)</strong> ：网络中所有节点对之间最短路径长度的最大值。它定义了网络中信息传输所需的最长时延。</p>
-</li>
+<li>GitHub 开源代码库：<a href="https://github.com/XuXING0430/complex-network-study">complex-network-study</a></li>
+<li>如果上面链接访问不了，可以 <a href="https://pan.baidu.com/s/5BekLPpCQCaXKymfvA2b_og?">网盘提取</a></li>
 </ul>
-<hr>
-<h2 id="3-聚类效应与社区结构"><a href="#3-聚类效应与社区结构" class="headerlink" title="3. 聚类效应与社区结构"></a>3. 聚类效应与社区结构</h2><p>这些指标用于量化网络中的局部聚集程度和中尺度结构。</p>
+<p>从研究角度看，网络的构建主要分为两类：</p>
+<blockquote>
+<p><strong>① 模拟网络（Synthetic Network）</strong> —— 基于模型算法生成；<br><strong>② 实体网络（Empirical Network）</strong> —— 来自现实数据的网络。</p>
+</blockquote>
+<p>两类方式各有侧重：  </p>
 <ul>
-<li><p><strong>平均聚类系数 (Average Clustering Coefficient, C)</strong> ：衡量网络中节点“抱团”或形成紧密邻域的平均趋势。一个节点 <img src="https://www.zhihu.com/equation?tex=i" alt="i"> 的局部聚类系数 <img src="https://www.zhihu.com/equation?tex=C_i" alt="C_i"> 定义为其邻居节点之间实际存在的边数与可能的最大边数之比。<br><img src="https://www.zhihu.com/equation?tex=+++++C_i+%3D+%5Cfrac%7B2E_i%7D%7Bk_i%28k_i-1%29%7D+++++" alt="     C_i = \\frac{2E_i}{k_i\(k_i-1\)}
-"><br>其中，<img src="https://www.zhihu.com/equation?tex=k_i" alt="k_i"> 是节点<br><img src="https://www.zhihu.com/equation?tex=i" alt="i"><br>的度（邻居数），<img src="https://www.zhihu.com/equation?tex=E_i" alt="E_i"> 是其<br><img src="https://www.zhihu.com/equation?tex=k_i" alt="k_i"> 个邻居之间实际存在的边数。网络的平均聚类系数即为所有节点<br><img src="https://www.zhihu.com/equation?tex=C_i" alt="C_i"> 的平均值：<br><img src="https://www.zhihu.com/equation?tex=+++++C+%3D+%5Cfrac%7B1%7D%7BN%7D+%5Csum_%7Bi%3D1%7D%5E%7BN%7D+C_i+++++" alt="     C = \\frac{1}{N} \\sum_{i=1}^{N} C_i
-">  </p>
-</li>
-<li><p><strong>社区 (Community)</strong> ：指网络中由一些连接紧密的节点组成的子图，这些子图内部的连接密度远高于其与网络其余部分的连接密度。</p>
-</li>
-<li><p><strong>模块度 (Modularity, Q)</strong> ：衡量网络社区结构划分质量的常用指标。其核心思想是比较社区内部实际存在的边数与在相同节点度和社区划分下的随机期望边数。<br><img src="https://www.zhihu.com/equation?tex=+++++Q+%3D+%5Cfrac%7B1%7D%7B2M%7D+%5Csum_%7Bi%2Cj%7D+%5Cleft%5B+A_%7Bij%7D+-+%5Cfrac%7Bk_i+k_j%7D%7B2M%7D+%5Cright%5D+%5Cdelta%28c_i%2C+c_j%29+++++" alt="     Q = \\frac{1}{2M} \\sum_{i,j} \\left\[ A_{ij} - \\frac{k_i k_j}{2M}
-\\right\] \\delta\(c_i, c_j\)
-"><br>其中，<img src="https://www.zhihu.com/equation?tex=A_%7Bij%7D" alt="A_{ij}"><br>是邻接矩阵元素，<img src="https://www.zhihu.com/equation?tex=k_i" alt="k_i"> 是节点<br><img src="https://www.zhihu.com/equation?tex=i" alt="i"> 的度，<img src="https://www.zhihu.com/equation?tex=%5Cdelta%28c_i%2C+c_j%29" alt="\\delta\(c_i,
-c_j\)"> 函数当节点 <img src="https://www.zhihu.com/equation?tex=i%2C+j" alt="i,
-j"> 属于同一社区时为 1，否则为<br>0。<img src="https://www.zhihu.com/equation?tex=Q" alt="Q"> 值越高（通常认为大于 0.3），表明社区划分越显著。</p>
-</li>
+<li>模拟网络用于理论研究与算法验证；  </li>
+<li>实体网络用于真实系统建模与特性分析。  </li>
 </ul>
+<p>而无论哪种方式，最终的核心数据结构都是：<strong>邻接矩阵（Adjacency Matrix）</strong>，邻接表也是可以的。</p>
 <hr>
-<h2 id="4-节点中心性度量"><a href="#4-节点中心性度量" class="headerlink" title="4. 节点中心性度量"></a>4. 节点中心性度量</h2><p>中心性指标用于识别网络中最重要的节点，但“重要性”的定义因场景而异。</p>
+<h2 id="🧩-一、邻接矩阵的基本形式"><a href="#🧩-一、邻接矩阵的基本形式" class="headerlink" title="🧩 一、邻接矩阵的基本形式"></a>🧩 一、邻接矩阵的基本形式</h2><p>假设我们有 ( N ) 个节点，网络可以用一个 ( N \times N ) 的矩阵 ( A ) 表示：</p>
+<p>$$<br>A_{ij} =<br>\begin{cases}<br>1, &amp; \text{节点 } i \text{ 与 } j \text{ 有边相连} \<br>0, &amp; \text{节点 } i \text{ 与 } j \text{ 无连接}<br>\end{cases}<br>$$</p>
 <ul>
-<li><p><strong>度中心性 (Degree Centrality)</strong> ：最直接的中心性度量，定义为节点的连接数（度）。对于有向图，分为入度和出度。标准化的度中心性为：<br><img src="https://www.zhihu.com/equation?tex=+++++C_D%28i%29+%3D+%5Cfrac%7Bk_i%7D%7BN-1%7D+++++" alt="     C_D\(i\) = \\frac{k_i}{N-1}
-">  </p>
-</li>
-<li><p><strong>介数中心性 (Betweenness Centrality)</strong> ：衡量一个节点作为网络中其他节点对之间最短路径“桥梁”的程度。<br><img src="https://www.zhihu.com/equation?tex=+++++C_B%28v%29+%3D+%5Csum_%7Bs+%5Cneq+v+%5Cneq+t%7D+%5Cfrac%7B%5Csigma_%7Bst%7D%28v%29%7D%7B%5Csigma_%7Bst%7D%7D+++++" alt="     C_B\(v\) = \\sum_{s \\neq v \\neq t}
-\\frac{\\sigma_{st}\(v\)}{\\sigma_{st}}
-"><br>其中，<img src="https://www.zhihu.com/equation?tex=%5Csigma_%7Bst%7D" alt="\\sigma_{st}"> 是从节点<br><img src="https://www.zhihu.com/equation?tex=s" alt="s"> 到<br><img src="https://www.zhihu.com/equation?tex=t" alt="t"><br>的最短路径总数，<img src="https://www.zhihu.com/equation?tex=%5Csigma_%7Bst%7D%28v%29" alt="\\sigma_{st}\(v\)"><br>是这些路径中经过节点 <img src="https://www.zhihu.com/equation?tex=v" alt="v"> 的数量。高介数的节点是网络信息流的关键瓶颈。</p>
-</li>
-<li><p><strong>接近度中心性 (Closeness Centrality)</strong> ：衡量一个节点到网络中所有其他节点的平均距离的倒数。它反映了节点作为信息传播中心的能力。<br><img src="https://www.zhihu.com/equation?tex=+++++C_C%28v%29+%3D+%5Cfrac%7BN-1%7D%7B%5Csum_%7Bt+%5Cneq+v%7D+d%28v%2C+t%29%7D+++++" alt="     C_C\(v\) = \\frac{N-1}{\\sum_{t \\neq v} d\(v, t\)}
-">  </p>
-</li>
-<li><p><strong>PageRank</strong> ：一种衡量节点递归重要性的算法。一个节点的 PageRank 值不仅取决于指向它的链接数量，还取决于这些链接来源节点的重要性。</p>
-</li>
+<li>对于<strong>无向网络</strong>：矩阵对称$A_{ij} = A_{ji}$；</li>
+<li>对于<strong>有向网络</strong>：矩阵一般不对称；</li>
+<li>对于<strong>加权网络</strong>：$A_{ij}$ 可取任意实数权重。</li>
 </ul>
+<p>表达矩阵和后续计算 一般有两种方式： </p>
+<ol>
+<li>使用二维矩阵（<code>double</code> 或 <code>sparse</code>）来存储邻接矩阵，并以矩阵形式进行后续计算。</li>
+<li>使用邻接矩阵或者邻接表构建图对象（G），并使用这个对象进行后续计算。</li>
+</ol>
 <hr>
-<h2 id="5-常见网络拓扑模型"><a href="#5-常见网络拓扑模型" class="headerlink" title="5. 常见网络拓扑模型"></a>5. 常见网络拓扑模型</h2><ul>
-<li><strong>无标度网络 (Scale-Free Network)</strong> ：许多真实网络的度分布服从幂律分布（Power-law distribution），即 <img src="https://www.zhihu.com/equation?tex=P%28k%29+%5Csim+k%5E%7B-%5Cgamma%7D" alt="P\(k\) \\sim k^{-\\gamma}">，其中 <img src="https://www.zhihu.com/equation?tex=P%28k%29" alt="P\(k\)"> 是度为 <img src="https://www.zhihu.com/equation?tex=k" alt="k"> 的节点比例，<img src="https://www.zhihu.com/equation?tex=%5Cgamma" alt="\\gamma"> 是幂律指数。这类网络具有少量度极高的“中心节点”（Hubs）和大量度很低的“末梢节点”，呈现“贫富分化”现象。无标度网络对随机故障具有鲁棒性，但对针对中心节点的蓄意攻击则表现出脆弱性。</li>
-<li><strong>小世界网络 (Small-World Network)</strong> ：这类网络同时具有高聚类系数（类似规则网络）和短平均路径长度（类似随机网络）的特征。该特性由 Watts 和 Strogatz 于 1998 年提出，广泛存在于社会、生物和技术网络中。</li>
-</ul>
-<hr>
-<h3 id="实践（Matlab代码版）"><a href="#实践（Matlab代码版）" class="headerlink" title="实践（Matlab代码版）"></a>实践（Matlab代码版）</h3><p>对上述指标的精确计算与综合分析，是揭示任何复杂系统内在机制的关键。然而，手动计算和分析过程繁琐且易错。</p>
-<p>为了促进学术研究与应用探索，我们开发了一个计算平台，该平台旨在提供一个高效、精准且用户友好的网络分析解决方案。可以直接进行体验：</p>
-<p><a href="https://complex.threepurple.cn/demo/basic-info">复杂网络分析平台 -<br>体验地址</a></p>
-<p>还包括以下的功能：</p>
+<h2 id="🧠-二、构建网络的两条主线"><a href="#🧠-二、构建网络的两条主线" class="headerlink" title="🧠 二、构建网络的两条主线"></a>🧠 二、构建网络的两条主线</h2><h3 id="（一）模拟网络（Synthetic-Networks）"><a href="#（一）模拟网络（Synthetic-Networks）" class="headerlink" title="（一）模拟网络（Synthetic Networks）"></a>（一）模拟网络（Synthetic Networks）</h3><p>模拟网络通过<strong>算法或数学模型</strong>生成人工网络，用于验证理论或测试算法表现。<br>常见模型包括：</p>
+<table>
+<thead>
+<tr>
+<th align="left">网络类型</th>
+<th align="left">特点</th>
+<th align="left">MATLAB 构建方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>随机网络（Erdős–Rényi, ER）</strong></td>
+<td align="left">边以固定概率 p 随机生成</td>
+<td align="left"><code>sprand(N, N, p)</code></td>
+</tr>
+<tr>
+<td align="left"><strong>小世界网络（Watts–Strogatz, WS）</strong></td>
+<td align="left">高聚类 + 短路径</td>
+<td align="left"><code>wattsStrogatz(N, K, p)</code></td>
+</tr>
+<tr>
+<td align="left"><strong>无标度网络（Barabási–Albert, BA）</strong></td>
+<td align="left">幂律度分布，存在 Hub 节点</td>
+<td align="left"><code>pref</code> 或自编生长算法</td>
+</tr>
+</tbody></table>
+<h4 id="✅-示例：随机网络（ER）模型"><a href="#✅-示例：随机网络（ER）模型" class="headerlink" title="✅ 示例：随机网络（ER）模型"></a>✅ 示例：随机网络（ER）模型</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">N = <span class="number">10</span>;      <span class="comment">% 节点数</span></span><br><span class="line">p = <span class="number">0.3</span>;     <span class="comment">% 边存在的概率</span></span><br><span class="line">A = <span class="built_in">rand</span>(N) &lt; p;   <span class="comment">% 随机连接</span></span><br><span class="line">A = <span class="built_in">triu</span>(A,<span class="number">1</span>);     <span class="comment">% 取上三角避免重复</span></span><br><span class="line">A = A + A&#x27;;        <span class="comment">% 对称化成无向网络</span></span><br><span class="line">G = graph(A);</span><br><span class="line"><span class="built_in">plot</span>(G, <span class="string">&#x27;Layout&#x27;</span>, <span class="string">&#x27;force&#x27;</span>);</span><br><span class="line">title(<span class="string">&#x27;Erdős–Rényi 随机网络&#x27;</span>);</span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">#### ✅ 示例：小世界网络（WS）模型</span><br><span class="line"></span><br><span class="line">```matlab</span><br><span class="line">N = <span class="number">20</span>; K = <span class="number">4</span>; p = <span class="number">0.1</span>;</span><br><span class="line">G = wattsStrogatz(N, K, p);</span><br><span class="line"><span class="built_in">plot</span>(G, <span class="string">&#x27;Layout&#x27;</span>, <span class="string">&#x27;force&#x27;</span>);</span><br><span class="line">title(<span class="string">&#x27;Watts–Strogatz 小世界网络&#x27;</span>);</span><br><span class="line">A = adjacency(G);</span><br></pre></td></tr></table></figure>
+
+<h4 id="✅-示例：无标度网络（BA）模型"><a href="#✅-示例：无标度网络（BA）模型" class="headerlink" title="✅ 示例：无标度网络（BA）模型"></a>✅ 示例：无标度网络（BA）模型</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">N = <span class="number">20</span>; m = <span class="number">2</span>;</span><br><span class="line">A = <span class="built_in">zeros</span>(N);</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:(m+<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">j</span> = (<span class="built_in">i</span>+<span class="number">1</span>):(m+<span class="number">1</span>)</span><br><span class="line">        A(<span class="built_in">i</span>,<span class="built_in">j</span>)=<span class="number">1</span>; A(<span class="built_in">j</span>,<span class="built_in">i</span>)=<span class="number">1</span>;</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = (m+<span class="number">2</span>):N</span><br><span class="line">    degree = sum(A);</span><br><span class="line">    prob = degree / sum(degree);</span><br><span class="line">    selected = randsample(<span class="number">1</span>:<span class="built_in">i</span><span class="number">-1</span>, m, <span class="built_in">true</span>, prob);</span><br><span class="line">    A(<span class="built_in">i</span>, selected) = <span class="number">1</span>; A(selected, <span class="built_in">i</span>) = <span class="number">1</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">G = graph(A);</span><br><span class="line"><span class="built_in">plot</span>(G, <span class="string">&#x27;Layout&#x27;</span>, <span class="string">&#x27;force&#x27;</span>);</span><br><span class="line">title(<span class="string">&#x27;Barabási–Albert 无标度网络&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这些网络模型是复杂网络研究的基础模型，可用于：</p>
 <ul>
-<li><strong>便捷的数据导入</strong> ：支持多种标准网络数据格式。</li>
-<li><strong>自动化的指标计算</strong> ：一键生成包括本文所述在内的数十种关键网络指标。</li>
-<li><strong>深度 AI 分析报告</strong> ：结合计算结果，提供对网络结构与特性的智能化解读。</li>
-<li><strong>图表可视化</strong> ：相关指标出图表</li>
+<li>验证算法；</li>
+<li>分析理论特性；</li>
+<li>模拟不同网络拓扑下的行为。</li>
 </ul>
-<p>复杂网络 matlab 实现代码请访问：<br><a href="https://github.com/XuXING0430/complex-network-study">https://github.com/XuXING0430/complex-network-study</a></p>
+<hr>
+<h3 id="（二）实体网络（Empirical-Networks）"><a href="#（二）实体网络（Empirical-Networks）" class="headerlink" title="（二）实体网络（Empirical Networks）"></a>（二）实体网络（Empirical Networks）</h3><p>实体网络来源于真实世界的数据，是复杂系统的映射结果。</p>
+<h4 id="常见来源包括："><a href="#常见来源包括：" class="headerlink" title="常见来源包括："></a>常见来源包括：</h4><table>
+<thead>
+<tr>
+<th align="center">领域</th>
+<th align="left">示例</th>
+<th align="left">数据格式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">社会网络</td>
+<td align="left">微信、微博、协作网络</td>
+<td align="left"><code>.csv</code>, <code>.edge</code>, <code>.gml</code></td>
+</tr>
+<tr>
+<td align="center">生物网络</td>
+<td align="left">蛋白质相互作用网络</td>
+<td align="left"><code>.graphml</code>, <code>.mat</code></td>
+</tr>
+<tr>
+<td align="center">技术网络</td>
+<td align="left">电网、交通网络、互联网</td>
+<td align="left"><code>.txt</code>, <code>.json</code></td>
+</tr>
+<tr>
+<td align="center">科研网络</td>
+<td align="left">引文、合作、知识图谱</td>
+<td align="left"><code>.csv</code>, <code>.gml</code></td>
+</tr>
+</tbody></table>
+<h4 id="✅-示例：从边列表构建实体网络"><a href="#✅-示例：从边列表构建实体网络" class="headerlink" title="✅ 示例：从边列表构建实体网络"></a>✅ 示例：从边列表构建实体网络</h4><p>假设你有一个 <code>edges.csv</code> 文件：</p>
+<table>
+<thead>
+<tr>
+<th align="center">Source</th>
+<th align="center">Target</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1</td>
+<td align="center">2</td>
+</tr>
+<tr>
+<td align="center">1</td>
+<td align="center">3</td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="center">4</td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="center">4</td>
+</tr>
+</tbody></table>
+<p>MATLAB 构建代码：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">data = <span class="built_in">readtable</span>(<span class="string">&#x27;edges.csv&#x27;</span>);</span><br><span class="line">edges = table2array(data(:,<span class="number">1</span>:<span class="number">2</span>));</span><br><span class="line">N = <span class="built_in">max</span>(edges(:));</span><br><span class="line">A = <span class="built_in">zeros</span>(N,N);</span><br><span class="line"><span class="keyword">for</span> k = <span class="number">1</span>:<span class="built_in">size</span>(edges,<span class="number">1</span>)</span><br><span class="line">    <span class="built_in">i</span> = edges(k,<span class="number">1</span>); <span class="built_in">j</span> = edges(k,<span class="number">2</span>);</span><br><span class="line">    A(<span class="built_in">i</span>,<span class="built_in">j</span>) = <span class="number">1</span>; A(<span class="built_in">j</span>,<span class="built_in">i</span>) = <span class="number">1</span>; <span class="comment">% 无向图</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line">G = graph(A);</span><br><span class="line"><span class="built_in">plot</span>(G, <span class="string">&#x27;Layout&#x27;</span>, <span class="string">&#x27;force&#x27;</span>);</span><br><span class="line">title(<span class="string">&#x27;实体网络示例&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="✅-示例：从-gml-文件导入网络"><a href="#✅-示例：从-gml-文件导入网络" class="headerlink" title="✅ 示例：从 .gml 文件导入网络"></a>✅ 示例：从 <code>.gml</code> 文件导入网络</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">G = importgraph(<span class="string">&#x27;network.gml&#x27;</span>); <span class="comment">% MATLAB R2023a 起支持</span></span><br><span class="line">A = adjacency(G);</span><br><span class="line"><span class="built_in">plot</span>(G);</span><br></pre></td></tr></table></figure>
+
+<h4 id="✅-示例：从实验或观测矩阵直接读取"><a href="#✅-示例：从实验或观测矩阵直接读取" class="headerlink" title="✅ 示例：从实验或观测矩阵直接读取"></a>✅ 示例：从实验或观测矩阵直接读取</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">A = load(<span class="string">&#x27;brain_connectivity.mat&#x27;</span>);  <span class="comment">% 神经连接矩阵</span></span><br><span class="line">G = graph(A);</span><br><span class="line"><span class="built_in">plot</span>(G, <span class="string">&#x27;Layout&#x27;</span>, <span class="string">&#x27;circle&#x27;</span>);</span><br><span class="line">title(<span class="string">&#x27;大脑功能连接网络&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🔍-三、邻接矩阵的验证与操作"><a href="#🔍-三、邻接矩阵的验证与操作" class="headerlink" title="🔍 三、邻接矩阵的验证与操作"></a>🔍 三、邻接矩阵的验证与操作</h2><p>当你成功构建网络后，建议进行基本验证：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">N = <span class="built_in">size</span>(A,<span class="number">1</span>);</span><br><span class="line">M = nnz(<span class="built_in">triu</span>(A));  <span class="comment">% 边数</span></span><br><span class="line">degree = sum(A,<span class="number">2</span>); <span class="comment">% 各节点度</span></span><br><span class="line">fprintf(<span class="string">&#x27;节点数: %d, 边数: %d\n&#x27;</span>, N, M);</span><br></pre></td></tr></table></figure>
+
+<p>如果矩阵非常稀疏（多数为 0），可转换为稀疏存储：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A = sparse(A);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🧭-四、延伸阅读：网络构建策略对分析结果的影响"><a href="#🧭-四、延伸阅读：网络构建策略对分析结果的影响" class="headerlink" title="🧭 四、延伸阅读：网络构建策略对分析结果的影响"></a>🧭 四、延伸阅读：网络构建策略对分析结果的影响</h2><p>不同的构建方式会显著影响分析结论：</p>
+<ul>
+<li><strong>模拟网络</strong>适合研究拓扑理论与算法鲁棒性；</li>
+<li><strong>实体网络</strong>则能反映真实系统特征与动力学规律。</li>
+</ul>
+<p>研究者常在模拟网络上测试方法性能，再在实体网络上验证泛化能力。</p>
+<hr>
+<h2 id="⚙️-五、在线构建与分析平台"><a href="#⚙️-五、在线构建与分析平台" class="headerlink" title="⚙️ 五、在线构建与分析平台"></a>⚙️ 五、在线构建与分析平台</h2><p>我们在平台中提供了一个简易入口：<br>👉 <a href="https://complex.threepurple.cn/demo/basic-info">复杂网络分析平台 - 构建与计算</a></p>
+<p>支持：</p>
+<ul>
+<li><strong>上传边表 / 邻接矩阵文件</strong>；</li>
+<li><strong>自动构建网络</strong>；</li>
+<li><strong>指标一键计算与可视化</strong>；</li>
+<li><strong>AI 智能报告生成</strong>。</li>
+</ul>
+<hr>
+<h2 id="📘-总结"><a href="#📘-总结" class="headerlink" title="📘 总结"></a>📘 总结</h2><p>构建网络是复杂网络研究的起点。<br>从 <strong>模拟网络</strong> 到 <strong>实体网络</strong>，你可以：</p>
+<ul>
+<li>用 MATLAB 生成理想拓扑结构；</li>
+<li>从真实数据中提取结构信息；</li>
+<li>最终得到可分析、可以可视化的邻接矩阵。</li>
+</ul>
+<blockquote>
+<p>下一篇预告：</p>
+<ul>
+<li><strong>复杂网络入门到精通（三）—— 网络可视化与基础统计</strong></li>
+<li>我们将使用 MATLAB 与 Gephi 展示网络图形化与分布特征。</li>
+</ul>
+</blockquote>
+<hr>
+<p>✳️ 作者推荐：</p>
+<ul>
+<li>在线计算指标，可视化体验：<a href="https://complex.threepurple.cn/demo/basic-info">complex.threepurple.cn</a></li>
+</ul>
 
       
     </div>
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>, <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络入门到精通</a>
 
       
   <span class="ico-tags"></span>
@@ -281,7 +389,7 @@ j"> 属于同一社区时为 1，否则为<br>0。<img src="https://www.zhihu.co
     
 
   
-    <article id="post-复杂网络仿真从入门到精通：0 学习路线"  class="article article-type-post" itemscope itemprop="blogPost" >
+    <article id="post-复杂网络仿真从入门到精通0： 学习路线"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
     
@@ -289,7 +397,7 @@ j"> 属于同一社区时为 1，否则为<br>0。<img src="https://www.zhihu.co
         
   
     <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%9A0%20%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/">复杂网络仿真从入门到精通：(0) 学习路线</a>
+      <a class="article-title" href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A0%EF%BC%9A%20%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/">复杂网络仿真从入门到精通0：学习路线</a>
     </h1>
   
 
@@ -297,7 +405,7 @@ j"> 属于同一社区时为 1，否则为<br>0。<img src="https://www.zhihu.co
     
     <div class="article-meta">
       
-	Posted on <a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%9A0%20%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/" class="article-date">
+	Posted on <a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A0%EF%BC%9A%20%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/" class="article-date">
 	  <time datetime="2025-10-07T07:42:54.000Z" itemprop="datePublished">October 7, 2025</time>
 	</a>
 
@@ -366,7 +474,111 @@ j"> 属于同一社区时为 1，否则为<br>0。<img src="https://www.zhihu.co
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>, <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络入门到精通</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" rel="tag">复杂网络</a></li></ul>
+
+      
+            
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+    
+
+  
+    <article id="post-复杂网络仿真从入门到精通1：关键网络指标解析"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A1%EF%BC%9A%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90/">复杂网络仿真从入门到精通1：关键网络指标解析</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A1%EF%BC%9A%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90/" class="article-date">
+	  <time datetime="2025-10-07T07:42:54.000Z" itemprop="datePublished">October 7, 2025</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>复杂网络作为描绘与分析现实世界复杂系统的有力工具，已渗透到自然科学与社会科学的众多领域。从生物网络、技术网络到社会网络，其普适性源于将系统实体抽象为“节点”（Nodes）、将实体间关系抽象为“边”（Edges）的强大能力。对网络拓扑结构的量化分析是理解系统行为、功能与演化规律的基础。</p>
+<p>本文旨在系统性介绍复杂网络分析中的核心度量指标，并辅以相应的数学定义，为复杂网络研究扫清障碍。</p>
+<hr>
+<h2 id="1-网络的基本拓扑属性"><a href="#1-网络的基本拓扑属性" class="headerlink" title="1. 网络的基本拓扑属性"></a>1. 网络的基本拓扑属性</h2><p>网络的基本属性是宏观上刻画其规模与连接紧密度的基础。</p>
+<ul>
+<li><strong>节点数 (Node Count, N)</strong> ：网络中节点的总数。</li>
+<li><strong>边数 (Edge Count, M)</strong> ：网络中边的总数。</li>
+<li><strong>网络密度 (Density, D)</strong> ：衡量网络中节点间连接的完备程度。对于一个无向无权网络，其定义为实际存在的边数与可能的最大边数之比。<br>$$D = \frac{2M}{N(N-1)}$$<br>密度值介于 0 和 1 之间。$D \to 1$ 表示网络趋近于一个完全图（Clique），节点间连接非常紧密；而 $D \to 0$ 则表示网络是一个稀疏网络。</li>
+</ul>
+<hr>
+<h2 id="2-路径、距离与网络效率"><a href="#2-路径、距离与网络效率" class="headerlink" title="2. 路径、距离与网络效率"></a>2. 路径、距离与网络效率</h2><p>路径相关指标主要用于衡量网络中信息或物质的传输效率与可达性。</p>
+<ul>
+<li><p><strong>平均路径长度 (Average Path Length, L)</strong> ：网络中所有节点对之间最短路径长度的算术平均值。它反映了网络的全局传输效率。<br>$$L = \frac{1}{N(N-1)} \sum_{i \neq j} d(i, j)$$<br>其中，$d(i, j)$ 是节点 $i$ 和 $j$ 之间的最短路径距离。较小的 $L$ 值通常意味着更高的网络通信效率。</p>
+</li>
+<li><p><strong>网络直径 (Diameter, D_max)</strong> ：网络中所有节点对之间最短路径长度的最大值。它定义了网络中信息传输所需的最长时延。</p>
+</li>
+</ul>
+<hr>
+<h2 id="3-聚类效应与社区结构"><a href="#3-聚类效应与社区结构" class="headerlink" title="3. 聚类效应与社区结构"></a>3. 聚类效应与社区结构</h2><p>这些指标用于量化网络中的局部聚集程度和中尺度结构。</p>
+<ul>
+<li><p><strong>平均聚类系数 (Average Clustering Coefficient, C)</strong> ：衡量网络中节点“抱团”或形成紧密邻域的平均趋势。一个节点 $i$ 的局部聚类系数  $C_i$ 定义为其邻居节点之间实际存在的边数与可能的最大边数之比。<br>$$C_i = \frac{2E_i}{k_i(k_i-1)} $$<br>其中，$k_i$是节点$i$的度（邻居数），$E_i$是其<br>$k_i$个邻居之间实际存在的边数。网络的平均聚类系数即为所有节点$C_i$的平均值：<br>$$C = \frac{1}{N} \sum_{i=1}^{N} C_i$$</p>
+</li>
+<li><p><strong>社区 (Community)</strong> ：指网络中由一些连接紧密的节点组成的子图，这些子图内部的连接密度远高于其与网络其余部分的连接密度。</p>
+</li>
+<li><p><strong>模块度 (Modularity, Q)</strong> ：衡量网络社区结构划分质量的常用指标。其核心思想是比较社区内部实际存在的边数与在相同节点度和社区划分下的随机期望边数。<br>$$Q = \frac{1}{2M} \sum_{i,j} \left[ A_{ij} - \frac{k_i k_j}{2M} \right] \delta(c_i, c_j)$$<br>其中，$A_{ij}$ 是邻接矩阵元素，$k_i$ 是节点 $i$ 的度，$\delta(c_i, c_j)$ 函数当节点 $i, j$ 属于同一社区时为 1，否则为 0。$Q$ 值越高（通常认为大于 0.3），表明社区划分越显著。</p>
+</li>
+</ul>
+<hr>
+<h2 id="4-节点中心性度量"><a href="#4-节点中心性度量" class="headerlink" title="4. 节点中心性度量"></a>4. 节点中心性度量</h2><p>中心性指标用于识别网络中最重要的节点，但“重要性”的定义因场景而异。</p>
+<ul>
+<li><p><strong>度中心性 (Degree Centrality)</strong> ：最直接的中心性度量，定义为节点的连接数（度）。对于有向图，分为入度和出度。标准化的度中心性为：<br>$$C_D(i) = \frac{k_i}{N-1}$$  </p>
+</li>
+<li><p><strong>介数中心性 (Betweenness Centrality)</strong> ：衡量一个节点作为网络中其他节点对之间最短路径“桥梁”的程度。<br>$$C_B(v) = \sum_{s \neq v \neq t}<br>\frac{\sigma_{st}(v)}{\sigma_{st}}$$其中，$\sigma_{st}$ 是从节点$s$到$t$<br>的最短路径总数，$$\sigma_{st}(v)$$<br>是这些路径中经过节点 $v$的数量。高介数的节点是网络信息流的关键瓶颈。</p>
+</li>
+<li><p><strong>接近度中心性 (Closeness Centrality)</strong> ：衡量一个节点到网络中所有其他节点的平均距离的倒数。它反映了节点作为信息传播中心的能力。<br>$$C_C(v) = \frac{N-1}{\sum_{t \neq v} d(v, t)}$$  </p>
+</li>
+<li><p><strong>PageRank</strong> ：一种衡量节点递归重要性的算法。一个节点的 PageRank 值不仅取决于指向它的链接数量，还取决于这些链接来源节点的重要性。</p>
+</li>
+</ul>
+<hr>
+<h2 id="5-常见网络拓扑模型"><a href="#5-常见网络拓扑模型" class="headerlink" title="5. 常见网络拓扑模型"></a>5. 常见网络拓扑模型</h2><ul>
+<li><strong>无标度网络 (Scale-Free Network)</strong> ：许多真实网络的度分布服从幂律分布（Power-law distribution），即 $$P(k) \sim k^{-\gamma}$$，其中 $P(k)$是度为 $k$ 的节点比例，$gamma$ 是幂律指数。这类网络具有少量度极高的“中心节点”（Hubs）和大量度很低的“末梢节点”，呈现“贫富分化”现象。无标度网络对随机故障具有鲁棒性，但对针对中心节点的蓄意攻击则表现出脆弱性。</li>
+<li><strong>小世界网络 (Small-World Network)</strong> ：这类网络同时具有高聚类系数（类似规则网络）和短平均路径长度（类似随机网络）的特征。该特性由 Watts 和 Strogatz 于 1998 年提出，广泛存在于社会、生物和技术网络中。</li>
+</ul>
+<hr>
+<h3 id="实践（Matlab代码版）"><a href="#实践（Matlab代码版）" class="headerlink" title="实践（Matlab代码版）"></a>实践（Matlab代码版）</h3><p>对上述指标的精确计算与综合分析，是揭示任何复杂系统内在机制的关键。然而，手动计算和分析过程繁琐且易错。<br>matlab 实现代码请访问：<br><a href="https://github.com/XuXING0430/complex-network-study">https://github.com/XuXING0430/complex-network-study</a></p>
+<p>为了促进学术研究与应用探索，我们开发了一个计算平台，该平台旨在提供一个高效、精准且用户友好的网络分析解决方案。可以直接进行体验：</p>
+<p><a href="https://complex.threepurple.cn/demo/basic-info">复杂网络分析平台 -<br>体验地址</a></p>
+<p>还包括以下的功能：</p>
+<ul>
+<li><strong>便捷的数据导入</strong> ：支持多种标准网络数据格式。</li>
+<li><strong>自动化的指标计算</strong> ：一键生成包括本文所述在内的数十种关键网络指标。</li>
+<li><strong>深度 AI 分析报告</strong> ：结合计算结果，提供对网络结构与特性的智能化解读。</li>
+<li><strong>图表可视化</strong> ：相关指标出图表</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>, <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络入门到精通</a>
 
       
   <span class="ico-tags"></span>
@@ -907,66 +1119,6 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
     
 
   
-    <article id="post-matlab实现随机攻击网络边-蓄意攻击网络连边-3"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2020/05/04/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%BE%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9-3/">matlab实现随机攻击网络边+蓄意攻击网络连边(3)</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	Posted on <a href="/2020/05/04/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%BE%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9-3/" class="article-date">
-	  <time datetime="2020-05-04T02:14:47.000Z" itemprop="datePublished">May 4, 2020</time>
-	</a>
-
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>其实在前面已经介绍过随机进攻节点和蓄意进攻节点的原理，今天和大家说一下边攻击。其实原理都是类似的，只要改动之前的一些代码就可以完成这个操作的。如果没有看过前两篇文章，那么建议你先看一下，有助于理解原理。</p>
-<h4 id="前两篇地址："><a href="#前两篇地址：" class="headerlink" title="前两篇地址："></a>前两篇地址：</h4><h4 id="matlab实现随机攻击网络节点-蓄意攻击网络节点-1-附github完整工程地址"><a href="#matlab实现随机攻击网络节点-蓄意攻击网络节点-1-附github完整工程地址" class="headerlink" title="matlab实现随机攻击网络节点+蓄意攻击网络节点(1)附github完整工程地址"></a><a href="[https://xuxing0430.github.io/2019/12/13/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/](https://xuxing0430.github.io/2019/12/13/matlab实现随机攻击网络节点-蓄意攻击网络节点/)">matlab实现随机攻击网络节点+蓄意攻击网络节点(1)附github完整工程地址</a></h4><h4 id="matlab实现随机攻击网络节点-蓄意攻击网络节点-2"><a href="#matlab实现随机攻击网络节点-蓄意攻击网络节点-2" class="headerlink" title="matlab实现随机攻击网络节点+蓄意攻击网络节点(2)"></a><a href="[https://xuxing0430.github.io/2019/12/20/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-2/](https://xuxing0430.github.io/2019/12/20/matlab实现随机攻击网络节点-蓄意攻击网络节点-2/)">matlab实现随机攻击网络节点+蓄意攻击网络节点(2)</a></h4><h3 id="我们首先应该了解删除连边和删除的节点的区别："><a href="#我们首先应该了解删除连边和删除的节点的区别：" class="headerlink" title="我们首先应该了解删除连边和删除的节点的区别："></a>我们首先应该了解删除连边和删除的节点的区别：</h3><p>删除节点：删除该节点及与该节点所有相连的边。</p>
-<p>删除连边：只删除该连边，而不改变节点的状态。</p>
-<h4 id="如果结合维度为N-N邻接矩阵A来说："><a href="#如果结合维度为N-N邻接矩阵A来说：" class="headerlink" title="如果结合维度为N*N邻接矩阵A来说："></a>如果结合维度为N*N邻接矩阵A来说：</h4><p>删除节点a：要删除A(a，:)和A(:，a)这一列一行，矩阵A变为（N-1）*（N-1）维度</p>
-<p>删除节点a和节点b的连边：A(a,b) = 0;A(b,a) = 0;(邻接矩阵的对称性)，矩阵A还是N*N维度。</p>
-<h3 id="知道了具体逻辑，那么下面就是代码实现了："><a href="#知道了具体逻辑，那么下面就是代码实现了：" class="headerlink" title="知道了具体逻辑，那么下面就是代码实现了："></a>知道了具体逻辑，那么下面就是代码实现了：</h3><h4 id="之前我们删除节点的代码片段为："><a href="#之前我们删除节点的代码片段为：" class="headerlink" title="之前我们删除节点的代码片段为："></a>之前我们删除节点的代码片段为：</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:numDelete</span><br><span class="line">    A( Name_Struct.Node_Key_Degree(<span class="built_in">i</span>),: ) = <span class="number">0</span>;     <span class="comment">%% 删除节点 Node_Key_Degree(i),用 0 占位，不能置空</span></span><br><span class="line">    A( :,Name_Struct.Node_Key_Degree(<span class="built_in">i</span>) ) = <span class="number">0</span>;</span><br><span class="line">    AA = A;</span><br><span class="line">    AA( sum(A)==<span class="number">0</span>,: ) = [];</span><br><span class="line">    AA( :,sum(A)==<span class="number">0</span> ) = [];</span><br><span class="line">    Con_Index_NetEff = testEglob( AA );</span><br><span class="line"></span><br><span class="line">    Eglob(<span class="built_in">i</span>) = Con_Index_NetEff.Net_Eff_Mymod;          </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-<h4 id="边攻击需要的数据准备："><a href="#边攻击需要的数据准备：" class="headerlink" title="边攻击需要的数据准备："></a>边攻击需要的数据准备：</h4><h5 id="邻接表：也就是网络中的所有连边关系-也就是下面的代码片段中的-biao（2-edge-number的矩阵）"><a href="#邻接表：也就是网络中的所有连边关系-也就是下面的代码片段中的-biao（2-edge-number的矩阵）" class="headerlink" title="邻接表：也就是网络中的所有连边关系 也就是下面的代码片段中的 biao（2*edge_number的矩阵）"></a>邻接表：也就是网络中的所有连边关系 也就是下面的代码片段中的 biao（2*edge_number的矩阵）</h5><h5 id="边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node-edge-bet（1-edge-number的矩阵），就是根据边介数参数得到的边的排序"><a href="#边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node-edge-bet（1-edge-number的矩阵），就是根据边介数参数得到的边的排序" class="headerlink" title="边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node_edge_bet（1*edge_number的矩阵），就是根据边介数参数得到的边的排序"></a>边的排序关系：（可以是随机排序，可以是按某种参数进行的排序）下面的代码片段中的Node_edge_bet（1*edge_number的矩阵），就是根据边介数参数得到的边的排序</h5><h4 id="那么改动后的边攻击代码片段为："><a href="#那么改动后的边攻击代码片段为：" class="headerlink" title="那么改动后的边攻击代码片段为："></a>那么改动后的边攻击代码片段为：</h4><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">A = A_Init;          <span class="comment">%% 网络邻接矩阵 A</span></span><br><span class="line"><span class="comment">% numDelete：删除连边的数量</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:numDelete</span><br><span class="line">	<span class="comment">%把要删除的边置为0</span></span><br><span class="line">    A( biao(<span class="number">1</span>,Node_edge_bet(<span class="built_in">i</span>)),biao(<span class="number">2</span>,Node_edge_bet(<span class="built_in">i</span>)) ) = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">%把对称位置的边也置为0</span></span><br><span class="line">    A( biao(<span class="number">2</span>,Node_edge_bet(<span class="built_in">i</span>)),biao(<span class="number">1</span>,Node_edge_bet(<span class="built_in">i</span>)) ) = <span class="number">0</span>;</span><br><span class="line">    AA = A;</span><br><span class="line">    Con_Index_NetEff = testEglob( AA );</span><br><span class="line">    Eglob_edge_bet(<span class="built_in">i</span>) = Con_Index_NetEff.Net_Eff;           </span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
-
-<p>经过分析之后，我们可以得到一个推测或者说是结论：那就是边攻击每次只攻击一个边，对网络的影响较小（相对于节点攻击来说）。</p>
-<p>感谢大家的时间，并希望以上的内容会对大家有所帮助。</p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matlab/" rel="tag">matlab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" rel="tag">网络连边</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" rel="tag">蓄意攻击</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" rel="tag">随机攻击</a></li></ul>
-
-      
-            
-      
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-    
-
-  
 
 
   <nav id="page-nav">
@@ -1073,7 +1225,19 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%881%EF%BC%89%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90/">复杂网络仿真从入门到精通（1）关键网络指标解析</a></h6>
+              <h6 style="margin: 0;"><a href="/2025/10/10/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%B3%BB%E5%88%972%EF%BC%9A%E7%BD%91%E7%BB%9C%E6%9E%84%E5%BB%BA/">复杂网络入门到精通系列2: 构建网络（邻接矩阵）</a></h6>
+              <span>October 10, 2025</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A0%EF%BC%9A%20%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/">复杂网络仿真从入门到精通0：学习路线</a></h6>
               <span>October 7, 2025</span>
             </div>
 
@@ -1085,7 +1249,7 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%EF%BC%9A0%20%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/">复杂网络仿真从入门到精通：(0) 学习路线</a></h6>
+              <h6 style="margin: 0;"><a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A1%EF%BC%9A%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90/">复杂网络仿真从入门到精通1：关键网络指标解析</a></h6>
               <span>October 7, 2025</span>
             </div>
 
@@ -1127,18 +1291,6 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
 
           </li>
         
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/2020/08/01/matlab%E8%BF%90%E8%A1%8C%E9%80%9F%E5%BA%A6%E4%BC%98%E5%8C%96/">matlab运行速度优化</a></h6>
-              <span>August 1, 2020</span>
-            </div>
-
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -1148,7 +1300,7 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/">CentOS</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/docker/">docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Veirlog/">Veirlog</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/matlab/">matlab</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/postman/">postman</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/postman/%E6%B5%8B%E8%AF%95/">测试</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring-security/">spring security</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/spring-security/java/">java</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tensorlfow/">tensorlfow</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/">云服务器</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a><span class="category-list-count">8</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/">CentOS</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/docker/">docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Veirlog/">Veirlog</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/matlab/">matlab</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/postman/">postman</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/postman/%E6%B5%8B%E8%AF%95/">测试</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring-security/">spring security</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/spring-security/java/">java</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tensorlfow/">tensorlfow</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/">云服务器</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a><span class="category-list-count">9</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络入门到精通</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="category-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1158,7 +1310,7 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AMD/" rel="tag">AMD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CentOS/" rel="tag">CentOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FPGA/" rel="tag">FPGA</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gephi/" rel="tag">Gephi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROCm/" rel="tag">ROCm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Space-L/" rel="tag">Space L</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Veirlog/" rel="tag">Veirlog</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gpu/" rel="tag">gpu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/idea/" rel="tag">idea</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javac/" rel="tag">javac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java%E6%95%99%E7%A8%8B/" rel="tag">java教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matlab/" rel="tag">matlab</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mono/" rel="tag">mono</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postman/" rel="tag">postman</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-security/" rel="tag">spring security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorlfow/" rel="tag">tensorlfow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win10/" rel="tag">win10</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%B2%E5%8F%A3/" rel="tag">串口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">云服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E5%8C%96/" rel="tag">优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" rel="tag">复杂网络</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" rel="tag">实体网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" rel="tag">寄存器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E6%A8%A1/" rel="tag">建模</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1/" rel="tag">数字频率计</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" rel="tag">数据预处理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" rel="tag">数码管</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" rel="tag">级联失效</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%AF%91/" rel="tag">编译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" rel="tag">网络节点</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" rel="tag">网络连边</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" rel="tag">蓄意攻击</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/" rel="tag">计数器</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%85%A5%E6%B3%95/" rel="tag">输入法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" rel="tag">随机攻击</a><span class="tag-list-count">3</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AMD/" rel="tag">AMD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CentOS/" rel="tag">CentOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FPGA/" rel="tag">FPGA</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gephi/" rel="tag">Gephi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROCm/" rel="tag">ROCm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Space-L/" rel="tag">Space L</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Veirlog/" rel="tag">Veirlog</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gpu/" rel="tag">gpu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/idea/" rel="tag">idea</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javac/" rel="tag">javac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java%E6%95%99%E7%A8%8B/" rel="tag">java教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matlab/" rel="tag">matlab</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mono/" rel="tag">mono</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postman/" rel="tag">postman</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-security/" rel="tag">spring security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorlfow/" rel="tag">tensorlfow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win10/" rel="tag">win10</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%B2%E5%8F%A3/" rel="tag">串口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">云服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E5%8C%96/" rel="tag">优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" rel="tag">复杂网络</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" rel="tag">实体网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" rel="tag">寄存器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E6%A8%A1/" rel="tag">建模</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1/" rel="tag">数字频率计</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" rel="tag">数据预处理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" rel="tag">数码管</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" rel="tag">级联失效</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%AF%91/" rel="tag">编译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" rel="tag">网络节点</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" rel="tag">网络连边</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" rel="tag">蓄意攻击</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/" rel="tag">计数器</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%85%A5%E6%B3%95/" rel="tag">输入法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" rel="tag">随机攻击</a><span class="tag-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -1168,7 +1320,7 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AMD/" style="font-size: 10px;">AMD</a> <a href="/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/tags/FPGA/" style="font-size: 18px;">FPGA</a> <a href="/tags/Gephi/" style="font-size: 10px;">Gephi</a> <a href="/tags/ROCm/" style="font-size: 10px;">ROCm</a> <a href="/tags/Space-L/" style="font-size: 12px;">Space L</a> <a href="/tags/Veirlog/" style="font-size: 20px;">Veirlog</a> <a href="/tags/c/" style="font-size: 10px;">c#</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/gpu/" style="font-size: 12px;">gpu</a> <a href="/tags/idea/" style="font-size: 10px;">idea</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javac/" style="font-size: 10px;">javac</a> <a href="/tags/java%E6%95%99%E7%A8%8B/" style="font-size: 10px;">java教程</a> <a href="/tags/matlab/" style="font-size: 20px;">matlab</a> <a href="/tags/mono/" style="font-size: 10px;">mono</a> <a href="/tags/postman/" style="font-size: 10px;">postman</a> <a href="/tags/spring-security/" style="font-size: 10px;">spring security</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/tensorlfow/" style="font-size: 10px;">tensorlfow</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/win10/" style="font-size: 10px;">win10</a> <a href="/tags/%E4%B8%B2%E5%8F%A3/" style="font-size: 10px;">串口</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">云服务器</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 10px;">优化</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" style="font-size: 14px;">复杂网络</a> <a href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" style="font-size: 12px;">实体网络</a> <a href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" style="font-size: 10px;">寄存器</a> <a href="/tags/%E5%BB%BA%E6%A8%A1/" style="font-size: 12px;">建模</a> <a href="/tags/%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1/" style="font-size: 10px;">数字频率计</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 10px;">数据预处理</a> <a href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" style="font-size: 10px;">数码管</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 10px;">测试</a> <a href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" style="font-size: 10px;">级联失效</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 10px;">编译</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" style="font-size: 12px;">网络节点</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" style="font-size: 10px;">网络连边</a> <a href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" style="font-size: 10px;">蓄意攻击</a> <a href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/" style="font-size: 12px;">计数器</a> <a href="/tags/%E8%BE%93%E5%85%A5%E6%B3%95/" style="font-size: 10px;">输入法</a> <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" style="font-size: 14px;">随机攻击</a>
+      <a href="/tags/AMD/" style="font-size: 10px;">AMD</a> <a href="/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/tags/FPGA/" style="font-size: 18px;">FPGA</a> <a href="/tags/Gephi/" style="font-size: 10px;">Gephi</a> <a href="/tags/ROCm/" style="font-size: 10px;">ROCm</a> <a href="/tags/Space-L/" style="font-size: 12px;">Space L</a> <a href="/tags/Veirlog/" style="font-size: 20px;">Veirlog</a> <a href="/tags/c/" style="font-size: 10px;">c#</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/gpu/" style="font-size: 12px;">gpu</a> <a href="/tags/idea/" style="font-size: 10px;">idea</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javac/" style="font-size: 10px;">javac</a> <a href="/tags/java%E6%95%99%E7%A8%8B/" style="font-size: 10px;">java教程</a> <a href="/tags/matlab/" style="font-size: 20px;">matlab</a> <a href="/tags/mono/" style="font-size: 10px;">mono</a> <a href="/tags/postman/" style="font-size: 10px;">postman</a> <a href="/tags/spring-security/" style="font-size: 10px;">spring security</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/tensorlfow/" style="font-size: 10px;">tensorlfow</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/win10/" style="font-size: 10px;">win10</a> <a href="/tags/%E4%B8%B2%E5%8F%A3/" style="font-size: 10px;">串口</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">云服务器</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 10px;">优化</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" style="font-size: 16px;">复杂网络</a> <a href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" style="font-size: 12px;">实体网络</a> <a href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" style="font-size: 10px;">寄存器</a> <a href="/tags/%E5%BB%BA%E6%A8%A1/" style="font-size: 12px;">建模</a> <a href="/tags/%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1/" style="font-size: 10px;">数字频率计</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 10px;">数据预处理</a> <a href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" style="font-size: 10px;">数码管</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 10px;">测试</a> <a href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" style="font-size: 10px;">级联失效</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 10px;">编译</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" style="font-size: 12px;">网络节点</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" style="font-size: 10px;">网络连边</a> <a href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" style="font-size: 10px;">蓄意攻击</a> <a href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/" style="font-size: 12px;">计数器</a> <a href="/tags/%E8%BE%93%E5%85%A5%E6%B3%95/" style="font-size: 10px;">输入法</a> <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" style="font-size: 14px;">随机攻击</a>
     </div>
   </div>
 
@@ -1178,7 +1330,7 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
     <h3 class="widget-title">Archives</h3>
 
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/10/">October 2025</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">August 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">5</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/10/">October 2025</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">August 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">5</span></li></ul>
     </div>
   </div>
 
