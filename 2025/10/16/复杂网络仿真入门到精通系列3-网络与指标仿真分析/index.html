@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <!-- PACE Progress Bar START -->
+  
+    
+<script src="https://raw.githubusercontent.com/HubSpot/pace/v1.0.2/pace.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+
+  
+  
+
+  <!-- PACE Progress Bar START -->
+
+  
+  <title>复杂网络仿真入门到精通3: 网络可视化与指标仿真分析 | Three purple&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="复杂网络" />
+  
+  
+  
+  
+  <meta name="description" content="本文为“复杂网络仿真入门到精通”系列的第三篇，前一篇我们学习了如何构建网络（包括随机网络、小世界网络与无标度网络），本篇将聚焦于网络的可视化与基础统计分析，并进一步探讨如何判断一个网络是否具有“小世界”或“无标度”特性。   一、引言网络不仅仅是由节点与边组成的抽象结构，其拓扑特征往往蕴含了系统行为的重要信息。从社交网络到神经网络，从交通系统到蛋白质相互作用网络，理解网络的统计特性是揭示系统规律">
+<meta property="og:type" content="article">
+<meta property="og:title" content="复杂网络仿真入门到精通3: 网络可视化与指标仿真分析">
+<meta property="og:url" content="https://doc.threepurple.cn/2025/10/16/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%B3%BB%E5%88%973-%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%8C%87%E6%A0%87%E4%BB%BF%E7%9C%9F%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Three purple&#39;s blog">
+<meta property="og:description" content="本文为“复杂网络仿真入门到精通”系列的第三篇，前一篇我们学习了如何构建网络（包括随机网络、小世界网络与无标度网络），本篇将聚焦于网络的可视化与基础统计分析，并进一步探讨如何判断一个网络是否具有“小世界”或“无标度”特性。   一、引言网络不仅仅是由节点与边组成的抽象结构，其拓扑特征往往蕴含了系统行为的重要信息。从社交网络到神经网络，从交通系统到蛋白质相互作用网络，理解网络的统计特性是揭示系统规律">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-10-16T07:33:06.000Z">
+<meta property="article:modified_time" content="2025-10-16T11:57:29.848Z">
+<meta property="article:author" content="Three purple">
+<meta property="article:tag" content="复杂网络">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Three purple&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="/css/hiero.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+  <!-- Custom CSS -->
+  
+<link rel="stylesheet" href="/css/my.css">
+
+  <!-- Google Adsense -->
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<script>
+var themeMenus = {};
+
+  themeMenus["/"] = "Home"; 
+
+  themeMenus["/archives/"] = "Archives"; 
+
+  themeMenus["/categories/"] = "Categories"; 
+
+  themeMenus["/tags/"] = "Tags"; 
+
+</script>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  <header id="allheader" class="site-header" role="banner">
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="124px" height="124px" alt="Hike News" src=" /css/images/bDuck.png">
+              </a>
+            
+          </h1>
+
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+            <div class="clearfix sf-menu">
+
+              <ul id="main-nav" class="nmenu sf-js-enabled">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives/">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories/">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags/">Tags</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="originBgDiv" style="background: #fff; width: 100%;">
+
+      <div style="max-height:600px; overflow: hidden;  display: flex; display: -webkit-flex; align-items: center;">
+        <img id="originBg" width="100%" alt="" src="">
+      </div>
+
+  </div>
+
+  <script>
+  function setAboutIMG(){
+      var imgUrls = "css/images/pose.jpg,https://source.unsplash.com/collection/954550/1920x1080".split(",");
+      var random = Math.floor((Math.random() * imgUrls.length ));
+      if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+        document.getElementById("originBg").src=imgUrls[random];
+      } else {
+        document.getElementById("originBg").src='/' + imgUrls[random];
+      }
+  }
+  bgDiv=document.getElementById("originBgDiv");
+  if(location.pathname.match('about')){
+    setAboutIMG();
+    bgDiv.style.display='block';
+  }else{
+    bgDiv.style.display='none';
+  }
+  </script>
+
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-复杂网络仿真入门到精通系列3-网络与指标仿真分析" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      复杂网络仿真入门到精通3: 网络可视化与指标仿真分析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2025/10/16/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%B3%BB%E5%88%973-%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%8C%87%E6%A0%87%E4%BB%BF%E7%9C%9F%E5%88%86%E6%9E%90/" class="article-date">
+	  <time datetime="2025-10-16T07:33:06.000Z" itemprop="datePublished">October 16, 2025</time>
+	</a>
+
+      
+	<span id="busuanzi_container_page_pv">
+	  本文总阅读量<span id="busuanzi_value_page_pv"></span>次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文为“复杂网络仿真入门到精通”系列的第三篇，前一篇我们学习了如何构建网络（包括随机网络、小世界网络与无标度网络），本篇将聚焦于网络的<strong>可视化与基础统计分析</strong>，并进一步探讨如何判断一个网络是否具有“小世界”或“无标度”特性。</p>
+</blockquote>
+<hr>
+<h2 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h2><p>网络不仅仅是由节点与边组成的抽象结构，其拓扑特征往往蕴含了系统行为的重要信息。<br>从社交网络到神经网络，从交通系统到蛋白质相互作用网络，<strong>理解网络的统计特性</strong>是揭示系统规律的第一步。</p>
+<p>本文将以 MATLAB 为主要工具，介绍：</p>
+<ol>
+<li>网络可视化方法；</li>
+<li>网络基本指标计算；</li>
+<li>小世界与无标度性质的定量分析；</li>
+<li>幂律分布拟合与验证。</li>
+</ol>
+<p>github代码地址：<a href="https://github.com/XuXING0430/complex-network-study/tree/main/step3_network_visualization_and_analysis">复杂网络学习合集-step3</a><br>如访问不了可从下列地址保存：第一个文件夹 下面的 Step3<br><a href="https://pan.baidu.com/s/5BekLPpCQCaXKymfvA2b_og?">网盘地址</a></p>
+<hr>
+<h2 id="二、准备数据"><a href="#二、准备数据" class="headerlink" title="二、准备数据"></a>二、准备数据</h2><p>可以使用前一篇中的随机、小世界、无标度模型，或导入真实网络。<br>例如，若已有边列表文件 <code>edge_list.csv</code>：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> isfile(<span class="string">&#x27;edge_list.csv&#x27;</span>)</span><br><span class="line">    T = <span class="built_in">readtable</span>(<span class="string">&#x27;edge_list.csv&#x27;</span>);</span><br><span class="line">    G = graph(T.source, T.target);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="comment">% 若无文件，则生成一个小世界网络示例</span></span><br><span class="line">    N = <span class="number">100</span>; </span><br><span class="line">    K = <span class="number">4</span>; </span><br><span class="line">    <span class="built_in">beta</span> = <span class="number">0.2</span>;</span><br><span class="line">    s = repelem((<span class="number">1</span>:N)&#x27;, K/<span class="number">2</span>);</span><br><span class="line">    t = <span class="built_in">mod</span>(s + <span class="built_in">repmat</span>(<span class="number">1</span>:K/<span class="number">2</span>, N, <span class="number">1</span>), N) + <span class="number">1</span>;</span><br><span class="line">    G = graph(s(:), t(:));</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">````</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">## 三、网络可视化</span><br><span class="line"></span><br><span class="line">MATLAB 提供了丰富的可视化布局方式，如 `force`, `subspace`, `circle` 等，下面给出一个简单的实现例子，可以根据这个例子进行一定的后续优化。</span><br><span class="line"></span><br><span class="line">```matlab</span><br><span class="line"><span class="built_in">figure</span>;</span><br><span class="line"><span class="built_in">plot</span>(G, <span class="string">&#x27;Layout&#x27;</span>, <span class="string">&#x27;force&#x27;</span>);</span><br><span class="line">title(<span class="string">&#x27;网络可视化（Force Layout）&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>为了更直观地展示结构特征，可以根据<strong>节点度</strong>调整节点大小或颜色：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">deg = degree(G);</span><br><span class="line"><span class="built_in">figure</span>;</span><br><span class="line">p = <span class="built_in">plot</span>(G, <span class="string">&#x27;Layout&#x27;</span>, <span class="string">&#x27;force&#x27;</span>);</span><br><span class="line">p.NodeCData = deg;</span><br><span class="line">p.MarkerSize = <span class="number">5</span> + deg;</span><br><span class="line">colorbar;</span><br><span class="line">title(<span class="string">&#x27;网络可视化（节点颜色代表度）&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p>同理 Python R语言，都可以实现类似的可视化方案</p>
+<hr>
+<h2 id="四、网络基本统计指标"><a href="#四、网络基本统计指标" class="headerlink" title="四、网络基本统计指标"></a>四、网络基本统计指标</h2><h3 id="1-节点与边"><a href="#1-节点与边" class="headerlink" title="1. 节点与边"></a>1. 节点与边</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">numNodes = numnodes(G);</span><br><span class="line">numEdges = numedges(G);</span><br><span class="line">fprintf(<span class="string">&#x27;节点数: %d, 边数: %d\n&#x27;</span>, numNodes, numEdges);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-平均度与度分布"><a href="#2-平均度与度分布" class="headerlink" title="2. 平均度与度分布"></a>2. 平均度与度分布</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">deg = degree(G);</span><br><span class="line">avgDeg = <span class="built_in">mean</span>(deg);</span><br><span class="line"><span class="built_in">figure</span>; </span><br><span class="line">histogram(deg);</span><br><span class="line">xlabel(<span class="string">&#x27;Degree&#x27;</span>); ylabel(<span class="string">&#x27;Frequency&#x27;</span>);</span><br><span class="line">title(<span class="string">&#x27;节点度分布&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-聚类系数与平均最短路径长度"><a href="#3-聚类系数与平均最短路径长度" class="headerlink" title="3. 聚类系数与平均最短路径长度"></a>3. 聚类系数与平均最短路径长度</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">C = <span class="built_in">mean</span>(clusteringCoefficient(G));</span><br><span class="line">L = <span class="built_in">mean</span>(distances(G), <span class="string">&#x27;all&#x27;</span>, <span class="string">&#x27;omitnan&#x27;</span>);</span><br><span class="line">fprintf(<span class="string">&#x27;平均聚类系数: %.4f\n平均最短路径长度: %.4f\n&#x27;</span>, C, L);</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>clusteringCoefficient(G)</code> 可用自定义函数或基于邻接矩阵计算：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">C</span> = <span class="title">clusteringCoefficient</span><span class="params">(G)</span></span></span><br><span class="line">    A = adjacency(G);</span><br><span class="line">    n = <span class="built_in">size</span>(A,<span class="number">1</span>);</span><br><span class="line">    C = <span class="built_in">zeros</span>(n,<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">i</span>=<span class="number">1</span>:n</span><br><span class="line">        ki = sum(A(<span class="built_in">i</span>,:));</span><br><span class="line">        <span class="keyword">if</span> ki &gt; <span class="number">1</span></span><br><span class="line">            subA = A(<span class="built_in">i</span>,:) * A * A(:,<span class="built_in">i</span>);</span><br><span class="line">            C(<span class="built_in">i</span>) = subA / (ki*(ki<span class="number">-1</span>));</span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<hr>
+<h2 id="五、小世界特性分析"><a href="#五、小世界特性分析" class="headerlink" title="五、小世界特性分析"></a>五、小世界特性分析</h2><p>小世界网络一般具有：</p>
+<ul>
+<li>高聚类系数；</li>
+<li>短平均路径长度。</li>
+</ul>
+<p>为了验证网络是否具有小世界特征，我们需要把网络与同规模、同平均度的随机网络进行对比：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">N = numnodes(G);</span><br><span class="line">E = numedges(G);</span><br><span class="line">G_rand = randomReference(G); <span class="comment">% 同规模随机网络</span></span><br><span class="line"></span><br><span class="line">C_rand = <span class="built_in">mean</span>(clusteringCoefficient(G_rand));</span><br><span class="line">L_rand = <span class="built_in">mean</span>(distances(G_rand), <span class="string">&#x27;all&#x27;</span>, <span class="string">&#x27;omitnan&#x27;</span>);</span><br><span class="line"></span><br><span class="line">SWI = (C / C_rand) / (L / L_rand);</span><br><span class="line">fprintf(<span class="string">&#x27;小世界指数 SWI = %.3f\n&#x27;</span>, SWI);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> SWI &gt; <span class="number">1</span></span><br><span class="line">    <span class="built_in">disp</span>(<span class="string">&#x27;该网络表现出小世界特性&#x27;</span>);</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">disp</span>(<span class="string">&#x27;该网络不具备显著小世界特性&#x27;</span>);</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="六、无标度特性与幂律度分布"><a href="#六、无标度特性与幂律度分布" class="headerlink" title="六、无标度特性与幂律度分布"></a>六、无标度特性与幂律度分布</h2><p>无标度网络的节点度分布通常服从幂律形式：</p>
+<p>$$P(k) \sim k^{-\gamma}$$</p>
+<p>在对数坐标下呈线性关系。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">deg = degree(G);</span><br><span class="line">[counts, bins] = histcounts(deg, <span class="string">&#x27;BinMethod&#x27;</span>, <span class="string">&#x27;integers&#x27;</span>);</span><br><span class="line">bins_center = bins(<span class="number">1</span>:<span class="keyword">end</span><span class="number">-1</span>) + diff(bins)/<span class="number">2</span>;</span><br><span class="line"></span><br><span class="line"><span class="built_in">figure</span>;</span><br><span class="line">loglog(bins_center, counts/sum(counts), <span class="string">&#x27;o&#x27;</span>);</span><br><span class="line">xlabel(<span class="string">&#x27;k&#x27;</span>); ylabel(<span class="string">&#x27;P(k)&#x27;</span>);</span><br><span class="line">title(<span class="string">&#x27;度分布（对数坐标）&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="幂律拟合与参数估计"><a href="#幂律拟合与参数估计" class="headerlink" title="幂律拟合与参数估计"></a>幂律拟合与参数估计</h3><figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">validIdx = deg &gt; <span class="number">0</span>;</span><br><span class="line">k = deg(validIdx);</span><br><span class="line">[alpha, xmin, L] = plfit(k);  <span class="comment">% 使用 Clauset 等提出的最大似然估计方法</span></span><br><span class="line"></span><br><span class="line">fprintf(<span class="string">&#x27;幂律指数 α = %.3f, xmin = %d\n&#x27;</span>, alpha, xmin);</span><br><span class="line"></span><br><span class="line"><span class="built_in">figure</span>;</span><br><span class="line">plplot(k, xmin, alpha);</span><br><span class="line">title(<span class="string">&#x27;幂律拟合结果&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>若无 <code>plfit</code> 函数，可自行实现或使用简化线性拟合：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">logk = <span class="built_in">log</span>(bins_center(bins_center&gt;<span class="number">0</span>));</span><br><span class="line">logP = <span class="built_in">log</span>(counts(bins_center&gt;<span class="number">0</span>)/sum(counts));</span><br><span class="line">coeffs = polyfit(logk, logP, <span class="number">1</span>);</span><br><span class="line"><span class="built_in">gamma</span> = -coeffs(<span class="number">1</span>);</span><br><span class="line">fprintf(<span class="string">&#x27;拟合幂律指数 γ ≈ %.3f\n&#x27;</span>, <span class="built_in">gamma</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="七、综合分析"><a href="#七、综合分析" class="headerlink" title="七、综合分析"></a>七、综合分析</h2><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>判断依据</th>
+<th>结论示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>小世界</td>
+<td>( SWI &gt; 1 )</td>
+<td>是</td>
+</tr>
+<tr>
+<td>无标度</td>
+<td>度分布符合幂律</td>
+<td>是（γ ≈ 2.5）</td>
+</tr>
+</tbody></table>
+<p>若网络同时满足以上两点，则说明其拓扑结构兼具局部聚集与全局稀疏的复杂性特征。</p>
+<hr>
+<h2 id="八、结论"><a href="#八、结论" class="headerlink" title="八、结论"></a>八、结论</h2><p>本文从可视化入手，系统介绍了复杂网络的基础统计分析方法。<br>通过对聚类系数、路径长度、度分布及幂律拟合的分析，我们能够初步判断网络类型：</p>
+<ul>
+<li><strong>小世界网络</strong> → 局部紧密、全局高效；</li>
+<li><strong>无标度网络</strong> → 度分布长尾，存在“枢纽节点”；</li>
+</ul>
+<p>这些特性不仅是理论研究的核心，也为后续的<strong>鲁棒性分析</strong>与<strong>传播动力学仿真</strong>提供了基础。</p>
+<hr>
+<h2 id="九、下一篇预告"><a href="#九、下一篇预告" class="headerlink" title="九、下一篇预告"></a>九、下一篇预告</h2><p>下一篇《复杂网络系列④：网络鲁棒性分析》<br>我们将深入探讨：</p>
+<ul>
+<li>网络在随机失效与攻击下的稳定性；</li>
+<li>节点介数、节点度、中心性等多种重要性指标。</li>
+</ul>
+<p>敬请期待。</p>
+<h2 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h2><p>我们开发了一个在线复杂网络计算平台：<br>👉 <a href="https://complex.threepurple.cn/">复杂网络分析平台</a></p>
+<p>支持：</p>
+<ul>
+<li><strong>上传邻接矩阵文件</strong>；</li>
+<li><strong>自动构建网络</strong>；</li>
+<li><strong>指标一键计算与可视化</strong>；</li>
+<li><strong>AI 智能报告生成</strong>。</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>, <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络入门到精通</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" rel="tag">复杂网络</a></li></ul>
+
+      
+        <div id="donation_div"></div>
+
+
+<script src="/js/vdonate.js"></script>
+
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/weChat.jpg?raw=true',
+  alipayImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/aliPay.jpg?raw=true'
+});
+</script>
+      
+            
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2025/10/10/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%B3%BB%E5%88%972%EF%BC%9A%E7%BD%91%E7%BB%9C%E6%9E%84%E5%BB%BA/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">复杂网络仿真入门到精通2: 构建网络（邻接矩阵）</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article" style="overflow-y: scroll; max-width: 28%;">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%BC%95%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">一、引言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%87%86%E5%A4%87%E6%95%B0%E6%8D%AE"><span class="nav-number">2.</span> <span class="nav-text">二、准备数据</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E7%BD%91%E7%BB%9C%E5%9F%BA%E6%9C%AC%E7%BB%9F%E8%AE%A1%E6%8C%87%E6%A0%87"><span class="nav-number">3.</span> <span class="nav-text">四、网络基本统计指标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%8A%82%E7%82%B9%E4%B8%8E%E8%BE%B9"><span class="nav-number">3.1.</span> <span class="nav-text">1. 节点与边</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%B9%B3%E5%9D%87%E5%BA%A6%E4%B8%8E%E5%BA%A6%E5%88%86%E5%B8%83"><span class="nav-number">3.2.</span> <span class="nav-text">2. 平均度与度分布</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%81%9A%E7%B1%BB%E7%B3%BB%E6%95%B0%E4%B8%8E%E5%B9%B3%E5%9D%87%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%95%BF%E5%BA%A6"><span class="nav-number">3.3.</span> <span class="nav-text">3. 聚类系数与平均最短路径长度</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%B0%8F%E4%B8%96%E7%95%8C%E7%89%B9%E6%80%A7%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">五、小世界特性分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E6%97%A0%E6%A0%87%E5%BA%A6%E7%89%B9%E6%80%A7%E4%B8%8E%E5%B9%82%E5%BE%8B%E5%BA%A6%E5%88%86%E5%B8%83"><span class="nav-number">5.</span> <span class="nav-text">六、无标度特性与幂律度分布</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%82%E5%BE%8B%E6%8B%9F%E5%90%88%E4%B8%8E%E5%8F%82%E6%95%B0%E4%BC%B0%E8%AE%A1"><span class="nav-number">5.1.</span> <span class="nav-text">幂律拟合与参数估计</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E7%BB%BC%E5%90%88%E5%88%86%E6%9E%90"><span class="nav-number">6.</span> <span class="nav-text">七、综合分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%E7%BB%93%E8%AE%BA"><span class="nav-number">7.</span> <span class="nav-text">八、结论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B9%9D%E3%80%81%E4%B8%8B%E4%B8%80%E7%AF%87%E9%A2%84%E5%91%8A"><span class="nav-number">8.</span> <span class="nav-text">九、下一篇预告</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E"><span class="nav-number">9.</span> <span class="nav-text">最后</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2025 Three purple&#39;s blog All Rights Reserved.
+          
+            <span id="busuanzi_container_site_uv">
+              本站访客数<span id="busuanzi_value_site_uv"></span>人次  
+              本站总访问量<span id="busuanzi_value_site_pv"></span>次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hiero" target="_blank">hiero</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var contentdiv = document.getElementById("content");
+
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+</script>
+
+<!-- Custome JS -->
+
+<script src="/js/my.js"></script>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives/" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories/" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags/" class="mobile-nav-link">Tags</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/scripts.js"></script>
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-37QFEM5W0L', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+
+
+
+	<script async src="https://dnqof95d40fo6.cloudfront.net/atw7f8.js">
+	</script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
