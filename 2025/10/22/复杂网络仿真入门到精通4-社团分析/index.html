@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <!-- PACE Progress Bar START -->
+  
+    
+<script src="https://raw.githubusercontent.com/HubSpot/pace/v1.0.2/pace.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+
+  
+  
+
+  <!-- PACE Progress Bar START -->
+
+  
+  <title>复杂网络仿真入门到精通4: 社团结构分析 | Three purple&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="复杂网络" />
+  
+  
+  
+  
+  <meta name="description" content="系列文章：  系列合集 下一篇预告：网络鲁棒性分析   一、引言：社团结构的重要性社团结构（Community Structure）是复杂网络研究中最具代表性的现象之一。它描述了网络中节点之间形成紧密连接群体的现象，在社交网络、科研合作网络、生物网络中普遍存在。  社交网络：社团对应朋友圈或兴趣群体；   科研合作网络：社团对应研究方向或课题组；   生物网络：社团对应功能模块（如基因调控模块）">
+<meta property="og:type" content="article">
+<meta property="og:title" content="复杂网络仿真入门到精通4: 社团结构分析">
+<meta property="og:url" content="https://doc.threepurple.cn/2025/10/22/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A4-%E7%A4%BE%E5%9B%A2%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Three purple&#39;s blog">
+<meta property="og:description" content="系列文章：  系列合集 下一篇预告：网络鲁棒性分析   一、引言：社团结构的重要性社团结构（Community Structure）是复杂网络研究中最具代表性的现象之一。它描述了网络中节点之间形成紧密连接群体的现象，在社交网络、科研合作网络、生物网络中普遍存在。  社交网络：社团对应朋友圈或兴趣群体；   科研合作网络：社团对应研究方向或课题组；   生物网络：社团对应功能模块（如基因调控模块）">
+<meta property="og:locale">
+<meta property="og:image" content="https://raw.githubusercontent.com/XuXING0430/doc_imgags/master/img/20251022095557.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/XuXING0430/doc_imgags/master/img/20251022095755.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/XuXING0430/doc_imgags/master/img/20251022095724.png">
+<meta property="article:published_time" content="2025-10-22T00:59:31.000Z">
+<meta property="article:modified_time" content="2025-10-27T01:30:14.344Z">
+<meta property="article:author" content="Three purple">
+<meta property="article:tag" content="复杂网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/XuXING0430/doc_imgags/master/img/20251022095557.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Three purple&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="/css/hiero.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+  <!-- Custom CSS -->
+  
+<link rel="stylesheet" href="/css/my.css">
+
+  <!-- Google Adsense -->
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<script>
+var themeMenus = {};
+
+  themeMenus["/"] = "Home"; 
+
+  themeMenus["/archives/"] = "Archives"; 
+
+  themeMenus["/categories/"] = "Categories"; 
+
+  themeMenus["/tags/"] = "Tags"; 
+
+</script>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  <header id="allheader" class="site-header" role="banner">
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="124px" height="124px" alt="Hike News" src=" /css/images/bDuck.png">
+              </a>
+            
+          </h1>
+
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+            <div class="clearfix sf-menu">
+
+              <ul id="main-nav" class="nmenu sf-js-enabled">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives/">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories/">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags/">Tags</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="originBgDiv" style="background: #fff; width: 100%;">
+
+      <div style="max-height:600px; overflow: hidden;  display: flex; display: -webkit-flex; align-items: center;">
+        <img id="originBg" width="100%" alt="" src="">
+      </div>
+
+  </div>
+
+  <script>
+  function setAboutIMG(){
+      var imgUrls = "css/images/pose.jpg,https://source.unsplash.com/collection/954550/1920x1080".split(",");
+      var random = Math.floor((Math.random() * imgUrls.length ));
+      if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+        document.getElementById("originBg").src=imgUrls[random];
+      } else {
+        document.getElementById("originBg").src='/' + imgUrls[random];
+      }
+  }
+  bgDiv=document.getElementById("originBgDiv");
+  if(location.pathname.match('about')){
+    setAboutIMG();
+    bgDiv.style.display='block';
+  }else{
+    bgDiv.style.display='none';
+  }
+  </script>
+
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-复杂网络仿真入门到精通4-社团分析" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      复杂网络仿真入门到精通4: 社团结构分析
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2025/10/22/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A4-%E7%A4%BE%E5%9B%A2%E5%88%86%E6%9E%90/" class="article-date">
+	  <time datetime="2025-10-22T00:59:31.000Z" itemprop="datePublished">October 22, 2025</time>
+	</a>
+
+      
+	<span>
+	  本文总阅读量 <span id="busuanzi_page_pv">加载中...</span> 次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>系列文章：</p>
+<ul>
+<li><a href="https://doc.threepurple.cn/categories/复杂网络/复杂网络入门到精通/">系列合集</a></li>
+<li>下一篇预告：网络鲁棒性分析</li>
+</ul>
+</blockquote>
+<h2 id="一、引言：社团结构的重要性"><a href="#一、引言：社团结构的重要性" class="headerlink" title="一、引言：社团结构的重要性"></a>一、引言：社团结构的重要性</h2><p>社团结构（Community Structure）是复杂网络研究中最具代表性的现象之一。<br>它描述了网络中<strong>节点之间形成紧密连接群体</strong>的现象，在社交网络、科研合作网络、生物网络中普遍存在。</p>
+<ul>
+<li><strong>社交网络</strong>：社团对应朋友圈或兴趣群体；  </li>
+<li><strong>科研合作网络</strong>：社团对应研究方向或课题组；  </li>
+<li><strong>生物网络</strong>：社团对应功能模块（如基因调控模块）。  </li>
+</ul>
+<p>通过社团分析，我们可以理解网络的宏观组织形态、发现潜在的功能群体，并进一步优化传播、推荐或控制机制。<br>因此，社团检测已成为复杂网络分析中最核心的研究内容之一。</p>
+<p><strong>本文对应资源</strong>：<br>github代码地址：<a href="https://github.com/XuXING0430/complex-network-study">复杂网络学习合集-step4</a><br>如访问不了可从下列地址保存：第一个文件夹 下面的 Step4<br><a href="https://pan.baidu.com/s/5BekLPpCQCaXKymfvA2b_og?">网盘地址</a></p>
+<hr>
+<h2 id="二、社团检测的基本思路"><a href="#二、社团检测的基本思路" class="headerlink" title="二、社团检测的基本思路"></a>二、社团检测的基本思路</h2><p>社团划分的目标是：</p>
+<blockquote>
+<p><strong>让社团内部的连接尽量密集，而社团之间的连接尽量稀疏。</strong></p>
+</blockquote>
+<p>目前主流方法大致可以分为三类：</p>
+<table>
+<thead>
+<tr>
+<th>方法类别</th>
+<th>主要思想</th>
+<th>常用算法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基于模块度优化（Modularity）</td>
+<td>通过最大化模块度 (Q) 寻找最优划分</td>
+<td>Louvain、Newman</td>
+</tr>
+<tr>
+<td>基于谱聚类（Spectral）</td>
+<td>对网络拉普拉斯矩阵进行特征分解</td>
+<td>Spectral Clustering</td>
+</tr>
+<tr>
+<td>基于概率模型</td>
+<td>用随机块模型（SBM）建模节点连接概率</td>
+<td>Stochastic Block Model</td>
+</tr>
+</tbody></table>
+<p>这些方法各有优势：  </p>
+<ul>
+<li>Louvain 方法高效、适用于大规模网络；  </li>
+<li>谱聚类方法理论清晰、便于可解释；  </li>
+<li>概率模型适合推断复杂多层网络。</li>
+</ul>
+<hr>
+<h2 id="三、MATLAB-实现：Louvain-社团检测"><a href="#三、MATLAB-实现：Louvain-社团检测" class="headerlink" title="三、MATLAB 实现：Louvain 社团检测"></a>三、MATLAB 实现：Louvain 社团检测</h2><p>在 MATLAB 中，我们通常先构建网络（或载入上一节课程保存的邻接矩阵），然后执行社团检测。<br>最常见的是 <strong>Louvain 算法</strong>，它通过模块度 (Q) 的优化自动识别社团。</p>
+<p><strong>关键示例：</strong></p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">G = graph(A);</span><br><span class="line">[community, Q] = community_louvain(full(adjacency(G)));</span><br><span class="line">fprintf(<span class="string">&#x27;模块度 Q = %.4f\n&#x27;</span>, Q);</span><br></pre></td></tr></table></figure>
+
+<p>得到的结果中：</p>
+<ul>
+<li><code>community</code> 表示每个节点所属社团编号；</li>
+<li><code>Q</code> 为模块度值，衡量社团划分质量。</li>
+</ul>
+<p>随后可使用 force-directed 布局进行可视化：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">p = <span class="built_in">plot</span>(G, <span class="string">&#x27;Layout&#x27;</span>, <span class="string">&#x27;force&#x27;</span>);</span><br><span class="line">colors = lines(<span class="built_in">max</span>(community));</span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:<span class="built_in">max</span>(community)</span><br><span class="line">    highlight(p, <span class="built_in">find</span>(community==<span class="built_in">i</span>), <span class="string">&#x27;NodeColor&#x27;</span>, colors(<span class="built_in">i</span>,:));</span><br><span class="line"><span class="keyword">end</span> </span><br></pre></td></tr></table></figure>
+
+<p>若模块度 (Q &gt; 0.3)，说明网络具有明显的社团结构。</p>
+<p><img src="https://raw.githubusercontent.com/XuXING0430/doc_imgags/master/img/20251022095557.png" alt=""></p>
+<h2 id="四、模块度与网络类型的关系"><a href="#四、模块度与网络类型的关系" class="headerlink" title="四、模块度与网络类型的关系"></a>四、模块度与网络类型的关系</h2><p>模块度 ( Q ) 的定义为：</p>
+<p>$$Q = \frac{1}{2m} \sum_{ij} \left[ A_{ij} - \frac{k_i k_j}{2m} \right] \delta(c_i, c_j)$$</p>
+<p>其中：</p>
+<ul>
+<li>$(A_{ij})$：邻接矩阵；</li>
+<li>$(k_i)$：节点 $(i)$ 的度；</li>
+<li>$(m)$：边总数；</li>
+<li>$(\delta(c_i, c_j))$：若节点 $(i,j) $属于同一社团则为 1，否则为 0。</li>
+</ul>
+<p>根据经验：</p>
+<ul>
+<li>(Q &gt; 0.3)：网络具有显著社团结构；</li>
+<li>(Q &lt; 0.1)：社团结构不明显。</li>
+</ul>
+<p>结合前几篇结果，我们可以对网络类型进行对比：</p>
+<table>
+<thead>
+<tr>
+<th>网络类型</th>
+<th>主要特征</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>小世界网络</strong></td>
+<td>高聚类系数 + 短平均路径</td>
+</tr>
+<tr>
+<td><strong>无标度网络</strong></td>
+<td>度分布呈幂律</td>
+</tr>
+<tr>
+<td><strong>社团网络</strong></td>
+<td>模块度 (Q) 高，结构分层明显</td>
+</tr>
+</tbody></table>
+<p>这三类特性经常同时出现在现实系统中，例如社交网络既呈幂律分布，又具有小世界和社团特性。</p>
+<hr>
+<h2 id="五、社团结构的功能与桥节点分析"><a href="#五、社团结构的功能与桥节点分析" class="headerlink" title="五、社团结构的功能与桥节点分析"></a>五、社团结构的功能与桥节点分析</h2><p>完成社团划分后，我们往往还需识别<strong>社团间的关键节点</strong>。<br>这些节点在不同社团间起“桥梁作用”，对信息传播或控制极为关键。</p>
+<p>在 MATLAB 中，可以使用介数中心性（Betweenness Centrality）来识别桥节点：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">bet = centrality(G, <span class="string">&#x27;betweenness&#x27;</span>);</span><br><span class="line">[~, idx] = <span class="built_in">max</span>(bet);</span><br><span class="line">fprintf(<span class="string">&#x27;桥节点编号：%d\n&#x27;</span>, idx);</span><br></pre></td></tr></table></figure>
+
+<p>随后进行可视化：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">highlight(p, idx, <span class="string">&#x27;NodeColor&#x27;</span>, <span class="string">&#x27;k&#x27;</span>, <span class="string">&#x27;Marker&#x27;</span>, <span class="string">&#x27;s&#x27;</span>, <span class="string">&#x27;MarkerSize&#x27;</span>, <span class="number">8</span>);</span><br><span class="line">title(<span class="string">&#x27;桥节点高亮&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/XuXING0430/doc_imgags/master/img/20251022095755.png" alt=""></p>
+<p>此外，还可以分析不同社团间的连接强度：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">imagesc(commMatrix);</span><br><span class="line">colorbar;</span><br><span class="line">title(<span class="string">&#x27;社团间连接强度矩阵&#x27;</span>);</span><br></pre></td></tr></table></figure>
+<p><img src="https://raw.githubusercontent.com/XuXING0430/doc_imgags/master/img/20251022095724.png" alt=""></p>
+<p>从矩阵图中，我们能清晰看到哪些社团之间的交互更频繁。</p>
+<h2 id="六、科研视角的延伸与应用"><a href="#六、科研视角的延伸与应用" class="headerlink" title="六、科研视角的延伸与应用"></a>六、科研视角的延伸与应用</h2><p>社团检测不仅是可视化的结果，更是理解复杂系统组织规律的关键工具。<br>在科研与工程应用中，常见的拓展方向包括：</p>
+<ol>
+<li><p><strong>社团动态演化</strong><br>研究社团随时间变化的形成与合并过程，例如社交话题的生命周期。</p>
+</li>
+<li><p><strong>多层网络社团检测</strong><br>当网络存在多种关系（如“合作”与“引用”），需要分析不同层的社团重叠与耦合。</p>
+</li>
+<li><p><strong>基于社团的功能预测</strong><br>通过节点所属社团，预测其潜在属性或未来连接。</p>
+</li>
+</ol>
+<p><strong>推荐阅读：</strong></p>
+<ul>
+<li>Newman, M. E. J. <em>Networks: An Introduction</em>. Oxford University Press, 2010.</li>
+<li>Fortunato, S. <em>Community Detection in Graphs</em>. <em>Physics Reports</em>, 2010.</li>
+</ul>
+<hr>
+<h2 id="七、小结与下一步"><a href="#七、小结与下一步" class="headerlink" title="七、小结与下一步"></a>七、小结与下一步</h2><p>本节我们完成了：</p>
+<ul>
+<li>✅ 理解社团结构的概念与意义；</li>
+<li>✅ 掌握 Louvain 算法的基本实现；</li>
+<li>✅ 通过模块度分析网络结构特性；</li>
+<li>✅ 识别关键桥节点并可视化社团分布。</li>
+</ul>
+<h2 id="最后：给大家推荐一个在线复杂计算平台-欢迎大家进行体验"><a href="#最后：给大家推荐一个在线复杂计算平台-欢迎大家进行体验" class="headerlink" title="最后：给大家推荐一个在线复杂计算平台, 欢迎大家进行体验"></a>最后：给大家推荐一个在线复杂计算平台, 欢迎大家进行体验</h2><p>👉 <a href="https://complex.threepurple.cn">复杂网络分析平台</a></p>
+<p>支持：</p>
+<ul>
+<li><strong>AI 智能报告生成</strong></li>
+<li><strong>上传邻接矩阵文件</strong>；</li>
+<li><strong>自动构建网络, 指标一键计算与可视化</strong>；</li>
+<li><strong>网络鲁棒性分析（节点/边攻击）</strong></li>
+<li><strong>级联失效模型分析</strong></li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>, <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络入门到精通</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" rel="tag">复杂网络</a></li></ul>
+
+      
+        <div id="donation_div"></div>
+
+
+<script src="/js/vdonate.js"></script>
+
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/weChat.jpg?raw=true',
+  alipayImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/aliPay.jpg?raw=true'
+});
+</script>
+      
+            
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2025/10/26/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E8%B5%84%E6%BA%90%E6%95%B4%E7%90%86%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          复杂网络学习资源整理（持续更新）
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/10/16/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%B3%BB%E5%88%973-%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%8C%87%E6%A0%87%E4%BB%BF%E7%9C%9F%E5%88%86%E6%9E%90/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">复杂网络仿真入门到精通3: 网络可视化与指标仿真分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article" style="overflow-y: scroll; max-width: 28%;">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%BC%95%E8%A8%80%EF%BC%9A%E7%A4%BE%E5%9B%A2%E7%BB%93%E6%9E%84%E7%9A%84%E9%87%8D%E8%A6%81%E6%80%A7"><span class="nav-number">1.</span> <span class="nav-text">一、引言：社团结构的重要性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E7%A4%BE%E5%9B%A2%E6%A3%80%E6%B5%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">二、社团检测的基本思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81MATLAB-%E5%AE%9E%E7%8E%B0%EF%BC%9ALouvain-%E7%A4%BE%E5%9B%A2%E6%A3%80%E6%B5%8B"><span class="nav-number">3.</span> <span class="nav-text">三、MATLAB 实现：Louvain 社团检测</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%A8%A1%E5%9D%97%E5%BA%A6%E4%B8%8E%E7%BD%91%E7%BB%9C%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="nav-number">4.</span> <span class="nav-text">四、模块度与网络类型的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E7%A4%BE%E5%9B%A2%E7%BB%93%E6%9E%84%E7%9A%84%E5%8A%9F%E8%83%BD%E4%B8%8E%E6%A1%A5%E8%8A%82%E7%82%B9%E5%88%86%E6%9E%90"><span class="nav-number">5.</span> <span class="nav-text">五、社团结构的功能与桥节点分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%E7%A7%91%E7%A0%94%E8%A7%86%E8%A7%92%E7%9A%84%E5%BB%B6%E4%BC%B8%E4%B8%8E%E5%BA%94%E7%94%A8"><span class="nav-number">6.</span> <span class="nav-text">六、科研视角的延伸与应用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%E5%B0%8F%E7%BB%93%E4%B8%8E%E4%B8%8B%E4%B8%80%E6%AD%A5"><span class="nav-number">7.</span> <span class="nav-text">七、小结与下一步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%EF%BC%9A%E7%BB%99%E5%A4%A7%E5%AE%B6%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AA%E5%9C%A8%E7%BA%BF%E5%A4%8D%E6%9D%82%E8%AE%A1%E7%AE%97%E5%B9%B3%E5%8F%B0-%E6%AC%A2%E8%BF%8E%E5%A4%A7%E5%AE%B6%E8%BF%9B%E8%A1%8C%E4%BD%93%E9%AA%8C"><span class="nav-number">8.</span> <span class="nav-text">最后：给大家推荐一个在线复杂计算平台, 欢迎大家进行体验</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2025 Three purple&#39;s blog All Rights Reserved.
+          
+            <span>
+              本站总访客数 <span id="busuanzi_site_uv">加载中...</span> 人 | 
+              本站总访问量 <span id="busuanzi_site_pv">加载中...</span> 次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hiero" target="_blank">hiero</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var contentdiv = document.getElementById("content");
+
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+</script>
+
+<!-- Custome JS -->
+
+<script src="/js/my.js"></script>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives/" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories/" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags/" class="mobile-nav-link">Tags</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/scripts.js"></script>
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-37QFEM5W0L', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+
+
+
+	<script src="//cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js" defer></script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>

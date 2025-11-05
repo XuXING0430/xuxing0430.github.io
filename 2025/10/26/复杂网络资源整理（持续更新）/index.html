@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <!-- PACE Progress Bar START -->
+  
+    
+<script src="https://raw.githubusercontent.com/HubSpot/pace/v1.0.2/pace.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+
+  
+  
+
+  <!-- PACE Progress Bar START -->
+
+  
+  <title>复杂网络学习资源整理（持续更新） | Three purple&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  
+  <meta name="description" content="本文整理了复杂网络（Complex Networks）学习与研究的常用资源，包括教材、论文、算法、数据集、工具和开源代码库，帮助你从入门到实战快速建立体系。   一、📘 入门书籍与经典教材   书名 作者 简介    Networks: An Introduction Mark Newman 最经典的复杂网络教材，系统讲解理论、指标与模型。   Graph Theory and Complex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="复杂网络学习资源整理（持续更新）">
+<meta property="og:url" content="https://doc.threepurple.cn/2025/10/26/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E8%B5%84%E6%BA%90%E6%95%B4%E7%90%86%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/index.html">
+<meta property="og:site_name" content="Three purple&#39;s blog">
+<meta property="og:description" content="本文整理了复杂网络（Complex Networks）学习与研究的常用资源，包括教材、论文、算法、数据集、工具和开源代码库，帮助你从入门到实战快速建立体系。   一、📘 入门书籍与经典教材   书名 作者 简介    Networks: An Introduction Mark Newman 最经典的复杂网络教材，系统讲解理论、指标与模型。   Graph Theory and Complex">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-10-26T12:28:10.000Z">
+<meta property="article:modified_time" content="2025-11-05T01:04:51.458Z">
+<meta property="article:author" content="Three purple">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Three purple&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="/css/hiero.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+  <!-- Custom CSS -->
+  
+<link rel="stylesheet" href="/css/my.css">
+
+  <!-- Google Adsense -->
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<script>
+var themeMenus = {};
+
+  themeMenus["/"] = "Home"; 
+
+  themeMenus["/archives/"] = "Archives"; 
+
+  themeMenus["/categories/"] = "Categories"; 
+
+  themeMenus["/tags/"] = "Tags"; 
+
+</script>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  <header id="allheader" class="site-header" role="banner">
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="124px" height="124px" alt="Hike News" src=" /css/images/bDuck.png">
+              </a>
+            
+          </h1>
+
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+            <div class="clearfix sf-menu">
+
+              <ul id="main-nav" class="nmenu sf-js-enabled">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives/">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories/">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags/">Tags</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="originBgDiv" style="background: #fff; width: 100%;">
+
+      <div style="max-height:600px; overflow: hidden;  display: flex; display: -webkit-flex; align-items: center;">
+        <img id="originBg" width="100%" alt="" src="">
+      </div>
+
+  </div>
+
+  <script>
+  function setAboutIMG(){
+      var imgUrls = "css/images/pose.jpg,https://source.unsplash.com/collection/954550/1920x1080".split(",");
+      var random = Math.floor((Math.random() * imgUrls.length ));
+      if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+        document.getElementById("originBg").src=imgUrls[random];
+      } else {
+        document.getElementById("originBg").src='/' + imgUrls[random];
+      }
+  }
+  bgDiv=document.getElementById("originBgDiv");
+  if(location.pathname.match('about')){
+    setAboutIMG();
+    bgDiv.style.display='block';
+  }else{
+    bgDiv.style.display='none';
+  }
+  </script>
+
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-复杂网络资源整理（持续更新）" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      复杂网络学习资源整理（持续更新）
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2025/10/26/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E8%B5%84%E6%BA%90%E6%95%B4%E7%90%86%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/" class="article-date">
+	  <time datetime="2025-10-26T12:28:10.000Z" itemprop="datePublished">October 26, 2025</time>
+	</a>
+
+      
+	<span>
+	  本文总阅读量 <span id="busuanzi_page_pv">加载中...</span> 次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>本文整理了复杂网络（Complex Networks）学习与研究的常用资源，包括教材、论文、算法、数据集、工具和开源代码库，帮助你从入门到实战快速建立体系。</p>
+</blockquote>
+<hr>
+<h2 id="一、📘-入门书籍与经典教材"><a href="#一、📘-入门书籍与经典教材" class="headerlink" title="一、📘 入门书籍与经典教材"></a>一、📘 入门书籍与经典教材</h2><table>
+<thead>
+<tr>
+<th>书名</th>
+<th>作者</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Networks: An Introduction</strong></td>
+<td>Mark Newman</td>
+<td>最经典的复杂网络教材，系统讲解理论、指标与模型。</td>
+</tr>
+<tr>
+<td><strong>Graph Theory and Complex Networks</strong></td>
+<td>Maarten van Steen</td>
+<td>免费英文教材（可在线获取），兼顾图论与网络科学。</td>
+</tr>
+<tr>
+<td><strong>复杂网络理论及其应用</strong></td>
+<td>Albert-László Barabási</td>
+<td>很好的中文教材。</td>
+</tr>
+</tbody></table>
+<p>注：我已经整理好对应资源，文末网盘链接自取</p>
+<hr>
+<h2 id="二、📄-经典论文与里程碑成果"><a href="#二、📄-经典论文与里程碑成果" class="headerlink" title="二、📄 经典论文与里程碑成果"></a>二、📄 经典论文与里程碑成果</h2><table>
+<thead>
+<tr>
+<th>主题</th>
+<th>论文</th>
+<th>出版</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>小世界网络</td>
+<td>Watts &amp; Strogatz, <em>Nature</em>, 1998</td>
+<td>提出小世界模型，揭示真实网络的高聚类与短路径特征。</td>
+</tr>
+<tr>
+<td>无标度网络</td>
+<td>Barabási &amp; Albert, <em>Science</em>, 1999</td>
+<td>提出幂律分布模型，奠定复杂网络理论基础。</td>
+</tr>
+<tr>
+<td>社区发现综述</td>
+<td>Newman, <em>SIAM Review</em>, 2003</td>
+<td>系统总结了网络划分与社区检测方法。</td>
+</tr>
+<tr>
+<td>网络鲁棒性</td>
+<td>Albert et al., <em>Nature</em>, 2000</td>
+<td>分析复杂网络在攻击下的连通性与失效特性。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="三、🧠-核心概念与常用算法"><a href="#三、🧠-核心概念与常用算法" class="headerlink" title="三、🧠 核心概念与常用算法"></a>三、🧠 核心概念与常用算法</h2><h3 id="网络结构指标"><a href="#网络结构指标" class="headerlink" title="网络结构指标"></a>网络结构指标</h3><ul>
+<li><strong>度分布（Degree Distribution）</strong></li>
+<li><strong>平均路径长度（Average Path Length）</strong></li>
+<li><strong>聚类系数（Clustering Coefficient）</strong></li>
+<li><strong>网络密度与连通性</strong></li>
+</ul>
+<h3 id="社区发现算法"><a href="#社区发现算法" class="headerlink" title="社区发现算法"></a>社区发现算法</h3><ul>
+<li>Louvain 算法（模块度最大化）</li>
+<li>Label Propagation（标签传播）</li>
+<li>Girvan–Newman（基于介数中心性）</li>
+</ul>
+<h3 id="中心性指标"><a href="#中心性指标" class="headerlink" title="中心性指标"></a>中心性指标</h3><ul>
+<li>度中心性、介数中心性、接近中心性</li>
+<li>特征向量中心性、PageRank</li>
+</ul>
+<h3 id="网络动力学模型"><a href="#网络动力学模型" class="headerlink" title="网络动力学模型"></a>网络动力学模型</h3><ul>
+<li>传播模型：SIR、SIS、Rumor Model</li>
+<li>级联失效模型：负载重分配、鲁棒性分析</li>
+<li>演化模型：BA、WS、ER 随机网络生成</li>
+</ul>
+<hr>
+<h2 id="四、💻-常用开源库与工具"><a href="#四、💻-常用开源库与工具" class="headerlink" title="四、💻 常用开源库与工具"></a>四、💻 常用开源库与工具</h2><h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><ul>
+<li><strong>NetworkX</strong> — 功能最全的复杂网络库</li>
+<li><strong>igraph (Python版)</strong> — 高性能计算，支持大规模图</li>
+</ul>
+<h3 id="Java"><a href="#Java" class="headerlink" title="Java"></a>Java</h3><ul>
+<li><strong>JGraphT</strong> — 功能丰富的图算法库（最短路径、连通性、流计算）</li>
+</ul>
+<h3 id="R"><a href="#R" class="headerlink" title="R"></a>R</h3><ul>
+<li><strong>igraph (R版)</strong> — 与 Python 版类似，科研论文常用</li>
+<li><strong>statnet / sna</strong> — 专注社会网络分析</li>
+</ul>
+<hr>
+<h2 id="五、📊-网络数据集资源"><a href="#五、📊-网络数据集资源" class="headerlink" title="五、📊 网络数据集资源"></a>五、📊 网络数据集资源</h2><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>链接</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>KONECT</strong></td>
+<td><a href="https://konect.cc/">https://konect.cc/</a></td>
+<td>大规模网络数据集集合，包含社交、通信、生物网络等。</td>
+</tr>
+<tr>
+<td><strong>SNAP (Stanford)</strong></td>
+<td><a href="https://snap.stanford.edu/data/">https://snap.stanford.edu/data/</a></td>
+<td>斯坦福网络分析平台，提供学术常用图数据。</td>
+</tr>
+<tr>
+<td><strong>Network Repository</strong></td>
+<td><a href="https://networkrepository.com/">https://networkrepository.com/</a></td>
+<td>在线浏览和下载多种类型的网络数据。</td>
+</tr>
+<tr>
+<td><strong>ICON Dataset</strong></td>
+<td><a href="https://icon.colorado.edu/">https://icon.colorado.edu/</a></td>
+<td>社会与行为网络数据集。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="六、🖥️-可视化与分析工具"><a href="#六、🖥️-可视化与分析工具" class="headerlink" title="六、🖥️ 可视化与分析工具"></a>六、🖥️ 可视化与分析工具</h2><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Gephi</strong></td>
+<td>桌面可视化分析工具，支持社区检测、布局算法、交互分析。</td>
+</tr>
+<tr>
+<td><strong>Cytoscape</strong></td>
+<td>生物信息学常用，可扩展插件丰富。</td>
+</tr>
+<tr>
+<td><strong>Graphia</strong></td>
+<td>轻量可视化与聚类分析工具。</td>
+</tr>
+<tr>
+<td><strong>D3.js</strong></td>
+<td>Web 端可视化，适合前端展示与交互开发。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="七、🌐-在线平台与实战项目"><a href="#七、🌐-在线平台与实战项目" class="headerlink" title="七、🌐 在线平台与实战项目"></a>七、🌐 在线平台与实战项目</h2><ul>
+<li><strong><a href="https://complex.threepurple.cn/">复杂网络计算平台</a></strong> — 在线级联失效模拟、鲁棒性分析、网络指标计算与可视化平台。</li>
+<li><strong>NetworkX Documentation</strong> — 官方教程与示例。</li>
+</ul>
+<hr>
+<h2 id="八、🎯-我总结的资源"><a href="#八、🎯-我总结的资源" class="headerlink" title="八、🎯 我总结的资源"></a>八、🎯 我总结的资源</h2><h3 id="1-📂-代码仓库"><a href="#1-📂-代码仓库" class="headerlink" title="1. 📂 代码仓库"></a>1. 📂 代码仓库</h3><ul>
+<li><a href="https://github.com/XuXING0430/complex-network-study">complex-network-study</a> —— 复杂网路学习路线</li>
+</ul>
+<h3 id="2-📘-教程与学习笔记"><a href="#2-📘-教程与学习笔记" class="headerlink" title="2. 📘 教程与学习笔记"></a>2. 📘 教程与学习笔记</h3><ul>
+<li><a href="https://doc.threepurple.cn/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络仿真入门到精通（系列）</a> —— 详细解析 复杂网络的仿真内容，。</li>
+<li>B站视频教程：<a href="https://www.bilibili.com/video/BV1dMs8zdEZ1/">复杂网络仿真入门到精通</a></li>
+</ul>
+<h3 id="3-📝-博客与资料整理"><a href="#3-📝-博客与资料整理" class="headerlink" title="3. 📝 博客与资料整理"></a>3. 📝 博客与资料整理</h3><ul>
+<li><a href="https://zhuanlan.zhihu.com/p/97232429">matlab实现随机+蓄意攻击网络节点(1)</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/601086935">matlab实现简单级联失效模型</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/111520514">如何建立复杂网络实体网络的Space L模型？</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/143159022">如何对复杂网络建模所需要的数据进行预处理</a></li>
+</ul>
+<h3 id="4-🔗-个人平台与工具网站"><a href="#4-🔗-个人平台与工具网站" class="headerlink" title="4. 🔗 个人平台与工具网站"></a>4. 🔗 个人平台与工具网站</h3><ul>
+<li><p><strong><a href="https://complex.threepurple.cn/">复杂网络计算平台</a></strong> — 在线级联失效模拟、鲁棒性分析、网络指标计算与可视化平台。</p>
+<blockquote>
+<p>支持邻接矩阵上传、网络可视化、网络鲁棒性分析、级联失效模拟与指标计算。</p>
+</blockquote>
+</li>
+<li><p><strong><a href="https://www.zhihu.com/column/c_1247885367900266496">知乎专栏：复杂网络研究、仿真经验分享</a></strong></p>
+</li>
+</ul>
+<h3 id="5-🔗-网盘资源"><a href="#5-🔗-网盘资源" class="headerlink" title="5. 🔗 网盘资源"></a>5. 🔗 网盘资源</h3><ul>
+<li><strong><a href="https://pan.baidu.com/s/5BekLPpCQCaXKymfvA2b_og?">资源合集</a></strong> <blockquote>
+<p>包含书籍、论文、代码与数据集等，持续更新中。</p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h2 id="💬-结语"><a href="#💬-结语" class="headerlink" title="💬 结语"></a>💬 结语</h2><p>复杂网络作为跨学科研究的重要方向，已经在社会学、生物学、计算机科学等领域广泛应用。<br>希望这份资源整理能帮助你快速建立知识体系，找到适合自己的研究或开发方向。</p>
+<blockquote>
+<p>📌 持续更新中，欢迎收藏或补充。<br>如果你有推荐资源或开源项目，欢迎留言交流！</p>
+</blockquote>
+<hr>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+      
+      
+        <div id="donation_div"></div>
+
+
+<script src="/js/vdonate.js"></script>
+
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/weChat.jpg?raw=true',
+  alipayImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/aliPay.jpg?raw=true'
+});
+</script>
+      
+            
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2025/10/22/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A4-%E7%A4%BE%E5%9B%A2%E5%88%86%E6%9E%90/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">复杂网络仿真入门到精通4: 社团结构分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article" style="overflow-y: scroll; max-width: 28%;">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%F0%9F%93%98-%E5%85%A5%E9%97%A8%E4%B9%A6%E7%B1%8D%E4%B8%8E%E7%BB%8F%E5%85%B8%E6%95%99%E6%9D%90"><span class="nav-number">1.</span> <span class="nav-text">一、📘 入门书籍与经典教材</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%F0%9F%93%84-%E7%BB%8F%E5%85%B8%E8%AE%BA%E6%96%87%E4%B8%8E%E9%87%8C%E7%A8%8B%E7%A2%91%E6%88%90%E6%9E%9C"><span class="nav-number">2.</span> <span class="nav-text">二、📄 经典论文与里程碑成果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81%F0%9F%A7%A0-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5%E4%B8%8E%E5%B8%B8%E7%94%A8%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">三、🧠 核心概念与常用算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84%E6%8C%87%E6%A0%87"><span class="nav-number">3.1.</span> <span class="nav-text">网络结构指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BE%E5%8C%BA%E5%8F%91%E7%8E%B0%E7%AE%97%E6%B3%95"><span class="nav-number">3.2.</span> <span class="nav-text">社区发现算法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%AD%E5%BF%83%E6%80%A7%E6%8C%87%E6%A0%87"><span class="nav-number">3.3.</span> <span class="nav-text">中心性指标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%8A%A8%E5%8A%9B%E5%AD%A6%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.4.</span> <span class="nav-text">网络动力学模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%F0%9F%92%BB-%E5%B8%B8%E7%94%A8%E5%BC%80%E6%BA%90%E5%BA%93%E4%B8%8E%E5%B7%A5%E5%85%B7"><span class="nav-number">4.</span> <span class="nav-text">四、💻 常用开源库与工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Python"><span class="nav-number">4.1.</span> <span class="nav-text">Python</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Java"><span class="nav-number">4.2.</span> <span class="nav-text">Java</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#R"><span class="nav-number">4.3.</span> <span class="nav-text">R</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%F0%9F%93%8A-%E7%BD%91%E7%BB%9C%E6%95%B0%E6%8D%AE%E9%9B%86%E8%B5%84%E6%BA%90"><span class="nav-number">5.</span> <span class="nav-text">五、📊 网络数据集资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81%F0%9F%96%A5%EF%B8%8F-%E5%8F%AF%E8%A7%86%E5%8C%96%E4%B8%8E%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="nav-number">6.</span> <span class="nav-text">六、🖥️ 可视化与分析工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%83%E3%80%81%F0%9F%8C%90-%E5%9C%A8%E7%BA%BF%E5%B9%B3%E5%8F%B0%E4%B8%8E%E5%AE%9E%E6%88%98%E9%A1%B9%E7%9B%AE"><span class="nav-number">7.</span> <span class="nav-text">七、🌐 在线平台与实战项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AB%E3%80%81%F0%9F%8E%AF-%E6%88%91%E6%80%BB%E7%BB%93%E7%9A%84%E8%B5%84%E6%BA%90"><span class="nav-number">8.</span> <span class="nav-text">八、🎯 我总结的资源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%F0%9F%93%82-%E4%BB%A3%E7%A0%81%E4%BB%93%E5%BA%93"><span class="nav-number">8.1.</span> <span class="nav-text">1. 📂 代码仓库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%F0%9F%93%98-%E6%95%99%E7%A8%8B%E4%B8%8E%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0"><span class="nav-number">8.2.</span> <span class="nav-text">2. 📘 教程与学习笔记</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%F0%9F%93%9D-%E5%8D%9A%E5%AE%A2%E4%B8%8E%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86"><span class="nav-number">8.3.</span> <span class="nav-text">3. 📝 博客与资料整理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%F0%9F%94%97-%E4%B8%AA%E4%BA%BA%E5%B9%B3%E5%8F%B0%E4%B8%8E%E5%B7%A5%E5%85%B7%E7%BD%91%E7%AB%99"><span class="nav-number">8.4.</span> <span class="nav-text">4. 🔗 个人平台与工具网站</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%F0%9F%94%97-%E7%BD%91%E7%9B%98%E8%B5%84%E6%BA%90"><span class="nav-number">8.5.</span> <span class="nav-text">5. 🔗 网盘资源</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%92%AC-%E7%BB%93%E8%AF%AD"><span class="nav-number">9.</span> <span class="nav-text">💬 结语</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2025 Three purple&#39;s blog All Rights Reserved.
+          
+            <span>
+              本站总访客数 <span id="busuanzi_site_uv">加载中...</span> 人 | 
+              本站总访问量 <span id="busuanzi_site_pv">加载中...</span> 次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hiero" target="_blank">hiero</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var contentdiv = document.getElementById("content");
+
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+</script>
+
+<!-- Custome JS -->
+
+<script src="/js/my.js"></script>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives/" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories/" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags/" class="mobile-nav-link">Tags</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/scripts.js"></script>
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-37QFEM5W0L', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+
+
+
+	<script src="//cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js" defer></script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
