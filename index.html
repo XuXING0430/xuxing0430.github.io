@@ -163,6 +163,289 @@ var themeMenus = {};
         
           <section id="main">
   
+    <article id="post-在Java中调用MATLAB函数的完整流程：从打包-jar-到服务器部署"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2025/11/11/%E5%9C%A8Java%E4%B8%AD%E8%B0%83%E7%94%A8MATLAB%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B%EF%BC%9A%E4%BB%8E%E6%89%93%E5%8C%85-jar-%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2/">在Java中调用MATLAB函数的完整流程：从打包 jar 到服务器部署</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2025/11/11/%E5%9C%A8Java%E4%B8%AD%E8%B0%83%E7%94%A8MATLAB%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B%EF%BC%9A%E4%BB%8E%E6%89%93%E5%8C%85-jar-%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2/" class="article-date">
+	  <time datetime="2025-11-11T01:42:41.000Z" itemprop="datePublished">November 11, 2025</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="为什么在-Java-中调用-MATLAB-函数？"><a href="#为什么在-Java-中调用-MATLAB-函数？" class="headerlink" title="为什么在 Java 中调用 MATLAB 函数？"></a>为什么在 Java 中调用 MATLAB 函数？</h2><p>最近在做复杂网络仿真平台时，需要在 Java 环境中调用一些 MATLAB 编写的算法函数。这些函数在matlab中已经调试好经过了验证，就不想在java换再实现一套同样的逻辑。</p>
+<p>一开始以为会很麻烦，后来发现 MATLAB 官方其实提供了完整的 Java 支持。其实就是用 MATLAB Compiler SDK 就能直接导出 <code>.jar</code> 文件，然后在 Java 项目中调用。然后配置好环境就可以轻松运行了。</p>
+<p>这篇文章记录完整流程：</p>
+<ol>
+<li>MATLAB 如何导出 jar  </li>
+<li>本地如何配置运行环境  </li>
+<li>服务器端如何部署（含 MATLAB Runtime）</li>
+</ol>
+<h2 id="一、MATLAB-导出-jar-包"><a href="#一、MATLAB-导出-jar-包" class="headerlink" title="一、MATLAB 导出 jar 包"></a>一、MATLAB 导出 jar 包</h2><p>MATLAB 自带 Compiler SDK，可以把 <code>.m</code> 文件打包成 Java 可调用的 jar。</p>
+<p>示例函数：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% add.m</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">y</span> = <span class="title">add</span><span class="params">(a, b)</span></span></span><br><span class="line">    y = a + b;</span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p>然后在当前函数（add.m）文件下 在 MATLAB 的命令行执行：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mcc -W <span class="string">&#x27;java:addClass,AddClass&#x27;</span> -T link:lib add.m</span><br></pre></td></tr></table></figure>
+
+<p>执行后会生成：</p>
+<ul>
+<li><code>AddClass.jar</code></li>
+<li><code>AddClass.ctf</code></li>
+<li>以及 <code>for_testing</code> 文件夹等辅助内容<br><img src="https://raw.githubusercontent.com/XuXING0430/doc_imgags/master/img/MATLAB+Export+JAR+Screenshot.png" alt=""></li>
+</ul>
+<h2 id="二、本地环境配置（Java-调用）"><a href="#二、本地环境配置（Java-调用）" class="headerlink" title="二、本地环境配置（Java 调用）"></a>二、本地环境配置（Java 调用）</h2><p>在本地 Java 项目中使用刚生成的 jar。<br>假设使用 IntelliJ IDEA。</p>
+<h3 id="1-导入文件"><a href="#1-导入文件" class="headerlink" title="1. 导入文件"></a>1. 导入文件</h3><p>将 <code>AddClass.jar</code>、<code>AddClass.ctf</code> 放到工程文件夹下的 <code>libs/</code> 文件夹。</p>
+<h3 id="2-添加依赖"><a href="#2-添加依赖" class="headerlink" title="2. 添加依赖"></a>2. 添加依赖</h3><p>添加 MATLAB runtime 依赖 javabuilder.jar：</p>
+<p>示例位置</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files\MATLAB\R2023a\toolbox\javabuilder\jar\javabuilder.jar</span><br></pre></td></tr></table></figure>
+
+<p>Maven：</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.mathworks<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>javabuilder<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">scope</span>&gt;</span>system<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">systemPath</span>&gt;</span>$&#123;matlab_home&#125;/toolbox/javabuilder/jar/javabuilder.jar<span class="tag">&lt;/<span class="name">systemPath</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>Gradle：</p>
+<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    implementation files(<span class="string">&#x27;C:/Program Files/MATLAB/R2023a/toolbox/javabuilder/jar/javabuilder.jar&#x27;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Java-调用代码"><a href="#3-Java-调用代码" class="headerlink" title="3. Java 调用代码"></a>3. Java 调用代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> addClass.AddClass;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestMatlab</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">AddClass</span> <span class="variable">addObj</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AddClass</span>();</span><br><span class="line">        Object[] result = addObj.add(<span class="number">1</span>, <span class="number">2</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;Result = &quot;</span> + result[<span class="number">0</span>]);</span><br><span class="line">        addObj.dispose(); <span class="comment">// 释放资源</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-环境变量"><a href="#4-环境变量" class="headerlink" title="4. 环境变量"></a>4. 环境变量</h3><p>MATLAB Runtime (MCR) 必需。<br>若未安装 MATLAB，则需单独安装对应版本。</p>
+<p>下载地址：<br><a href="https://www.mathworks.com/products/compiler/matlab-runtime.html">https://www.mathworks.com/products/compiler/matlab-runtime.html</a></p>
+<p>然后配置路径</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set PATH=%PATH%;C:\Program Files\MATLAB\MATLAB Runtime\v910\runtime\win64</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="三、服务器部署（Linux-环境）"><a href="#三、服务器部署（Linux-环境）" class="headerlink" title="三、服务器部署（Linux 环境）"></a>三、服务器部署（Linux 环境）</h2><h3 id="1-安装-MATLAB-Runtime"><a href="#1-安装-MATLAB-Runtime" class="headerlink" title="1. 安装 MATLAB Runtime"></a>1. 安装 MATLAB Runtime</h3><p>下载地址：<br><a href="https://www.mathworks.com/products/compiler/matlab-runtime.html">https://www.mathworks.com/products/compiler/matlab-runtime.html</a></p>
+<p>选择与打包版本匹配的 runtime版本，例如 R2023a → v910。</p>
+<p>安装路径示例：<br><code>/usr/local/MATLAB/MATLAB_Runtime/v910/</code></p>
+<h3 id="2-配置环境变量"><a href="#2-配置环境变量" class="headerlink" title="2. 配置环境变量"></a>2. 配置环境变量</h3><p>编辑 <code>/etc/profile</code>：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=<span class="variable">$LD_LIBRARY_PATH</span>:/usr/local/MATLAB/MATLAB_Runtime/v910/runtime/glnxa64</span><br><span class="line"><span class="built_in">export</span> XAPPLRESDIR=/usr/local/MATLAB/MATLAB_Runtime/v910/X11/app-defaults</span><br></pre></td></tr></table></figure>
+
+<p>执行 <code>source /etc/profile</code>。</p>
+<h3 id="3-运行-Java-程序"><a href="#3-运行-Java-程序" class="headerlink" title="3. 运行 Java 程序"></a>3. 运行 Java 程序</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -<span class="built_in">cp</span> .:AddClass.jar:/usr/local/MATLAB/MATLAB_Runtime/v910/java/jar/javabuilder.jar TestMatlab</span><br></pre></td></tr></table></figure>
+
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Result = 3.0</span><br></pre></td></tr></table></figure>
+
+<p>我当时是使用docker构建镜像的，遇到了好几个问题，最后Dockerfile 部分内容如下：</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ------------------------------</span></span><br><span class="line"><span class="comment"># 拷贝 MATLAB 编译生成的整个分发目录</span></span><br><span class="line"><span class="comment"># （包含 add.jar, run_xxx.sh, .ctf 等）</span></span><br><span class="line"><span class="comment"># ------------------------------</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> matlab/ /app/matlab-dist/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># ------------------------------</span></span><br><span class="line"><span class="comment"># 设置 MATLAB Runtime 环境变量</span></span><br><span class="line"><span class="comment"># 容器启动时挂载宿主机 /usr/local/MATLAB/MATLAB_Runtime/v96</span></span><br><span class="line"><span class="comment"># ------------------------------</span></span><br><span class="line"><span class="keyword">ENV</span> MCR_ROOT=/usr/local/MATLAB/MATLAB_Runtime/v96</span><br><span class="line"><span class="keyword">ENV</span> LD_LIBRARY_PATH=$MCR_ROOT/runtime/glnxa64:$MCR_ROOT/bin/glnxa64:$MCR_ROOT/sys/os/glnxa64:/app/matlab-dist</span><br><span class="line"><span class="keyword">ENV</span> JAVA_LIB_PATH=$LD_LIBRARY_PATH</span><br><span class="line"></span><br><span class="line"><span class="comment"># 把 matlab-dist 下的 jar 加入 system property java.class.path</span></span><br><span class="line"><span class="keyword">ENV</span> JAVA_TOOL_OPTIONS=<span class="string">&quot;-Djava.class.path=/app/app.jar:/app/matlab-dist/*:$MCR_ROOT/toolbox/javabuilder/jar/javabuilder.jar&quot;</span></span><br></pre></td></tr></table></figure>
+
+
+<h2 id="四、常见问题"><a href="#四、常见问题" class="headerlink" title="四、常见问题"></a>四、常见问题</h2><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>原因</th>
+<th>解决办法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>java.lang.UnsatisfiedLinkError</td>
+<td>Runtime 库未配置</td>
+<td>检查 LD_LIBRARY_PATH</td>
+</tr>
+<tr>
+<td>Could not find library mclmcrrt9_10.dll</td>
+<td>MCR 未安装或版本不匹配</td>
+<td>安装对应版本 MCR</td>
+</tr>
+<tr>
+<td>ClassNotFoundException</td>
+<td>jar 路径错误</td>
+<td>检查 classpath</td>
+</tr>
+<tr>
+<td>输出为空或异常退出</td>
+<td>CTF 路径错误</td>
+<td>保证 .ctf 文件与 jar 同目录</td>
+</tr>
+</tbody></table>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><p>虽然也是踩坑了，不过整个过程其实不复杂：</p>
+<ol>
+<li>MATLAB 打包 jar  </li>
+<li>Java 添加依赖  </li>
+<li>安装并配置 Runtime  </li>
+<li>成功运行</li>
+</ol>
+<p>如果部署在服务器上，建议把 MATLAB 模块单独封装成服务（如 Flask / SpringBoot 接口），通过 HTTP 调用，这样更容易维护和扩展。</p>
+<p>感谢大家的观看，希望这篇文章能帮到有类似需求的朋友！</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/">独立开发</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MATLAB/" rel="tag">MATLAB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" rel="tag">独立开发</a></li></ul>
+
+      
+            
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+    
+
+  
+    <article id="post-复杂网络入门到精通5-网络动力学"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2025/11/10/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A5-%E7%BD%91%E7%BB%9C%E5%8A%A8%E5%8A%9B%E5%AD%A6/">复杂网络入门到精通5-网络动力学</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2025/11/10/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A5-%E7%BD%91%E7%BB%9C%E5%8A%A8%E5%8A%9B%E5%AD%A6/" class="article-date">
+	  <time datetime="2025-11-10T07:34:08.000Z" itemprop="datePublished">November 10, 2025</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<ul>
+<li>本文为《复杂网络仿真入门到精通》系列第5篇。<br>前几篇主要介绍了网络的结构特征，这一篇我们将正式进入<strong>网络动力学</strong>领域——让网络“动”起来。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>系列文章：</p>
+<ul>
+<li><a href="https://doc.threepurple.cn/categories/复杂网络/复杂网络入门到精通/">系列合集</a></li>
+<li>下一篇预告：网络鲁棒性分析</li>
+</ul>
+</blockquote>
+<h2 id="一、什么是网络动力学？"><a href="#一、什么是网络动力学？" class="headerlink" title="一、什么是网络动力学？"></a>一、什么是网络动力学？</h2><p>网络动力学研究的是：  </p>
+<blockquote>
+<p><strong>在一个由节点和边组成的系统中，状态如何随时间演化。</strong></p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/XuXING0430/doc_imgags/master/img/sir_network.gif" alt=""></p>
+<p>典型的研究问题包括：</p>
+<ul>
+<li>传染病在社交网络中的传播；</li>
+<li>信息在社交平台上的扩散；</li>
+<li>电力网络或神经网络的同步；</li>
+<li>系统中失效的传播。</li>
+</ul>
+<p>抽象公式：<br>$$<br>x_i(t+1) = f(x_i(t), {x_j(t)}_{j \in N_i})<br>$$</p>
+<p>其中：</p>
+<ul>
+<li>$x_i(t)$：节点 $i$ 在时刻 $t$ 的状态；</li>
+<li>$N_i$：与节点 $i$ 相连的邻居集合；</li>
+<li>$f(\cdot)$：状态更新规则。</li>
+</ul>
+<hr>
+<h2 id="二、SIR-传染病模型概述"><a href="#二、SIR-传染病模型概述" class="headerlink" title="二、SIR 传染病模型概述"></a>二、SIR 传染病模型概述</h2><p>SIR 模型是网络动力学中最经典的传播模型。<br>每个节点有三种状态：</p>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>含义</th>
+<th>颜色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>S</td>
+<td>易感者（Susceptible）</td>
+<td>灰色</td>
+</tr>
+<tr>
+<td>I</td>
+<td>感染者（Infected）</td>
+<td>红色</td>
+</tr>
+<tr>
+<td>R</td>
+<td>康复者（Recovered）</td>
+<td>绿色</td>
+</tr>
+</tbody></table>
+<p>状态转移规则：<br>$$<br>S + I \xrightarrow{\beta} 2I, \quad I \xrightarrow{\gamma} R<br>$$</p>
+<ul>
+<li>感染率 $\beta$：感染者以概率传播给邻居  </li>
+<li>康复率 $\gamma$：感染者以概率康复</li>
+</ul>
+<h2 id="三、Python-实现"><a href="#三、Python-实现" class="headerlink" title="三、Python 实现"></a>三、Python 实现</h2><p>下面是一个简单可复现的 Python 版本，用于模拟传播过程：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> networkx <span class="keyword">as</span> nx</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建网络</span></span><br><span class="line">G = nx.erdos_renyi_graph(<span class="number">50</span>, <span class="number">0.05</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化节点状态</span></span><br><span class="line">state = &#123;node: <span class="string">&#x27;S&#x27;</span> <span class="keyword">for</span> node <span class="keyword">in</span> G.nodes()&#125;</span><br><span class="line">state[random.choice(<span class="built_in">list</span>(G.nodes()))] = <span class="string">&#x27;I&#x27;</span></span><br><span class="line"></span><br><span class="line">beta = <span class="number">0.3</span></span><br><span class="line">gamma = <span class="number">0.1</span></span><br><span class="line">steps = <span class="number">30</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 仿真</span></span><br><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> <span class="built_in">range</span>(steps):</span><br><span class="line">    new_state = state.copy()</span><br><span class="line">    <span class="keyword">for</span> node <span class="keyword">in</span> G.nodes():</span><br><span class="line">        <span class="keyword">if</span> state[node] == <span class="string">&#x27;I&#x27;</span>:</span><br><span class="line">            <span class="keyword">for</span> nbr <span class="keyword">in</span> G.neighbors(node):</span><br><span class="line">                <span class="keyword">if</span> state[nbr] == <span class="string">&#x27;S&#x27;</span> <span class="keyword">and</span> random.random() &lt; beta:</span><br><span class="line">                    new_state[nbr] = <span class="string">&#x27;I&#x27;</span></span><br><span class="line">            <span class="keyword">if</span> random.random() &lt; gamma:</span><br><span class="line">                new_state[node] = <span class="string">&#x27;R&#x27;</span></span><br><span class="line">    state = new_state.copy()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 绘图</span></span><br><span class="line">    color_map = &#123;<span class="string">&#x27;S&#x27;</span>: <span class="string">&#x27;skyblue&#x27;</span>, <span class="string">&#x27;I&#x27;</span>: <span class="string">&#x27;red&#x27;</span>, <span class="string">&#x27;R&#x27;</span>: <span class="string">&#x27;gray&#x27;</span>&#125;</span><br><span class="line">    colors = [color_map[state[n]] <span class="keyword">for</span> n <span class="keyword">in</span> G.nodes()]</span><br><span class="line">    nx.draw(G, node_color=colors, with_labels=<span class="literal">False</span>)</span><br><span class="line">    plt.title(<span class="string">f&#x27;Time step <span class="subst">&#123;t&#125;</span>&#x27;</span>)</span><br><span class="line">    plt.pause(<span class="number">0.3</span>)</span><br><span class="line">    plt.clf()</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="四、MATLAB-实现（直接输出仿真图）"><a href="#四、MATLAB-实现（直接输出仿真图）" class="headerlink" title="四、MATLAB 实现（直接输出仿真图）"></a>四、MATLAB 实现（直接输出仿真图）</h2><p>MATLAB 版本可以直接显示传播过程的静态图或逐步演示：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">%% 复杂网络 SIR 模型仿真（MATLAB 可视化示例）</span></span><br><span class="line">clc; clear; close all;</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 网络参数</span></span><br><span class="line">N = <span class="number">50</span>;           <span class="comment">% 节点数</span></span><br><span class="line">p = <span class="number">0.07</span>;         <span class="comment">% ER 网络连边概率</span></span><br><span class="line">steps = <span class="number">30</span>;       <span class="comment">% 仿真步数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%% 构建随机网络（ER 网络）</span></span><br><span class="line">G = <span class="built_in">rand</span>(N) &lt; p;</span><br><span class="line">G = <span class="built_in">triu</span>(G,<span class="number">1</span>);    <span class="comment">% 只保留上三角</span></span><br><span class="line">G = G + G&#x27;;       <span class="comment">% 对称邻接矩阵</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%% 初始化节点状态</span></span><br><span class="line">state = <span class="built_in">repmat</span>(<span class="string">&quot;S&quot;</span>, N, <span class="number">1</span>); <span class="comment">% 全部初始为易感者</span></span><br><span class="line">state(randi(N)) = <span class="string">&quot;I&quot;</span>;     <span class="comment">% 随机选择一个感染者</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%% SIR 模型参数</span></span><br><span class="line"><span class="built_in">beta</span> = <span class="number">0.3</span>;   <span class="comment">% 感染率</span></span><br><span class="line"><span class="built_in">gamma</span> = <span class="number">0.1</span>;  <span class="comment">% 康复率</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%% 节点布局（圆形）</span></span><br><span class="line">theta = <span class="built_in">linspace</span>(<span class="number">0</span>, <span class="number">2</span>*<span class="built_in">pi</span>, N+<span class="number">1</span>);</span><br><span class="line">pos = [<span class="built_in">cos</span>(theta(<span class="number">1</span>:N))&#x27;, <span class="built_in">sin</span>(theta(<span class="number">1</span>:N))&#x27;];</span><br><span class="line"></span><br><span class="line"><span class="comment">%% 定义颜色映射</span></span><br><span class="line">color_map = containers.Map([<span class="string">&quot;S&quot;</span>,<span class="string">&quot;I&quot;</span>,<span class="string">&quot;R&quot;</span>], ...</span><br><span class="line">                          &#123;[<span class="number">0.7</span> <span class="number">0.7</span> <span class="number">0.7</span>], ...  <span class="comment">% S 灰色</span></span><br><span class="line">                           [<span class="number">1</span> <span class="number">0.2</span> <span class="number">0.2</span>], ...    <span class="comment">% I 红色</span></span><br><span class="line">                           [<span class="number">0.2</span> <span class="number">0.8</span> <span class="number">0.2</span>]&#125;);    <span class="comment">% R 绿色</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%% 仿真循环</span></span><br><span class="line"><span class="built_in">figure</span>(<span class="string">&#x27;Position&#x27;</span>,[<span class="number">100</span> <span class="number">100</span> <span class="number">600</span> <span class="number">600</span>]);</span><br><span class="line"><span class="keyword">for</span> t = <span class="number">1</span>:steps</span><br><span class="line">    new_state = state;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">% 状态更新</span></span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:N</span><br><span class="line">        <span class="keyword">if</span> state(<span class="built_in">i</span>) == <span class="string">&quot;I&quot;</span></span><br><span class="line">            neighbors = <span class="built_in">find</span>(G(<span class="built_in">i</span>,:));</span><br><span class="line">            <span class="keyword">for</span> <span class="built_in">j</span> = neighbors</span><br><span class="line">                <span class="keyword">if</span> state(<span class="built_in">j</span>) == <span class="string">&quot;S&quot;</span> &amp;&amp; <span class="built_in">rand</span> &lt; <span class="built_in">beta</span></span><br><span class="line">                    new_state(<span class="built_in">j</span>) = <span class="string">&quot;I&quot;</span>;</span><br><span class="line">                <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">rand</span> &lt; <span class="built_in">gamma</span></span><br><span class="line">                new_state(<span class="built_in">i</span>) = <span class="string">&quot;R&quot;</span>;</span><br><span class="line">            <span class="keyword">end</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    state = new_state;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">% 绘制网络</span></span><br><span class="line">    clf;</span><br><span class="line">    gplot(G, pos, <span class="string">&#x27;k-&#x27;</span>);  <span class="comment">% 绘制连边</span></span><br><span class="line">    <span class="built_in">hold</span> on;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">% 每个节点的颜色</span></span><br><span class="line">    node_colors = <span class="built_in">zeros</span>(N,<span class="number">3</span>);</span><br><span class="line">    <span class="keyword">for</span> k = <span class="number">1</span>:N</span><br><span class="line">        node_colors(k,:) = color_map(state(k));</span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">scatter</span>(pos(:,<span class="number">1</span>), pos(:,<span class="number">2</span>), <span class="number">100</span>, node_colors, <span class="string">&#x27;filled&#x27;</span>);</span><br><span class="line">    title([<span class="string">&#x27;SIR 网络仿真, t = &#x27;</span> num2str(t)]);</span><br><span class="line">    axis equal;</span><br><span class="line">    axis off;</span><br><span class="line">    drawnow;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>每次运行都会生成一个动态展示，节点颜色随状态变化，可直观展示传播过程。</p>
+</blockquote>
+<hr>
+<h2 id="五、总结与延伸"><a href="#五、总结与延伸" class="headerlink" title="五、总结与延伸"></a>五、总结与延伸</h2><ul>
+<li><p>网络动力学让静态网络“动”起来，能够模拟现实中各种传播过程。</p>
+</li>
+<li><p>Python 适合逻辑演示与快速实验，MATLAB 适合可视化展示。</p>
+</li>
+<li><p>后续可拓展：</p>
+<ul>
+<li>不同网络拓扑（无标度、小世界、随机网络）下的传播比较</li>
+<li>SI、SIS、SEIR 等模型</li>
+<li>异质节点参数或动态网络演化</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="下一节预告"><a href="#下一节预告" class="headerlink" title="下一节预告"></a>下一节预告</h2><blockquote>
+<p>《复杂网络仿真入门到精通6：鲁棒性分析》<br>学习网络在攻击或故障下的稳定性。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>, <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络入门到精通</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" rel="tag">复杂网络</a></li></ul>
+
+      
+            
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+    
+
+  
     <article id="post-双十一福利｜复杂网络仿真平台送-6-次计算次数"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -1304,155 +1587,11 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
     
 
   
-    <article id="post-如何使用postman进行API测试"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2020/08/18/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8postman%E8%BF%9B%E8%A1%8CAPI%E6%B5%8B%E8%AF%95/">如何使用postman进行API测试</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	Posted on <a href="/2020/08/18/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8postman%E8%BF%9B%E8%A1%8CAPI%E6%B5%8B%E8%AF%95/" class="article-date">
-	  <time datetime="2020-08-18T12:54:07.000Z" itemprop="datePublished">August 18, 2020</time>
-	</a>
-
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近接触了Postman API测试，业务上是需要写出来Postman脚本。以前可以说是从来都没有听说过脚本的事情，虽说也其实这个工具有一点了解，但是在这回实践之后才有了更多的理解。首先推荐大家学习一个Pluralsight的视频<a href="https://app.pluralsight.com/library/courses/postman-fundamentals/table-of-contents">Postman Fundamentals</a>，我只是有针对性的看了前一部分，就感觉收获良多。一个好的入门课程其实也是很重要的。</p>
-<p>这里我就举例说一个spring security的用户验证的测试，其他的测试过程也是很相似的。</p>
-<p>认证测试：</p>
-<p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/1.png?raw=true" alt=""></p>
-<ul>
-<li>step1 在地址栏中输入自己API的地址（例子中是用户登陆认证的一个form）</li>
-<li>step2 选择请求的方式，这个postman里面有很多，我这里选择的是POST</li>
-<li>step3 在headers我们可以把Content-Type设置出来</li>
-<li>step4 在body中加入需要请求的key和对应的value（这个例子中就是username、password，因为spring secutity的登陆认证机制只有验证登陆后才可以进行后续操作，否则就会报401未认证）</li>
-<li>step5 在Tests中可以编写一些测试语句，以检查得到的Response body是否是你需要的</li>
-</ul>
-<p>这个例子的Tests如下：</p>
-<p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/2.png?raw=true" alt=""></p>
-<p>编写好测试界面中的测试语句，然后点击send，可以在下面的Tests Results中查看测试是否通过，例子中的就是测试全部通过了，如果有错误，下面的提示中会告知你哪个测试出错，以及为什么出错。</p>
-<p>下面说一下这几个简单测试语句：</p>
-<p>我想在开始之前提醒大家一件事，postman测试语句是需要很精准的，也就是说你写的测试语句需要可以精准的、直观的测试出返回的response是否符合预期，你的测试需要着眼于关键点。</p>
-<p><strong>状态码测试：</strong></p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pm.test(&quot;Status code is 200&quot;, function () &#123;</span><br><span class="line">    pm.response.to.have.status(200);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>第一行中的”Status code is 200”是可以自己修改的，这一行字符串会在下面的控制台输出（可参照上图），这里建议要取一些有意义的字符串，可以见名知义那种。</p>
-<p>第二行中的 200，就是你期望得到的状态码。</p>
-<p><strong>是否得到认证的测试：</strong></p>
-<p>第二行就是定义jsonData接受response中json数据，然后就是进行判断返回的字段是否是预期的。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pm.test(&quot;Your test user is authenticated&quot;, function () &#123;</span><br><span class="line">    var jsonData = pm.response.json();</span><br><span class="line">    pm.expect(jsonData.authenticated).to.eql(true);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-
-<p>那么对比验证一下认证失败的情况：</p>
-<p>我随便的设置了登录的用户名和密码，可以看到下方的Test results中3条都fail了，并且还有返回值的对比说明。</p>
-<p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2020_8/3.png?raw=true" alt=""></p>
-<p>希望以上能对大家有所帮助。</p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/postman/">postman</a>, <a class="article-category-link" href="/categories/postman/%E6%B5%8B%E8%AF%95/">测试</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/postman/" rel="tag">postman</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a></li></ul>
-
-      
-            
-      
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-    
-
-  
-    <article id="post-如何在spring-security中对用户密码进行加密"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2020/08/12/%E5%A6%82%E4%BD%95%E5%9C%A8spring-security%E4%B8%AD%E5%AF%B9%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/">如何在spring security中对用户密码进行加密</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	Posted on <a href="/2020/08/12/%E5%A6%82%E4%BD%95%E5%9C%A8spring-security%E4%B8%AD%E5%AF%B9%E7%94%A8%E6%88%B7%E5%AF%86%E7%A0%81%E8%BF%9B%E8%A1%8C%E5%8A%A0%E5%AF%86/" class="article-date">
-	  <time datetime="2020-08-12T13:16:43.000Z" itemprop="datePublished">August 12, 2020</time>
-	</a>
-
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近在实践中接触了spring security密码加密的相关内容。</p>
-<p>以前在数据库中存入用户密码的时侯，选择的都是明文密码，没有任何的安全性，这种方式其实非常的危险。所以我们需要在用户注册时就对用户键入的密码进行加密，然后存储到数据库中。之后在用户登录的时候再对数据中的加密密码和用户键入的密码进行一个对比的验证。</p>
-<p>这里不推荐使用spring security自带的PasswordEncoder方法进行加密，因为这样很容易被破解掉。推荐编写自己的加密方法，可以选择SHA-1,SHA-256等算法，然后也可以在密码加密之前中加入盐值salt。然后写自己的MyPasswordEncoder方法然后重写PasswordEncoder，实现encode,matches方法。</p>
-<p>spring security自带的PasswordEncoder方法如下所示：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">PasswordEncoder</span> &#123;</span><br><span class="line"></span><br><span class="line">   String <span class="title function_">encode</span><span class="params">(CharSequence rawPassword)</span>;</span><br><span class="line"></span><br><span class="line">   <span class="type">boolean</span> <span class="title function_">matches</span><span class="params">(CharSequence rawPassword, String encodedPassword)</span>;</span><br></pre></td></tr></table></figure>
-
-<p>我们可以看到这个PasswordEncoder接口有两个方法，encode的方法是加密，matches方法是比较初始密码加密后是否等于加密后的密码。</p>
-<p>下面展示一个小的例子：新建自己的MyPasswordEncoder方法实现PasswordEncoder接口中的两个方法，这里我就写了一个encode的方法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyPasswordEncoder</span> <span class="keyword">implements</span> <span class="title class_">PasswordEncoder</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//加密算法</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> MyDigestAlgorithm myDigestAlgorithm; </span><br><span class="line"></span><br><span class="line">    <span class="type">String</span> <span class="variable">encodedPassword</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    <span class="comment">// add salt</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">saltedPassword</span> <span class="operator">=</span> Common.SALT + rawPassword.toString();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//encrypt the password</span></span><br><span class="line">        encodedPassword = MyDigestAlgorithm.toHexString(MyAlgorithm.getSHA(saltedPassword));</span><br><span class="line">    &#125; <span class="keyword">catch</span> (NoSuchAlgorithmException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> encodedPassword;</span><br><span class="line">	&#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>有了加密方法之后，就可以在service编写业务代码：简单来说就是，存入数据库之前把用户键入的密码加密，然后再存入数据库。例子如下所示：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public void addAccounts(Account account) &#123;</span><br><span class="line"></span><br><span class="line">        account.setPassword(myPasswordEncoder.encode(account.getPassword()));</span><br><span class="line">        accountMapper.addAccounts(account);</span><br><span class="line">        </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>因为我们是自己重写的PasswordEncoder方法，所以在spring security的config中，需要注入我们的加密类，否则登陆的时候就会认证失败。例子如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Bean</span><br><span class="line">   public MyPasswordEncoder myPasswordEncoder()&#123;</span><br><span class="line"></span><br><span class="line">       return new MyPasswordEncoder();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
-<p>希望能对您有所帮助。</p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/spring-security/">spring security</a>, <a class="article-category-link" href="/categories/spring-security/java/">java</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/spring-security/" rel="tag">spring security</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a></li></ul>
-
-      
-            
-      
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-    
-
-  
 
 
   <nav id="page-nav">
     
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">Next</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next</a>
   </nav>
 
 </section>
@@ -1554,6 +1693,30 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
               <div class="widget-entry-summary" style="margin: 0;">
             
 
+              <h6 style="margin: 0;"><a href="/2025/11/11/%E5%9C%A8Java%E4%B8%AD%E8%B0%83%E7%94%A8MATLAB%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%8C%E6%95%B4%E6%B5%81%E7%A8%8B%EF%BC%9A%E4%BB%8E%E6%89%93%E5%8C%85-jar-%E5%88%B0%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2/">在Java中调用MATLAB函数的完整流程：从打包 jar 到服务器部署</a></h6>
+              <span>November 11, 2025</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/2025/11/10/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A5-%E7%BD%91%E7%BB%9C%E5%8A%A8%E5%8A%9B%E5%AD%A6/">复杂网络入门到精通5-网络动力学</a></h6>
+              <span>November 10, 2025</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
               <h6 style="margin: 0;"><a href="/2025/11/10/%E5%8F%8C%E5%8D%81%E4%B8%80%E7%A6%8F%E5%88%A9%EF%BD%9C%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%B9%B3%E5%8F%B0%E9%80%81-6-%E6%AC%A1%E8%AE%A1%E7%AE%97%E6%AC%A1%E6%95%B0/">双十一福利｜复杂网络仿真平台送 6 次计算 + 七折优惠 🎁</a></h6>
               <span>November 10, 2025</span>
             </div>
@@ -1596,30 +1759,6 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
 
           </li>
         
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/2025/10/10/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%B3%BB%E5%88%972%EF%BC%9A%E7%BD%91%E7%BB%9C%E6%9E%84%E5%BB%BA/">复杂网络仿真入门到精通2: 构建网络（邻接矩阵）</a></h6>
-              <span>October 10, 2025</span>
-            </div>
-
-          </li>
-        
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/2025/10/07/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A1%EF%BC%9A%E5%85%B3%E9%94%AE%E7%BD%91%E7%BB%9C%E6%8C%87%E6%A0%87%E8%A7%A3%E6%9E%90/">复杂网络仿真从入门到精通1：关键网络指标解析</a></h6>
-              <span>October 7, 2025</span>
-            </div>
-
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -1629,7 +1768,7 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/">CentOS</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/docker/">docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Veirlog/">Veirlog</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/matlab/">matlab</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/postman/">postman</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/postman/%E6%B5%8B%E8%AF%95/">测试</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring-security/">spring security</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/spring-security/java/">java</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tensorlfow/">tensorlfow</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/">云服务器</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a><span class="category-list-count">12</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络入门到精通</a><span class="category-list-count">5</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/">CentOS</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/docker/">docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Veirlog/">Veirlog</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/matlab/">matlab</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/postman/">postman</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/postman/%E6%B5%8B%E8%AF%95/">测试</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring-security/">spring security</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/spring-security/java/">java</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tensorlfow/">tensorlfow</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/">云服务器</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络入门到精通</a><span class="category-list-count">6</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/">独立开发</a><span class="category-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1639,7 +1778,7 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AMD/" rel="tag">AMD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CentOS/" rel="tag">CentOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FPGA/" rel="tag">FPGA</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gephi/" rel="tag">Gephi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROCm/" rel="tag">ROCm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Space-L/" rel="tag">Space L</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Veirlog/" rel="tag">Veirlog</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gpu/" rel="tag">gpu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/idea/" rel="tag">idea</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javac/" rel="tag">javac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java%E6%95%99%E7%A8%8B/" rel="tag">java教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matlab/" rel="tag">matlab</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mono/" rel="tag">mono</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postman/" rel="tag">postman</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-security/" rel="tag">spring security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorlfow/" rel="tag">tensorlfow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win10/" rel="tag">win10</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%B2%E5%8F%A3/" rel="tag">串口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">云服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E5%8C%96/" rel="tag">优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" rel="tag">复杂网络</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" rel="tag">实体网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" rel="tag">寄存器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E6%A8%A1/" rel="tag">建模</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1/" rel="tag">数字频率计</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" rel="tag">数据预处理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" rel="tag">数码管</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" rel="tag">级联失效</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%AF%91/" rel="tag">编译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" rel="tag">网络节点</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" rel="tag">网络连边</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" rel="tag">蓄意攻击</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/" rel="tag">计数器</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%85%A5%E6%B3%95/" rel="tag">输入法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" rel="tag">随机攻击</a><span class="tag-list-count">3</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AMD/" rel="tag">AMD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CentOS/" rel="tag">CentOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FPGA/" rel="tag">FPGA</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gephi/" rel="tag">Gephi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MATLAB/" rel="tag">MATLAB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROCm/" rel="tag">ROCm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Space-L/" rel="tag">Space L</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Veirlog/" rel="tag">Veirlog</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gpu/" rel="tag">gpu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/idea/" rel="tag">idea</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javac/" rel="tag">javac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java%E6%95%99%E7%A8%8B/" rel="tag">java教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matlab/" rel="tag">matlab</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mono/" rel="tag">mono</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postman/" rel="tag">postman</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-security/" rel="tag">spring security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorlfow/" rel="tag">tensorlfow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win10/" rel="tag">win10</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%B2%E5%8F%A3/" rel="tag">串口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">云服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E5%8C%96/" rel="tag">优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" rel="tag">复杂网络</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" rel="tag">实体网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" rel="tag">寄存器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E6%A8%A1/" rel="tag">建模</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1/" rel="tag">数字频率计</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" rel="tag">数据预处理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" rel="tag">数码管</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" rel="tag">独立开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" rel="tag">级联失效</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%AF%91/" rel="tag">编译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" rel="tag">网络节点</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" rel="tag">网络连边</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" rel="tag">蓄意攻击</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/" rel="tag">计数器</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%85%A5%E6%B3%95/" rel="tag">输入法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" rel="tag">随机攻击</a><span class="tag-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -1649,7 +1788,7 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AMD/" style="font-size: 10px;">AMD</a> <a href="/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/tags/FPGA/" style="font-size: 16.67px;">FPGA</a> <a href="/tags/Gephi/" style="font-size: 10px;">Gephi</a> <a href="/tags/ROCm/" style="font-size: 10px;">ROCm</a> <a href="/tags/Space-L/" style="font-size: 11.67px;">Space L</a> <a href="/tags/Veirlog/" style="font-size: 18.33px;">Veirlog</a> <a href="/tags/c/" style="font-size: 10px;">c#</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/gpu/" style="font-size: 11.67px;">gpu</a> <a href="/tags/idea/" style="font-size: 10px;">idea</a> <a href="/tags/java/" style="font-size: 15px;">java</a> <a href="/tags/javac/" style="font-size: 10px;">javac</a> <a href="/tags/java%E6%95%99%E7%A8%8B/" style="font-size: 10px;">java教程</a> <a href="/tags/matlab/" style="font-size: 18.33px;">matlab</a> <a href="/tags/mono/" style="font-size: 10px;">mono</a> <a href="/tags/postman/" style="font-size: 10px;">postman</a> <a href="/tags/spring-security/" style="font-size: 10px;">spring security</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/tensorlfow/" style="font-size: 10px;">tensorlfow</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/win10/" style="font-size: 10px;">win10</a> <a href="/tags/%E4%B8%B2%E5%8F%A3/" style="font-size: 10px;">串口</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">云服务器</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 10px;">优化</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" style="font-size: 20px;">复杂网络</a> <a href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" style="font-size: 11.67px;">实体网络</a> <a href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" style="font-size: 10px;">寄存器</a> <a href="/tags/%E5%BB%BA%E6%A8%A1/" style="font-size: 11.67px;">建模</a> <a href="/tags/%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1/" style="font-size: 10px;">数字频率计</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 10px;">数据预处理</a> <a href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" style="font-size: 10px;">数码管</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 10px;">测试</a> <a href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" style="font-size: 10px;">级联失效</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 10px;">编译</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" style="font-size: 11.67px;">网络节点</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" style="font-size: 10px;">网络连边</a> <a href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" style="font-size: 10px;">蓄意攻击</a> <a href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/" style="font-size: 11.67px;">计数器</a> <a href="/tags/%E8%BE%93%E5%85%A5%E6%B3%95/" style="font-size: 10px;">输入法</a> <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" style="font-size: 13.33px;">随机攻击</a>
+      <a href="/tags/AMD/" style="font-size: 10px;">AMD</a> <a href="/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/tags/FPGA/" style="font-size: 16px;">FPGA</a> <a href="/tags/Gephi/" style="font-size: 10px;">Gephi</a> <a href="/tags/MATLAB/" style="font-size: 10px;">MATLAB</a> <a href="/tags/ROCm/" style="font-size: 10px;">ROCm</a> <a href="/tags/Space-L/" style="font-size: 12px;">Space L</a> <a href="/tags/Veirlog/" style="font-size: 18px;">Veirlog</a> <a href="/tags/c/" style="font-size: 10px;">c#</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/gpu/" style="font-size: 12px;">gpu</a> <a href="/tags/idea/" style="font-size: 10px;">idea</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javac/" style="font-size: 10px;">javac</a> <a href="/tags/java%E6%95%99%E7%A8%8B/" style="font-size: 10px;">java教程</a> <a href="/tags/matlab/" style="font-size: 18px;">matlab</a> <a href="/tags/mono/" style="font-size: 10px;">mono</a> <a href="/tags/postman/" style="font-size: 10px;">postman</a> <a href="/tags/spring-security/" style="font-size: 10px;">spring security</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/tensorlfow/" style="font-size: 10px;">tensorlfow</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/win10/" style="font-size: 10px;">win10</a> <a href="/tags/%E4%B8%B2%E5%8F%A3/" style="font-size: 10px;">串口</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">云服务器</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 10px;">优化</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" style="font-size: 20px;">复杂网络</a> <a href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" style="font-size: 12px;">实体网络</a> <a href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" style="font-size: 10px;">寄存器</a> <a href="/tags/%E5%BB%BA%E6%A8%A1/" style="font-size: 12px;">建模</a> <a href="/tags/%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1/" style="font-size: 10px;">数字频率计</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 10px;">数据预处理</a> <a href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" style="font-size: 10px;">数码管</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 10px;">测试</a> <a href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" style="font-size: 10px;">独立开发</a> <a href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" style="font-size: 10px;">级联失效</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 10px;">编译</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" style="font-size: 12px;">网络节点</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" style="font-size: 10px;">网络连边</a> <a href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" style="font-size: 10px;">蓄意攻击</a> <a href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/" style="font-size: 12px;">计数器</a> <a href="/tags/%E8%BE%93%E5%85%A5%E6%B3%95/" style="font-size: 10px;">输入法</a> <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" style="font-size: 14px;">随机攻击</a>
     </div>
   </div>
 
@@ -1659,7 +1798,7 @@ end</code></pre><p>end<br>% 5. 根据失效列表求得当前网络的指标<br>
     <h3 class="widget-title">Archives</h3>
 
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/11/">November 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/10/">October 2025</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">August 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">5</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/11/">November 2025</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/10/">October 2025</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">August 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">5</span></li></ul>
     </div>
   </div>
 
