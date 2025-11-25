@@ -163,6 +163,141 @@ var themeMenus = {};
         
           <section id="main">
   
+    <article id="post-Veirlog学习记录-5-循环移位数码管的设计与实现"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2019/12/30/Veirlog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95-5-%E5%BE%AA%E7%8E%AF%E7%A7%BB%E4%BD%8D%E6%95%B0%E7%A0%81%E7%AE%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/">Veirlog学习记录-5-循环移位数码管的设计与实现</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2019/12/30/Veirlog%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95-5-%E5%BE%AA%E7%8E%AF%E7%A7%BB%E4%BD%8D%E6%95%B0%E7%A0%81%E7%AE%A1%E7%9A%84%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/" class="article-date">
+	  <time datetime="2019-12-30T02:25:18.000Z" itemprop="datePublished">December 30, 2019</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>﻿<strong>实现功能：在开发板的数码管上显示特定数字，并且让这些数字循环移位。</strong></p>
+<p>总体框图如下：<br><img src="https://img-blog.csdnimg.cn/2019050910072775.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3NzEzOQ==,size_16,color_FFFFFF,t_70" alt="总体框图"></p>
+<p>代码如下：</p>
+<p>分频模块：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">module div(</span><br><span class="line">    input clk, //输入自带的系统时钟(100Mhz)</span><br><span class="line">    input rst, //复位</span><br><span class="line">    output scan_clk //输出时钟，用于驱动数码管，让其动态扫描用</span><br><span class="line">    );</span><br><span class="line">    reg [19:0] clkdiv;</span><br><span class="line">    </span><br><span class="line">    always @(posedge clk or posedge rst)</span><br><span class="line">    begin</span><br><span class="line">        if( rst == 1)  clkdiv &lt;=0;</span><br><span class="line">        else  clkdiv &lt;= clkdiv + 1;</span><br><span class="line">    end</span><br><span class="line">    assign scan_clk = clkdiv[15]; //使得san_clk = 190Hz</span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
+<p>其他模块（显示模块）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">module otherModel(</span><br><span class="line">    input rst,</span><br><span class="line">    input scan_clk,</span><br><span class="line">    </span><br><span class="line">    output reg [7:0] an,</span><br><span class="line">    output reg [6:0] seg</span><br><span class="line">    );</span><br><span class="line">    reg [3:0] digit;  //选择位上显示的数字</span><br><span class="line">    reg [2:0] cnt;  //选择哪一位显示</span><br><span class="line">    </span><br><span class="line">    always @(posedge scan_clk or posedge rst)</span><br><span class="line">        begin</span><br><span class="line">        if ( rst == 1) cnt &lt;=0;</span><br><span class="line">        else cnt &lt;=cnt + 1;</span><br><span class="line">        end</span><br><span class="line">    </span><br><span class="line">    always @ (*)</span><br><span class="line">    begin</span><br><span class="line">        case ( cnt )</span><br><span class="line">        3&#x27;b000:begin digit = 4&#x27;b0000; an = 8&#x27;b01111111; end</span><br><span class="line">        3&#x27;b001:begin digit = 4&#x27;b0001; an = 8&#x27;b10111111; end</span><br><span class="line">        3&#x27;b010:begin digit = 4&#x27;b0010; an = 8&#x27;b11011111; end</span><br><span class="line">        3&#x27;b011:begin digit = 4&#x27;b0011; an = 8&#x27;b11101111; end</span><br><span class="line">        3&#x27;b100:begin digit = 4&#x27;b0100; an = 8&#x27;b11110111; end</span><br><span class="line">        3&#x27;b101:begin digit = 4&#x27;b0101; an = 8&#x27;b11111011; end</span><br><span class="line">        3&#x27;b110:begin digit = 4&#x27;b0110; an = 8&#x27;b11111101; end</span><br><span class="line">        3&#x27;b111:begin digit = 4&#x27;b0111; an = 8&#x27;b11111110; end</span><br><span class="line">         default:begin digit= 4&#x27;b0000; an = 8&#x27;b01111111; end</span><br><span class="line">        endcase</span><br><span class="line">    end</span><br><span class="line">    </span><br><span class="line">    always @ (*)</span><br><span class="line">      begin</span><br><span class="line">         case ( digit )</span><br><span class="line">         4&#x27;b0000:seg = 7&#x27;b0100100;</span><br><span class="line">         4&#x27;b0001:seg = 7&#x27;b1000000;</span><br><span class="line">         4&#x27;b0010:seg = 7&#x27;b1111001;</span><br><span class="line">         4&#x27;b0011:seg= 7&#x27;b0000000;</span><br><span class="line">         4&#x27;b0100:seg =7&#x27;b0100100;</span><br><span class="line">         4&#x27;b0101:seg =7&#x27;b1000000;</span><br><span class="line">         4&#x27;b0110:seg =7&#x27;b1111000;</span><br><span class="line">         4&#x27;b0111:seg =7&#x27;b0000000;</span><br><span class="line">         default: seg = 7&#x27;b0000001;</span><br><span class="line">         endcase</span><br><span class="line">     end</span><br><span class="line">         </span><br><span class="line">         </span><br><span class="line">         </span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
+<p>顶层模块：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">module top(</span><br><span class="line">    input clk,</span><br><span class="line">    input rst,</span><br><span class="line">    output [7:0] an,</span><br><span class="line">    output [6:0] seg</span><br><span class="line">    );</span><br><span class="line">    </span><br><span class="line">    div u1(clk,rst,scan_clk); //例化模块</span><br><span class="line">    otherModel u2(rst,scan_clk,an,seg);</span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
+<p>测试文件：<br><strong>注意：测试文件是针对otherModel文件的。在写测试文件之前，最好不要添加顶层模块，否则测试时会找不到想要测试的那个文件。如果，已经编写完了顶层模块，可以在design列表中，右键要测试的文件，然后点击 设置为顶层文件，这样就会测试到指定的文件了。</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">module otherModel_tb();</span><br><span class="line">    reg rst,scan_clk; //输入信号要用 reg型</span><br><span class="line">    wire [7:0] an; //输出信号要用 wire型</span><br><span class="line">    wire [6:0] seg; //输出信号</span><br><span class="line">    </span><br><span class="line">    otherModel test(</span><br><span class="line">                     .rst(rst),</span><br><span class="line">                     .scan_clk(scan_clk),</span><br><span class="line">                     .an(an),</span><br><span class="line">                     .seg(seg)</span><br><span class="line">                     </span><br><span class="line">                        );</span><br><span class="line">     initial fork</span><br><span class="line">           scan_clk = 0;</span><br><span class="line">           rst = 1; #50 rst = 0;</span><br><span class="line">     join</span><br><span class="line">                              </span><br><span class="line">     always #10 scan_clk = ~scan_clk; //定义没过10毫秒，信号就会进行翻转</span><br><span class="line">     </span><br><span class="line">endmodule</span><br></pre></td></tr></table></figure>
+
+<p>仿真波形如下：<br><img src="https://img-blog.csdnimg.cn/20190509101008687.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80Mzg3NzEzOQ==,size_16,color_FFFFFF,t_70" alt="仿真结果"><br><strong>我也写了几篇关于Veirlog的文章，感兴趣的同学可以去看看。该模块链接如下：</strong><br><a href="https://xuxing0430.github.io/categories/Veirlog/">Verilog学习</a></p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/Veirlog/">Veirlog</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/FPGA/" rel="tag">FPGA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Veirlog/" rel="tag">Veirlog</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" rel="tag">数码管</a></li></ul>
+
+      
+            
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+    
+
+  
+    <article id="post-matlab实现随机攻击网络节点-蓄意攻击网络节点-2"  class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" itemprop="name">
+      <a class="article-title" href="/2019/12/20/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-2/">matlab实现随机攻击网络节点+蓄意攻击网络节点(2)</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2019/12/20/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-2/" class="article-date">
+	  <time datetime="2019-12-20T00:41:36.000Z" itemprop="datePublished">December 20, 2019</time>
+	</a>
+
+      
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>更新：</strong> </p>
+<p>有同学反馈说：网络效率的函数可能有点问题。可以试试这个<a href="https://pan.baidu.com/s/1PWMNafuW8pZq5c-q2nz8Og">网络效率函数</a>，对应的部分改一下就可以了。 </p>
+<p>还有最大连通子图比例函数：<a href="https://pan.baidu.com/s/1lgXTb1OG0-vRNXHa9mJ7Sw">最大连通子图比例函数</a> </p>
+<hr>
+<p>﻿</p>
+<p>上一篇介绍了随机攻击网络节点与蓄意攻击节点的基本方法。<strong>上一篇文章</strong>地址：<a href="https://xuxing0430.github.io/2019/12/13/matlab%E5%AE%9E%E7%8E%B0%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9-%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/">matlab实现随机攻击网络节点+蓄意攻击网络节点（1）</a></p>
+<p>其中随机攻击的部分还有一些瑕疵，就是在实际的研究中，需要对网络进行<strong>多次</strong>（数十次甚至上百次）攻击后取指标变化平均值，这样的<strong>实验数据</strong>才具有一定的说服力。</p>
+<p>其实这个问题乍一听起来，原理也比较简单：<strong>就是让一个程序运行指定的次数然后，累加程序中某一个变量后取平均值</strong>。</p>
+<p>实现起来也并不费劲，<strong>首先就是把这个程序定义为一个函数，然后把所需要累加的变量作为函数的返回值。然后在另一个文件中创建循环，在循环中调用该函数，用一个变量接收该函数的返回值，以达到累加的效果，最后在循环外部取一个平均值即可。</strong></p>
+<p><strong>代码如下所示：</strong></p>
+<p><strong>定义函数文件名称（该名称需要与函数名称相同）</strong></p>
+<p><strong>函数的参数介绍：</strong></p>
+<p><strong>输入值</strong>： <strong>str</strong>：意为数据文件的路径；<strong>numDelete</strong>:删除节点的个数（这里的命名只是为了方便并不是必选项）<br><strong>返回值</strong>：<strong>Eglob</strong>，即网络效率值的数组</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Eglob</span> = <span class="title">ATestAver</span><span class="params">(str,numDelete)</span></span></span><br><span class="line"><span class="comment">%输入 ： </span></span><br><span class="line"><span class="comment">%        str：意为数据文件的路径</span></span><br><span class="line"><span class="comment">%        numDelete:删除节点的个数</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%返回值：Eglob，即网络效率值的数组</span></span><br><span class="line"></span><br><span class="line"><span class="comment">%加载数据文件</span></span><br><span class="line">load(str);</span><br><span class="line"></span><br><span class="line">Name_Struct = Node_Key_Sort_Descend;       <span class="comment">%  Name_Struct 数据集名称，更换网络数据集时，需要更改此处结构体名称</span></span><br><span class="line">A_Init =  Name_Struct.Adjacent_Matrix;      <span class="comment">%% 网络邻接矩阵</span></span><br><span class="line">N_Init = <span class="built_in">size</span>(A_Init,<span class="number">1</span>);                     <span class="comment">%% 节点个数</span></span><br><span class="line"></span><br><span class="line">NetEff_Init = <span class="built_in">zeros</span>(<span class="number">1</span>,numDelete);</span><br><span class="line">Struct_Init = struct(<span class="string">&#x27;Deg&#x27;</span>,NetEff_Init);</span><br><span class="line"></span><br><span class="line"><span class="comment">% 初始网络性能</span></span><br><span class="line"><span class="comment">%生成随机数，以此进行随机攻</span></span><br><span class="line">Name_Struct.Node_Key_Degree = randperm(<span class="number">440</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">%% </span></span><br><span class="line"><span class="comment">%  按照 Degree 算法排序，删除节点</span></span><br><span class="line">A = A_Init;          <span class="comment">%% 网络邻接矩阵 A</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:numDelete</span><br><span class="line">     <span class="comment">% 按照 Degree 算法排序，删除节点       </span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>定义测试文件：</strong></p>
+<p>  <strong>文件中需要定义随机攻击的次数和随机攻击节点的个数，具体参数设置应视具体网络而定。<br>  在调用函数时，要传入文件路径，和删除节点的个数。</strong> </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">%定义随机攻击节点的个数，具体数值根据网络规模拟定</span><br><span class="line">numDelete = 22;</span><br><span class="line"></span><br><span class="line">%定义网络效率初始矩阵</span><br><span class="line">netSum = zeros(1,numDelete);</span><br><span class="line"></span><br><span class="line">%定义随机攻击的次数，也就是函数循环的次数</span><br><span class="line">numRandom = 50;</span><br><span class="line">for i=1:numRandom</span><br><span class="line">    </span><br><span class="line">    %把得到的网络效率数组赋给netI</span><br><span class="line">    netI = ATestAver(&#x27;Data\12_15jiaQuanData.mat&#x27;,numDelete);</span><br><span class="line">    %累加</span><br><span class="line">    netSum = netSum + netI;</span><br><span class="line">end</span><br><span class="line"></span><br><span class="line">%求出平均值</span><br><span class="line">netAver = netSum/numRandom;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>我的测试数据具有<strong>小世界特性与无标度特性</strong>。并得到了以下的<strong>结果</strong>:<br><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2019_12/2.png?raw=true" alt="例子"><br><strong>大家可以看出，经过多次随机攻击取指标平均值之后，曲线近似于一条直线，下降速率较小且符合实际的网络情况。验证了无标度网络对于随机攻击拥有较好的鲁棒性。</strong></p>
+<p>希望本文对大家有所帮助，有任何问题或者是建议，欢迎大家与我交流。</p>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>, <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E9%B2%81%E6%A3%92%E6%80%A7/">网络鲁棒性</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/matlab/" rel="tag">matlab</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" rel="tag">网络节点</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" rel="tag">随机攻击</a></li></ul>
+
+      
+            
+      
+    </footer>
+  </div>
+  
+</article>
+
+<!-- Table of Contents -->
+
+    
+
+  
     <article id="post-matlab实现随机攻击网络节点-蓄意攻击网络节点"  class="article article-type-post" itemscope itemprop="blogPost" >
   <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
     
@@ -214,7 +349,7 @@ var themeMenus = {};
     <footer class="entry-meta entry-footer">
       
 	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>, <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E9%B2%81%E6%A3%92%E6%80%A7/">网络鲁棒性</a>
 
       
   <span class="ico-tags"></span>
@@ -711,119 +846,6 @@ var themeMenus = {};
     
 
   
-    <article id="post-解决java-lang-UnsatisfiedLinkError：java-library-path中没有rxtxSerial加载时抛出gnu-io-RXTXCommDriver错误"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/08/06/%E8%A7%A3%E5%86%B3java-lang-UnsatisfiedLinkError%EF%BC%9Ajava-library-path%E4%B8%AD%E6%B2%A1%E6%9C%89rxtxSerial%E5%8A%A0%E8%BD%BD%E6%97%B6%E6%8A%9B%E5%87%BAgnu-io-RXTXCommDriver%E9%94%99%E8%AF%AF/">解决java.lang.UnsatisfiedLinkError：java.library.path中没有rxtxSerial加载时抛出gnu.io.RXTXCommDriver错误</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	Posted on <a href="/2019/08/06/%E8%A7%A3%E5%86%B3java-lang-UnsatisfiedLinkError%EF%BC%9Ajava-library-path%E4%B8%AD%E6%B2%A1%E6%9C%89rxtxSerial%E5%8A%A0%E8%BD%BD%E6%97%B6%E6%8A%9B%E5%87%BAgnu-io-RXTXCommDriver%E9%94%99%E8%AF%AF/" class="article-date">
-	  <time datetime="2019-08-06T00:06:45.000Z" itemprop="datePublished">August 6, 2019</time>
-	</a>
-
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>﻿   在使用Java接收串口数据的时候，需要导入有关的jar包和配置文件。<br>如果报这个错误，是因为jar包和配置文件没有放好的原因。<br><em>解决</em>：要把.rxtxParallel.dll、rxtxSerial.dll拷贝到</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">D:\develop\Java\jdk1.7.0_72\bin</span><br></pre></td></tr></table></figure>
-
-
-<p>​        <strong>注意：是jdk下面的bin文件夹，不是jre</strong><br>  需要什么版本的配置文件，看你的JDK，如果是32位的就下载32位的，如果是64位的就下载64位的，一定要对应好，否则也会报错。下载地址如下：<br><a href="http://rxtx.qbang.org/wiki/index.php/Download">官网下载地址</a></p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/java/">java</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java%E6%95%99%E7%A8%8B/" rel="tag">java教程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%B8%B2%E5%8F%A3/" rel="tag">串口</a></li></ul>
-
-      
-            
-      
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-    
-
-  
-    <article id="post-解决在cmd编译java文件后，提示找不到或无法加载主类"  class="article article-type-post" itemscope itemprop="blogPost" >
-  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="thumb" itemprop="name">
-      <a class="article-title" href="/2019/08/05/%E8%A7%A3%E5%86%B3%E5%9C%A8cmd%E7%BC%96%E8%AF%91java%E6%96%87%E4%BB%B6%E5%90%8E%EF%BC%8C%E6%8F%90%E7%A4%BA%E6%89%BE%E4%B8%8D%E5%88%B0%E6%88%96%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BD%E4%B8%BB%E7%B1%BB/">解决在cmd编译java文件后，提示找不到或无法加载主类</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-meta">
-      
-	Posted on <a href="/2019/08/05/%E8%A7%A3%E5%86%B3%E5%9C%A8cmd%E7%BC%96%E8%AF%91java%E6%96%87%E4%BB%B6%E5%90%8E%EF%BC%8C%E6%8F%90%E7%A4%BA%E6%89%BE%E4%B8%8D%E5%88%B0%E6%88%96%E6%97%A0%E6%B3%95%E5%8A%A0%E8%BD%BD%E4%B8%BB%E7%B1%BB/" class="article-date">
-	  <time datetime="2019-08-05T13:56:50.000Z" itemprop="datePublished">August 5, 2019</time>
-	</a>
-
-      
-    </div>
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>​    ﻿最近在命令行中编译java文件，编译没有问题，却在运行的时候出现了却提示找不到或无法加载主类的报错，如下图所示。</p>
-<p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2019_8/3.png?raw=true" alt=""></p>
-<p>​     一开始我觉得是版本的问题。因为我一开始装的jdk版本是1.8，现在要用1.7的。上网搜索后，有很多办法，有的说是没加package名，还有说classPath的问题，不过都解决不了问题。后来发现如下方式可以解决：</p>
-<p>在cmd中输入命令：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET CLASSPATH=.</span><br></pre></td></tr></table></figure>
-
-<p>​    （等号后为英文点符号），即可设置解释的路径为当前路径。</p>
-<p>​    再次运行java xxx即可。</p>
-<p>效果如下：</p>
-<p><img src="https://github.com/XuXING0430/xuxing0430.github.io/blob/master/image/2019_8/4.png?raw=true" alt=""></p>
-
-      
-    </div>
-    <footer class="entry-meta entry-footer">
-      
-	<span class="ico-folder"></span>
-    <a class="article-category-link" href="/categories/java/">java</a>
-
-      
-  <span class="ico-tags"></span>
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/" rel="tag">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/javac/" rel="tag">javac</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%BC%96%E8%AF%91/" rel="tag">编译</a></li></ul>
-
-      
-            
-      
-    </footer>
-  </div>
-  
-</article>
-
-<!-- Table of Contents -->
-
-    
-
-  
 
 
   <nav id="page-nav">
@@ -930,6 +952,30 @@ var themeMenus = {};
               <div class="widget-entry-summary" style="margin: 0;">
             
 
+              <h6 style="margin: 0;"><a href="/2025/11/25/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A7-%E4%BB%8E0%E5%88%B01%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/">复杂网络仿真入门到精通7：从0到1构建一个实体网络</a></h6>
+              <span>November 25, 2025</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
+              <h6 style="margin: 0;"><a href="/2025/11/24/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A8-%E7%BD%91%E7%BB%9C%E9%B2%81%E6%A3%92%E6%80%A7(%E5%85%8D%E8%B4%B9%E7%89%88)/">复杂网络仿真入门到精通8：网络鲁棒性理论基础</a></h6>
+              <span>November 24, 2025</span>
+            </div>
+
+          </li>
+        
+          <li class="clearfix">
+
+            
+              <div class="widget-entry-summary" style="margin: 0;">
+            
+
               <h6 style="margin: 0;"><a href="/2025/11/11/%E5%8F%8C%E5%8D%81%E4%B8%80%E7%A6%8F%E5%88%A9%EF%BD%9C%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%B9%B3%E5%8F%B0%E9%80%81-6-%E6%AC%A1%E8%AE%A1%E7%AE%97%E6%AC%A1%E6%95%B0/">双十一福利｜复杂网络仿真平台送 6 次计算 + 七折优惠 🎁</a></h6>
               <span>November 11, 2025</span>
             </div>
@@ -954,7 +1000,7 @@ var themeMenus = {};
               <div class="widget-entry-summary" style="margin: 0;">
             
 
-              <h6 style="margin: 0;"><a href="/2025/11/10/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A5-%E7%BD%91%E7%BB%9C%E5%8A%A8%E5%8A%9B%E5%AD%A6/">复杂网络入门到精通5-网络动力学</a></h6>
+              <h6 style="margin: 0;"><a href="/2025/11/10/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A5-%E7%BD%91%E7%BB%9C%E5%8A%A8%E5%8A%9B%E5%AD%A6/">复杂网络仿真入门到精通5-网络动力学</a></h6>
               <span>November 10, 2025</span>
             </div>
 
@@ -972,30 +1018,6 @@ var themeMenus = {};
 
           </li>
         
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/2025/10/22/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A4-%E7%A4%BE%E5%9B%A2%E5%88%86%E6%9E%90/">复杂网络仿真入门到精通4: 社团结构分析</a></h6>
-              <span>October 22, 2025</span>
-            </div>
-
-          </li>
-        
-          <li class="clearfix">
-
-            
-              <div class="widget-entry-summary" style="margin: 0;">
-            
-
-              <h6 style="margin: 0;"><a href="/2025/10/16/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A%E7%B3%BB%E5%88%973-%E7%BD%91%E7%BB%9C%E4%B8%8E%E6%8C%87%E6%A0%87%E4%BB%BF%E7%9C%9F%E5%88%86%E6%9E%90/">复杂网络仿真入门到精通3: 网络可视化与指标仿真分析</a></h6>
-              <span>October 16, 2025</span>
-            </div>
-
-          </li>
-        
       </ul>
     </div>
   </div>
@@ -1005,7 +1027,7 @@ var themeMenus = {};
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/">CentOS</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/docker/">docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Veirlog/">Veirlog</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/matlab/">matlab</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/postman/">postman</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/postman/%E6%B5%8B%E8%AF%95/">测试</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring-security/">spring security</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/spring-security/java/">java</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tensorlfow/">tensorlfow</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/">云服务器</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a><span class="category-list-count">13</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络入门到精通</a><span class="category-list-count">6</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/">独立开发</a><span class="category-list-count">1</span></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/">CentOS</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/CentOS/docker/">docker</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/Veirlog/">Veirlog</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java/">java</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/matlab/">matlab</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/postman/">postman</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/postman/%E6%B5%8B%E8%AF%95/">测试</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/spring-security/">spring security</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/spring-security/java/">java</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tensorlfow/">tensorlfow</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/">云服务器</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a><span class="category-list-count">15</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络仿真从入门到精通</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络入门到精通</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E6%9E%84%E5%BB%BA%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">构建复杂网络</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E7%BD%91%E7%BB%9C%E9%B2%81%E6%A3%92%E6%80%A7/">网络鲁棒性</a><span class="category-list-count">3</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/">独立开发</a><span class="category-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1015,7 +1037,7 @@ var themeMenus = {};
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AMD/" rel="tag">AMD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CentOS/" rel="tag">CentOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FPGA/" rel="tag">FPGA</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gephi/" rel="tag">Gephi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MATLAB/" rel="tag">MATLAB</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROCm/" rel="tag">ROCm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Space-L/" rel="tag">Space L</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Veirlog/" rel="tag">Veirlog</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gpu/" rel="tag">gpu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/idea/" rel="tag">idea</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javac/" rel="tag">javac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java%E6%95%99%E7%A8%8B/" rel="tag">java教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matlab/" rel="tag">matlab</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mono/" rel="tag">mono</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postman/" rel="tag">postman</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-security/" rel="tag">spring security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorlfow/" rel="tag">tensorlfow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win10/" rel="tag">win10</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%B2%E5%8F%A3/" rel="tag">串口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">云服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E5%8C%96/" rel="tag">优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" rel="tag">复杂网络</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" rel="tag">实体网络</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" rel="tag">寄存器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E6%A8%A1/" rel="tag">建模</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1/" rel="tag">数字频率计</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" rel="tag">数据预处理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" rel="tag">数码管</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" rel="tag">独立开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" rel="tag">级联失效</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%AF%91/" rel="tag">编译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" rel="tag">网络节点</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" rel="tag">网络连边</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" rel="tag">蓄意攻击</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/" rel="tag">计数器</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%85%A5%E6%B3%95/" rel="tag">输入法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" rel="tag">随机攻击</a><span class="tag-list-count">3</span></li></ul>
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AMD/" rel="tag">AMD</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CentOS/" rel="tag">CentOS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FPGA/" rel="tag">FPGA</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Gephi/" rel="tag">Gephi</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MATLAB/" rel="tag">MATLAB</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ROCm/" rel="tag">ROCm</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Space-L/" rel="tag">Space L</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Veirlog/" rel="tag">Veirlog</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c#</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/docker/" rel="tag">docker</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gpu/" rel="tag">gpu</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/idea/" rel="tag">idea</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/" rel="tag">java</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/javac/" rel="tag">javac</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java%E6%95%99%E7%A8%8B/" rel="tag">java教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matlab/" rel="tag">matlab</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mono/" rel="tag">mono</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/postman/" rel="tag">postman</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/spring-security/" rel="tag">spring security</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorflow/" rel="tag">tensorflow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tensorlfow/" rel="tag">tensorlfow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ubuntu/" rel="tag">ubuntu</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/win10/" rel="tag">win10</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%B8%B2%E5%8F%A3/" rel="tag">串口</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">云服务器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BC%98%E5%8C%96/" rel="tag">优化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8A%A0%E5%AF%86/" rel="tag">加密</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" rel="tag">复杂网络</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" rel="tag">实体网络</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" rel="tag">寄存器</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BB%BA%E6%A8%A1/" rel="tag">建模</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1/" rel="tag">数字频率计</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" rel="tag">数据预处理</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" rel="tag">数码管</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B5%8B%E8%AF%95/" rel="tag">测试</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" rel="tag">独立开发</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" rel="tag">级联失效</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BC%96%E8%AF%91/" rel="tag">编译</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" rel="tag">网络节点</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" rel="tag">网络连边</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" rel="tag">蓄意攻击</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/" rel="tag">计数器</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%BE%93%E5%85%A5%E6%B3%95/" rel="tag">输入法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" rel="tag">随机攻击</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%B2%81%E6%A3%92%E6%80%A7/" rel="tag">鲁棒性</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1025,7 +1047,7 @@ var themeMenus = {};
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/AMD/" style="font-size: 10px;">AMD</a> <a href="/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/tags/FPGA/" style="font-size: 16px;">FPGA</a> <a href="/tags/Gephi/" style="font-size: 10px;">Gephi</a> <a href="/tags/MATLAB/" style="font-size: 10px;">MATLAB</a> <a href="/tags/ROCm/" style="font-size: 10px;">ROCm</a> <a href="/tags/Space-L/" style="font-size: 12px;">Space L</a> <a href="/tags/Veirlog/" style="font-size: 18px;">Veirlog</a> <a href="/tags/c/" style="font-size: 10px;">c#</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/gpu/" style="font-size: 12px;">gpu</a> <a href="/tags/idea/" style="font-size: 10px;">idea</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javac/" style="font-size: 10px;">javac</a> <a href="/tags/java%E6%95%99%E7%A8%8B/" style="font-size: 10px;">java教程</a> <a href="/tags/matlab/" style="font-size: 18px;">matlab</a> <a href="/tags/mono/" style="font-size: 10px;">mono</a> <a href="/tags/postman/" style="font-size: 10px;">postman</a> <a href="/tags/spring-security/" style="font-size: 10px;">spring security</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/tensorlfow/" style="font-size: 10px;">tensorlfow</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/win10/" style="font-size: 10px;">win10</a> <a href="/tags/%E4%B8%B2%E5%8F%A3/" style="font-size: 10px;">串口</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">云服务器</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 10px;">优化</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" style="font-size: 20px;">复杂网络</a> <a href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" style="font-size: 12px;">实体网络</a> <a href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" style="font-size: 10px;">寄存器</a> <a href="/tags/%E5%BB%BA%E6%A8%A1/" style="font-size: 12px;">建模</a> <a href="/tags/%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1/" style="font-size: 10px;">数字频率计</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 10px;">数据预处理</a> <a href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" style="font-size: 10px;">数码管</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 10px;">测试</a> <a href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" style="font-size: 10px;">独立开发</a> <a href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" style="font-size: 10px;">级联失效</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 10px;">编译</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" style="font-size: 12px;">网络节点</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" style="font-size: 10px;">网络连边</a> <a href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" style="font-size: 10px;">蓄意攻击</a> <a href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/" style="font-size: 12px;">计数器</a> <a href="/tags/%E8%BE%93%E5%85%A5%E6%B3%95/" style="font-size: 10px;">输入法</a> <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" style="font-size: 14px;">随机攻击</a>
+      <a href="/tags/AMD/" style="font-size: 10px;">AMD</a> <a href="/tags/CentOS/" style="font-size: 10px;">CentOS</a> <a href="/tags/FPGA/" style="font-size: 16px;">FPGA</a> <a href="/tags/Gephi/" style="font-size: 10px;">Gephi</a> <a href="/tags/MATLAB/" style="font-size: 12px;">MATLAB</a> <a href="/tags/ROCm/" style="font-size: 10px;">ROCm</a> <a href="/tags/Space-L/" style="font-size: 14px;">Space L</a> <a href="/tags/Veirlog/" style="font-size: 18px;">Veirlog</a> <a href="/tags/c/" style="font-size: 10px;">c#</a> <a href="/tags/docker/" style="font-size: 10px;">docker</a> <a href="/tags/gpu/" style="font-size: 12px;">gpu</a> <a href="/tags/idea/" style="font-size: 10px;">idea</a> <a href="/tags/java/" style="font-size: 16px;">java</a> <a href="/tags/javac/" style="font-size: 10px;">javac</a> <a href="/tags/java%E6%95%99%E7%A8%8B/" style="font-size: 10px;">java教程</a> <a href="/tags/matlab/" style="font-size: 18px;">matlab</a> <a href="/tags/mono/" style="font-size: 10px;">mono</a> <a href="/tags/postman/" style="font-size: 10px;">postman</a> <a href="/tags/spring-security/" style="font-size: 10px;">spring security</a> <a href="/tags/tensorflow/" style="font-size: 10px;">tensorflow</a> <a href="/tags/tensorlfow/" style="font-size: 10px;">tensorlfow</a> <a href="/tags/ubuntu/" style="font-size: 10px;">ubuntu</a> <a href="/tags/win10/" style="font-size: 10px;">win10</a> <a href="/tags/%E4%B8%B2%E5%8F%A3/" style="font-size: 10px;">串口</a> <a href="/tags/%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8/" style="font-size: 10px;">云服务器</a> <a href="/tags/%E4%BC%98%E5%8C%96/" style="font-size: 10px;">优化</a> <a href="/tags/%E5%8A%A0%E5%AF%86/" style="font-size: 10px;">加密</a> <a href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" style="font-size: 20px;">复杂网络</a> <a href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" style="font-size: 14px;">实体网络</a> <a href="/tags/%E5%AF%84%E5%AD%98%E5%99%A8/" style="font-size: 10px;">寄存器</a> <a href="/tags/%E5%BB%BA%E6%A8%A1/" style="font-size: 12px;">建模</a> <a href="/tags/%E6%95%B0%E5%AD%97%E9%A2%91%E7%8E%87%E8%AE%A1/" style="font-size: 10px;">数字频率计</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" style="font-size: 12px;">数据预处理</a> <a href="/tags/%E6%95%B0%E7%A0%81%E7%AE%A1/" style="font-size: 10px;">数码管</a> <a href="/tags/%E6%B5%8B%E8%AF%95/" style="font-size: 10px;">测试</a> <a href="/tags/%E7%8B%AC%E7%AB%8B%E5%BC%80%E5%8F%91/" style="font-size: 10px;">独立开发</a> <a href="/tags/%E7%BA%A7%E8%81%94%E5%A4%B1%E6%95%88/" style="font-size: 10px;">级联失效</a> <a href="/tags/%E7%BC%96%E8%AF%91/" style="font-size: 10px;">编译</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E8%8A%82%E7%82%B9/" style="font-size: 12px;">网络节点</a> <a href="/tags/%E7%BD%91%E7%BB%9C%E8%BF%9E%E8%BE%B9/" style="font-size: 10px;">网络连边</a> <a href="/tags/%E8%93%84%E6%84%8F%E6%94%BB%E5%87%BB/" style="font-size: 10px;">蓄意攻击</a> <a href="/tags/%E8%AE%A1%E6%95%B0%E5%99%A8/" style="font-size: 12px;">计数器</a> <a href="/tags/%E8%BE%93%E5%85%A5%E6%B3%95/" style="font-size: 10px;">输入法</a> <a href="/tags/%E9%9A%8F%E6%9C%BA%E6%94%BB%E5%87%BB/" style="font-size: 14px;">随机攻击</a> <a href="/tags/%E9%B2%81%E6%A3%92%E6%80%A7/" style="font-size: 10px;">鲁棒性</a>
     </div>
   </div>
 
@@ -1035,7 +1057,7 @@ var themeMenus = {};
     <h3 class="widget-title">Archives</h3>
 
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/11/">November 2025</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/10/">October 2025</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">August 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">5</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/11/">November 2025</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/10/">October 2025</a><span class="archive-list-count">6</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/08/">August 2025</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/08/">August 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">July 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/05/">May 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/10/">October 2019</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/08/">August 2019</a><span class="archive-list-count">5</span></li></ul>
     </div>
   </div>
 

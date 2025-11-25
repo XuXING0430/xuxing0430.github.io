@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <!-- PACE Progress Bar START -->
+  
+    
+<script src="https://raw.githubusercontent.com/HubSpot/pace/v1.0.2/pace.min.js"></script>
+
+    
+<link rel="stylesheet" href="https://github.com/HubSpot/pace/raw/master/themes/orange/pace-theme-flash.css">
+
+  
+  
+
+  <!-- PACE Progress Bar START -->
+
+  
+  <title>复杂网络仿真入门到精通7：从0到1构建一个实体网络 | Three purple&#39;s blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  <meta name="keywords" content="复杂网络Space L实体网络数据预处理MATLAB" />
+  
+  
+  
+  
+  <meta name="description" content="系列文章：  系列合集 本文对应的视频教程：B站视频教程   一、引言：从理论到实战在前面的课程中，我们学习了随机网络、小世界网络、无标度网络等理论模型的生成，也探讨了鲁棒性、社团结构等分析方法。然而，在实际科研或工程应用中，我们往往需要处理真实的实体网络（Entity Networks），例如：  交通网络：地铁、公交、航空线路； 基础设施：电网、水网； 社交网络：基于真实交互数据的网络。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="复杂网络仿真入门到精通7：从0到1构建一个实体网络">
+<meta property="og:url" content="https://doc.threepurple.cn/2025/11/25/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A7-%E4%BB%8E0%E5%88%B01%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/index.html">
+<meta property="og:site_name" content="Three purple&#39;s blog">
+<meta property="og:description" content="系列文章：  系列合集 本文对应的视频教程：B站视频教程   一、引言：从理论到实战在前面的课程中，我们学习了随机网络、小世界网络、无标度网络等理论模型的生成，也探讨了鲁棒性、社团结构等分析方法。然而，在实际科研或工程应用中，我们往往需要处理真实的实体网络（Entity Networks），例如：  交通网络：地铁、公交、航空线路； 基础设施：电网、水网； 社交网络：基于真实交互数据的网络。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-11-25T02:00:00.000Z">
+<meta property="article:modified_time" content="2025-11-25T00:49:26.567Z">
+<meta property="article:author" content="Three purple">
+<meta property="article:tag" content="复杂网络">
+<meta property="article:tag" content="Space L">
+<meta property="article:tag" content="实体网络">
+<meta property="article:tag" content="数据预处理">
+<meta property="article:tag" content="MATLAB">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Three purple&#39;s blog" type="application/atom+xml">
+  
+  <link rel="icon" href="/css/images/favicon.ico">
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans|Montserrat:700" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,300italic,400italic" rel="stylesheet" type="text/css">
+  <link href="https://cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+  <style type="text/css">
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/9749f0/00000000000000000001008f/27/l?subset_id=2&fvd=n5) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/90cf9f/000000000000000000010091/27/l?subset_id=2&fvd=n7) format("woff2");font-weight:500;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/8a5494/000000000000000000013365/27/l?subset_id=2&fvd=n4) format("woff2");font-weight:lighter;font-style:normal;}
+    @font-face{font-family:futura-pt;src:url(https://use.typekit.net/af/d337d8/000000000000000000010095/27/l?subset_id=2&fvd=i4) format("woff2");font-weight:400;font-style:italic;}</style>
+    
+  <link rel="stylesheet" id="athemes-headings-fonts-css" href="//fonts.googleapis.com/css?family=Yanone+Kaffeesatz%3A200%2C300%2C400%2C700&amp;ver=4.6.1" type="text/css" media="all">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+
+  
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+
+
+  <!-- Bootstrap core CSS -->
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" >
+  <link rel="stylesheet" href="/css/hiero.css" >
+  <link rel="stylesheet" href="/css/glyphs.css" >
+  
+    <link rel="stylesheet" href="/css/vdonate.css" >
+  
+
+  <!-- Custom CSS -->
+  
+<link rel="stylesheet" href="/css/my.css">
+
+  <!-- Google Adsense -->
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<script>
+var themeMenus = {};
+
+  themeMenus["/"] = "Home"; 
+
+  themeMenus["/archives/"] = "Archives"; 
+
+  themeMenus["/categories/"] = "Categories"; 
+
+  themeMenus["/tags/"] = "Tags"; 
+
+</script>
+
+
+  <body data-spy="scroll" data-target="#toc" data-offset="50">
+
+
+  <header id="allheader" class="site-header" role="banner">
+  <div class="clearfix container">
+      <div class="site-branding">
+
+          <h1 class="site-title">
+            
+              <a href="/" rel="home" >
+                <img style="margin-bottom: 10px;"  width="124px" height="124px" alt="Hike News" src=" /css/images/bDuck.png">
+              </a>
+            
+          </h1>
+
+          
+            
+          <nav id="main-navigation" class="main-navigation" role="navigation">
+            <a class="nav-open">Menu</a>
+            <a class="nav-close">Close</a>
+            <div class="clearfix sf-menu">
+
+              <ul id="main-nav" class="nmenu sf-js-enabled">
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/">Home</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/archives/">Archives</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/categories/">Categories</a> </li>
+                    
+                      <li class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-1663"> <a class="" href="/tags/">Tags</a> </li>
+                    
+              </ul>
+            </div>
+          </nav>
+
+
+      </div>
+  </div>
+</header>
+
+
+  <div id="originBgDiv" style="background: #fff; width: 100%;">
+
+      <div style="max-height:600px; overflow: hidden;  display: flex; display: -webkit-flex; align-items: center;">
+        <img id="originBg" width="100%" alt="" src="">
+      </div>
+
+  </div>
+
+  <script>
+  function setAboutIMG(){
+      var imgUrls = "css/images/pose.jpg,https://source.unsplash.com/collection/954550/1920x1080".split(",");
+      var random = Math.floor((Math.random() * imgUrls.length ));
+      if (imgUrls[random].startsWith('http') || imgUrls[random].indexOf('://') >= 0) {
+        document.getElementById("originBg").src=imgUrls[random];
+      } else {
+        document.getElementById("originBg").src='/' + imgUrls[random];
+      }
+  }
+  bgDiv=document.getElementById("originBgDiv");
+  if(location.pathname.match('about')){
+    setAboutIMG();
+    bgDiv.style.display='block';
+  }else{
+    bgDiv.style.display='none';
+  }
+  </script>
+
+
+
+  <div id="container">
+    <div id="wrap">
+            
+      <div id="content" class="outer">
+        
+          <section id="main" style="float:none;"><article id="post-复杂网络仿真入门到精通7-从0到1构建一个实体网络" style="width: 66%; float:left;" class="article article-type-post" itemscope itemprop="blogPost" >
+  <div id="articleInner" class="clearfix post-1016 post type-post status-publish format-standard has-post-thumbnail hentry category-template-2 category-uncategorized tag-codex tag-edge-case tag-featured-image tag-image tag-template">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="thumb" class="article-title" itemprop="name">
+      复杂网络仿真入门到精通7：从0到1构建一个实体网络
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-meta">
+      
+	Posted on <a href="/2025/11/25/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A7-%E4%BB%8E0%E5%88%B01%E6%9E%84%E5%BB%BA%E4%B8%80%E4%B8%AA%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" class="article-date">
+	  <time datetime="2025-11-25T02:00:00.000Z" itemprop="datePublished">November 25, 2025</time>
+	</a>
+
+      
+	<span>
+	  本文总阅读量 <span id="busuanzi_page_pv">加载中...</span> 次
+	</span>
+
+    </div>
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>系列文章：</p>
+<ul>
+<li><a href="https://doc.threepurple.cn/categories/复杂网络/复杂网络入门到精通/">系列合集</a></li>
+<li>本文对应的视频教程：<a href="https://www.bilibili.com/video/BV1xuyFBpEJL">B站视频教程</a></li>
+</ul>
+</blockquote>
+<h2 id="一、引言：从理论到实战"><a href="#一、引言：从理论到实战" class="headerlink" title="一、引言：从理论到实战"></a>一、引言：从理论到实战</h2><p>在前面的课程中，我们学习了随机网络、小世界网络、无标度网络等理论模型的生成，也探讨了鲁棒性、社团结构等分析方法。然而，在实际科研或工程应用中，我们往往需要处理<strong>真实的实体网络</strong>（Entity Networks），例如：</p>
+<ul>
+<li><strong>交通网络</strong>：地铁、公交、航空线路；</li>
+<li><strong>基础设施</strong>：电网、水网；</li>
+<li><strong>社交网络</strong>：基于真实交互数据的网络。</li>
+</ul>
+<p>这些网络不像 BA 无标度网络那样可以通过几行代码直接生成，而是需要从<strong>原始数据</strong>（如 Excel 台账、数据库记录）中提取节点和连边，构建出邻接矩阵。</p>
+<p>本节课将以<strong>地铁/公交网络</strong>为例，手把手教你如何<strong>从 0 到 1 构建一个实体网络的 Space L 模型</strong>，并解决最令人头疼的数据预处理问题。</p>
+<span id="more"></span>
+
+<h2 id="二、建模方法：Space-L-模型"><a href="#二、建模方法：Space-L-模型" class="headerlink" title="二、建模方法：Space L 模型"></a>二、建模方法：Space L 模型</h2><p>在构建交通类实体网络时，最常用的建模方法是 <strong>Space L</strong> 法。</p>
+<h3 id="2-1-什么是-Space-L？"><a href="#2-1-什么是-Space-L？" class="headerlink" title="2.1 什么是 Space L？"></a>2.1 什么是 Space L？</h3><p>Space L 模型的规则非常直观：<strong>如果两个站点在同一条线路上相邻，则认为它们之间存在连边。</strong></p>
+<ul>
+<li><strong>节点</strong>：车站/站点。</li>
+<li><strong>连边</strong>：线路上的物理连接。</li>
+</ul>
+<p>这种模型最能反映网络的物理拓扑结构，是计算平均路径长度、网络效率等指标的基础。</p>
+<h3 id="2-2-建模的挑战"><a href="#2-2-建模的挑战" class="headerlink" title="2.2 建模的挑战"></a>2.2 建模的挑战</h3><p>看似简单，但在实际操作中（例如面对一个拥有 300 条线路、3000 个站点的公交网络）会遇到巨大挑战：</p>
+<ol>
+<li><strong>节点编号困难</strong>：站点名称是字符串（如“北京南站”），计算机只能处理数字编号。</li>
+<li><strong>重复统计</strong>：换乘站出现在多条线路中，人工统计容易重复或遗漏。</li>
+<li><strong>工作量巨大</strong>：手工输入邻接矩阵几乎是不可能的，且极易出错。</li>
+</ol>
+<p>因此，我们需要一套<strong>自动化的数据预处理流程</strong>。</p>
+<hr>
+<h2 id="三、MATLAB-实现：自动化数据预处理"><a href="#三、MATLAB-实现：自动化数据预处理" class="headerlink" title="三、MATLAB 实现：自动化数据预处理"></a>三、MATLAB 实现：自动化数据预处理</h2><p>我们将流程分为三步：<strong>读取数据 -&gt; 映射编号 -&gt; 生成矩阵</strong>。</p>
+<h3 id="3-1-数据准备"><a href="#3-1-数据准备" class="headerlink" title="3.1 数据准备"></a>3.1 数据准备</h3><p>假设我们有一个 Excel 文件 <code>lines.xlsx</code>，存储了线路的连接关系。每一行代表一条边（两个相邻站点）：</p>
+<ul>
+<li>第一列：站点 A 名称</li>
+<li>第二列：站点 B 名称</li>
+<li>（可选）第三列：权重（距离或时间）</li>
+</ul>
+<h3 id="3-2-核心代码：字符串转编号"><a href="#3-2-核心代码：字符串转编号" class="headerlink" title="3.2 核心代码：字符串转编号"></a>3.2 核心代码：字符串转编号</h3><p>我们需要编写程序自动识别所有唯一的站点名称，并分配 ID。</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">% 1. 读取数据</span></span><br><span class="line"><span class="comment">% rawDataStr 是 N x 2 的单元格数组，存储站点名称字符串</span></span><br><span class="line">[~, rawDataStr] = xlsread(<span class="string">&#x27;lines.xlsx&#x27;</span>); </span><br><span class="line"></span><br><span class="line"><span class="comment">% 2. 提取所有唯一站点名称（构建字典）</span></span><br><span class="line">all_stations = unique(rawDataStr(:));</span><br><span class="line">station_list = string(all_stations); <span class="comment">% 转换为字符串数组</span></span><br><span class="line">raw_str = string(rawDataStr);        <span class="comment">% 原始数据转为字符串</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% 3. 建立映射关系：将字符串转换为数字编号</span></span><br><span class="line"><span class="comment">% test 矩阵将存储转换后的邻接表（第一列ID，第二列ID）</span></span><br><span class="line">num_edges = <span class="built_in">length</span>(raw_str);</span><br><span class="line">test = <span class="built_in">zeros</span>(num_edges, <span class="number">2</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">% 这是一个简单的双重循环映射，数据量极大时可优化为 Map 容器</span></span><br><span class="line"><span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:<span class="built_in">length</span>(station_list)</span><br><span class="line">    <span class="comment">% 找到所有等于当前站点名称的位置，并赋值为 ID (i)</span></span><br><span class="line">    test(raw_str == station_list(<span class="built_in">i</span>)) = <span class="built_in">i</span>;</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="comment">% 输出结果预览</span></span><br><span class="line"><span class="built_in">disp</span>(<span class="string">&#x27;邻接表构建完成（前5行）：&#x27;</span>);</span><br><span class="line"><span class="built_in">disp</span>(test(<span class="number">1</span>:<span class="number">5</span>, :));</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-邻接表转邻接矩阵"><a href="#3-3-邻接表转邻接矩阵" class="headerlink" title="3.3 邻接表转邻接矩阵"></a>3.3 邻接表转邻接矩阵</h3><p>得到数字化的邻接表 <code>test</code> 后，我们需要将其转换为 $N \times N$ 的邻接矩阵。这里我们封装一个通用的函数 <code>ainc2adj</code>：</p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">A</span> = <span class="title">ainc2adj</span><span class="params">(edge_list)</span></span></span><br><span class="line">    <span class="comment">% edge_list: M x 2 的邻接表</span></span><br><span class="line">    <span class="comment">% A: N x N 的邻接矩阵</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">% 获取最大节点编号，确定矩阵维度</span></span><br><span class="line">    n = <span class="built_in">max</span>(<span class="built_in">max</span>(edge_list));</span><br><span class="line">    A = <span class="built_in">zeros</span>(n, n);</span><br><span class="line">    </span><br><span class="line">    m = <span class="built_in">size</span>(edge_list, <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">for</span> <span class="built_in">i</span> = <span class="number">1</span>:m</span><br><span class="line">        u = edge_list(<span class="built_in">i</span>, <span class="number">1</span>);</span><br><span class="line">        v = edge_list(<span class="built_in">i</span>, <span class="number">2</span>);</span><br><span class="line">        </span><br><span class="line">        <span class="comment">% 排除自环</span></span><br><span class="line">        <span class="keyword">if</span> u ~= v</span><br><span class="line">            A(u, v) = <span class="number">1</span>;</span><br><span class="line">            A(v, u) = <span class="number">1</span>; <span class="comment">% 无向网络需对称赋值</span></span><br><span class="line">        <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>调用方法：</strong></p>
+<figure class="highlight matlab"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A = ainc2adj(test);</span><br><span class="line">save(<span class="string">&#x27;Subway_Adjacency.mat&#x27;</span>, <span class="string">&#x27;A&#x27;</span>, <span class="string">&#x27;station_list&#x27;</span>); <span class="comment">% 保存矩阵和站点名称映射</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、数据校验与可视化-Gephi"><a href="#四、数据校验与可视化-Gephi" class="headerlink" title="四、数据校验与可视化 (Gephi)"></a>四、数据校验与可视化 (Gephi)</h2><p>代码跑通了不代表模型是对的。实体网络建模最容易出现的问题是<strong>孤立节点</strong>或<strong>拼写错误导致的断连</strong>（例如“人民广场”和“人民广场站”被识别为两个点）。</p>
+<p>我们需要使用 <strong>Gephi</strong> 进行可视化校验。</p>
+<h3 id="4-1-导入-Gephi"><a href="#4-1-导入-Gephi" class="headerlink" title="4.1 导入 Gephi"></a>4.1 导入 Gephi</h3><ol>
+<li>将生成的邻接矩阵 <code>A</code> 保存为 CSV 格式，或使用 Gephi 支持的边列表格式。</li>
+<li>导入 Gephi，在“概览”界面可以看到初步的拓扑图。</li>
+</ol>
+<h3 id="4-2-使用-Force-Atlas-布局检查"><a href="#4-2-使用-Force-Atlas-布局检查" class="headerlink" title="4.2 使用 Force Atlas 布局检查"></a>4.2 使用 Force Atlas 布局检查</h3><p>初始图形往往是一团乱麻。我们需要使用 <strong>Force Atlas</strong>（力引导布局）算法：</p>
+<ol>
+<li>在左下角“布局”面板选择 <code>Force Atlas</code>。</li>
+<li>点击“运行”。</li>
+</ol>
+<p><strong>观察重点：</strong></p>
+<ul>
+<li><strong>孤立节点群</strong>：如果网络分裂成几个互不相连的岛屿，说明数据可能有缺失，或者某些换乘站的名称在不同线路中写得不一样（导致没连上）。</li>
+<li><strong>飞出的节点</strong>：如果有单个节点远离主体结构，检查它是否是真正的孤立站点，还是数据录入错误。</li>
+</ul>
+<h3 id="4-3-快速定位问题"><a href="#4-3-快速定位问题" class="headerlink" title="4.3 快速定位问题"></a>4.3 快速定位问题</h3><p>在 Gephi 的“预览”界面：</p>
+<ol>
+<li>勾选“显示标签”。</li>
+<li>刷新预览。</li>
+<li>找到那些异常的节点，看它的名字，然后回到 Excel 中修正数据。</li>
+</ol>
+<hr>
+<h2 id="五、小结与作业"><a href="#五、小结与作业" class="headerlink" title="五、小结与作业"></a>五、小结与作业</h2><p>本节课我们打通了从<strong>原始数据</strong>到<strong>仿真模型</strong>的关键链路：</p>
+<ol>
+<li><strong>Space L 建模</strong>：理解了实体网络最基础的拓扑构建规则。</li>
+<li><strong>自动化预处理</strong>：利用 MATLAB 解决了大规模站点编号映射的难题。</li>
+<li><strong>可视化校验</strong>：学会了用 Gephi 快速诊断网络连接问题。</li>
+</ol>
+<p>延伸阅读</p>
+<blockquote>
+<ul>
+<li><a href="https://doc.threepurple.cn/2020/05/19/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E5%AE%9E%E4%BD%93%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E7%BD%91%E7%BB%9C%E7%9A%84Space-L%E6%A8%A1%E5%9E%8B/">如何建立复杂网络实体网络的Space L模型</a></li>
+<li><a href="https://doc.threepurple.cn/posts/复杂网络仿真入门到精通/Gephi-复杂网络可视化工具使用教程/">Gephi 使用教程</a></li>
+</ul>
+</blockquote>
+<h2 id="最后：给大家推荐一个在线复杂计算平台"><a href="#最后：给大家推荐一个在线复杂计算平台" class="headerlink" title="最后：给大家推荐一个在线复杂计算平台"></a>最后：给大家推荐一个在线复杂计算平台</h2><p>如果你不想写代码，或者想快速验证你的邻接表数据：</p>
+<p>👉 <a href="https://complex.threepurple.cn">复杂网络分析平台</a></p>
+<p>支持：</p>
+<ul>
+<li><strong>直接上传 Excel/CSV 邻接表</strong>；</li>
+<li><strong>自动生成邻接矩阵与拓扑图</strong>；</li>
+<li><strong>一键计算网络效率、聚类系数等指标</strong>。</li>
+</ul>
+
+      
+    </div>
+    <footer class="entry-meta entry-footer">
+      
+	<span class="ico-folder"></span>
+    <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/">复杂网络</a>, <a class="article-category-link" href="/categories/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">复杂网络仿真从入门到精通</a>
+
+      
+  <span class="ico-tags"></span>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MATLAB/" rel="tag">MATLAB</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Space-L/" rel="tag">Space L</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C/" rel="tag">复杂网络</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%AE%9E%E4%BD%93%E7%BD%91%E7%BB%9C/" rel="tag">实体网络</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86/" rel="tag">数据预处理</a></li></ul>
+
+      
+        <div id="donation_div"></div>
+
+
+<script src="/js/vdonate.js"></script>
+
+<script>
+var a = new Donate({
+  title: '如果觉得我的文章对您有用，请随意打赏。您的支持将鼓励我继续创作!', // 可选参数，打赏标题
+  btnText: 'Donate', // 可选参数，打赏按钮文字
+  el: document.getElementById('donation_div'),
+  wechatImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/weChat.jpg?raw=true',
+  alipayImage: 'https://github.com/XuXING0430/XuXING0430.github.io/blob/master/image/aliPay.jpg?raw=true'
+});
+</script>
+      
+            
+      
+        
+	<div id="comment">
+		<!-- 来必力City版安装代码 -->
+		<div id="lv-container" data-id="city" data-uid="MTAyMC8yOTQ4MS82MDQ5">
+		<script type="text/javascript">
+		   (function(d, s) {
+		       var j, e = d.getElementsByTagName(s)[0];
+
+		       if (typeof LivereTower === 'function') { return; }
+
+		       j = d.createElement(s);
+		       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+		       j.async = true;
+
+		       e.parentNode.insertBefore(j, e);
+		   })(document, 'script');
+		</script>
+		<noscript>为正常使用来必力评论功能请激活JavaScript</noscript>
+		</div>
+		<!-- City版安装代码已完成 -->
+	</div>
+
+
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2025/11/24/%E5%A4%8D%E6%9D%82%E7%BD%91%E7%BB%9C%E4%BB%BF%E7%9C%9F%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A8-%E7%BD%91%E7%BB%9C%E9%B2%81%E6%A3%92%E6%80%A7(%E5%85%8D%E8%B4%B9%E7%89%88)/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">复杂网络仿真入门到精通8：网络鲁棒性理论基础</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+<!-- Table of Contents -->
+
+  <aside id="sidebar">
+    <div id="toc" class="toc-article" style="overflow-y: scroll; max-width: 28%;">
+    <strong class="toc-title">Contents</strong>
+    
+      <ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%BC%95%E8%A8%80%EF%BC%9A%E4%BB%8E%E7%90%86%E8%AE%BA%E5%88%B0%E5%AE%9E%E6%88%98"><span class="nav-number">1.</span> <span class="nav-text">一、引言：从理论到实战</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%BB%BA%E6%A8%A1%E6%96%B9%E6%B3%95%EF%BC%9ASpace-L-%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">二、建模方法：Space L 模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%BB%80%E4%B9%88%E6%98%AF-Space-L%EF%BC%9F"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 什么是 Space L？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%BB%BA%E6%A8%A1%E7%9A%84%E6%8C%91%E6%88%98"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 建模的挑战</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81MATLAB-%E5%AE%9E%E7%8E%B0%EF%BC%9A%E8%87%AA%E5%8A%A8%E5%8C%96%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">三、MATLAB 实现：自动化数据预处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 数据准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81%EF%BC%9A%E5%AD%97%E7%AC%A6%E4%B8%B2%E8%BD%AC%E7%BC%96%E5%8F%B7"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 核心代码：字符串转编号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E9%82%BB%E6%8E%A5%E8%A1%A8%E8%BD%AC%E9%82%BB%E6%8E%A5%E7%9F%A9%E9%98%B5"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 邻接表转邻接矩阵</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%95%B0%E6%8D%AE%E6%A0%A1%E9%AA%8C%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%8C%96-Gephi"><span class="nav-number">4.</span> <span class="nav-text">四、数据校验与可视化 (Gephi)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E5%AF%BC%E5%85%A5-Gephi"><span class="nav-number">4.1.</span> <span class="nav-text">4.1 导入 Gephi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E4%BD%BF%E7%94%A8-Force-Atlas-%E5%B8%83%E5%B1%80%E6%A3%80%E6%9F%A5"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 使用 Force Atlas 布局检查</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E5%BF%AB%E9%80%9F%E5%AE%9A%E4%BD%8D%E9%97%AE%E9%A2%98"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 快速定位问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81%E5%B0%8F%E7%BB%93%E4%B8%8E%E4%BD%9C%E4%B8%9A"><span class="nav-number">5.</span> <span class="nav-text">五、小结与作业</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E5%90%8E%EF%BC%9A%E7%BB%99%E5%A4%A7%E5%AE%B6%E6%8E%A8%E8%8D%90%E4%B8%80%E4%B8%AA%E5%9C%A8%E7%BA%BF%E5%A4%8D%E6%9D%82%E8%AE%A1%E7%AE%97%E5%B9%B3%E5%8F%B0"><span class="nav-number">6.</span> <span class="nav-text">最后：给大家推荐一个在线复杂计算平台</span></a></li></ol>
+    
+    </div>
+  </aside>
+</section>
+        
+      </div>
+      <footer id="footer" class="site-footer">
+  
+
+  <div class="clearfix container">
+      <div class="site-info">
+	      &copy; 2025 Three purple&#39;s blog All Rights Reserved.
+          
+            <span>
+              本站总访客数 <span id="busuanzi_site_uv">加载中...</span> 人 | 
+              本站总访问量 <span id="busuanzi_site_pv">加载中...</span> 次
+            </span>
+          
+      </div>
+      <div class="site-credit">
+        Theme by <a href="https://github.com/iTimeTraveler/hexo-theme-hiero" target="_blank">hiero</a>
+      </div>
+  </div>
+</footer>
+
+
+<!-- min height -->
+
+<script>
+    var contentdiv = document.getElementById("content");
+
+    contentdiv.style.minHeight = document.body.offsetHeight - document.getElementById("allheader").offsetHeight - document.getElementById("footer").offsetHeight + "px";
+</script>
+
+<!-- Custome JS -->
+
+<script src="/js/my.js"></script>
+
+    </div>
+    <!-- <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives/" class="mobile-nav-link">Archives</a>
+  
+    <a href="/categories/" class="mobile-nav-link">Categories</a>
+  
+    <a href="/tags/" class="mobile-nav-link">Tags</a>
+  
+</nav> -->
+    
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    });
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+
+  
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
+
+  
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/scripts.js"></script>
+
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+<script src="/js/main.js"></script>
+
+
+
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'G-37QFEM5W0L', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+
+
+
+
+
+
+	<script src="//cdn.busuanzi.cc/busuanzi/3.6.9/busuanzi.min.js" defer></script>
+
+
+
+
+
+
+  </div>
+
+  <a id="rocket" href="#top" class=""></a>
+  <script type="text/javascript" src="/js/totop.js" async=""></script>
+</body>
+</html>
